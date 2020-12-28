@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PixelFarm.Drawing</RootNamespace>
     <AssemblyName>PixelFarm.Drawing</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>8.0</LangVersion>
     <TargetFrameworkProfile />

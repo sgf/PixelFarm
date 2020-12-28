@@ -70,7 +70,7 @@ namespace YourImplementation
                                 {
                                     case TypefaceStyle.Italic:
                                         {
-                                            InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, TypefaceStyle.Italic, (ushort)RequestFontWeight.Normal);
+                                            InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal); //TODO this was circular italic. Stack overflow.
                                             if (anotherCandidate != null)
                                             {
                                                 return anotherCandidate;

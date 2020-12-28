@@ -1,5 +1,6 @@
 ﻿
 //for .NET 2.0 
+/*
 namespace System
 {
     //public delegate R Func<R>();
@@ -720,4 +721,4 @@ namespace System.Collections.Generic
 
 
 }
-
+*/

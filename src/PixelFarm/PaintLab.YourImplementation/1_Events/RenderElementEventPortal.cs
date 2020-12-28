@@ -418,8 +418,13 @@ namespace LayoutFarm.UI
             {
                 return;
             }
-            dbug_visualroot.dbugHitTracker.Write("stop-mousedown");
-            dbug_visualroot.dbugHitTracker.Play = false;
+
+            //TODO why is this null?
+            if (dbug_visualroot != null)
+            {
+                dbug_visualroot.dbugHitTracker.Write("stop-mousedown");
+                dbug_visualroot.dbugHitTracker.Play = false;
+            }
 #endif
         }
 
