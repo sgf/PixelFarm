@@ -48,6 +48,8 @@ namespace YourImplementation
 
         protected virtual bool HasSomeExtension => false;//class that override 
 
+        //DEO
+        /*
         public void CreatePrimaryRenderElement(GLPainterCore pcx, GLPainter painter, RootGraphic rootgfx)
         {
             if (_canvasRenderE == null)
@@ -62,6 +64,7 @@ namespace YourImplementation
                 _canvasRenderE = glRenderElem;
             }
         }
+        */
 
         internal CpuBlitGLCanvasRenderElement CpuBlitCanvasRenderElement => _canvasRenderE;
 
@@ -206,14 +209,15 @@ namespace YourImplementation
     {
 
         CpuBlitGLESUIElement _glesUIElem;
-        GLBitmap _glBmp;
+        //DEO GLBitmap _glBmp;
 
-        public CpuBlitGLCanvasRenderElement(int w, int h, GLBitmap glBmp)
+        
+        public CpuBlitGLCanvasRenderElement(int w, int h) //DEO, GLBitmap glBmp)
             : base(w, h)
         {
-
-            _glBmp = glBmp;
+            //DEO _glBmp = glBmp;
         }
+        
         public void SetOwnerDemoUI(CpuBlitGLESUIElement glesUIElem)
         {
             _glesUIElem = glesUIElem;
@@ -252,10 +256,10 @@ namespace YourImplementation
                 }
             }
 
-            _glBmp.UpdateTexture(updateArea.CurrentRect);
+            //DEO _glBmp.UpdateTexture(updateArea.CurrentRect);
 
             //------------------------------------------------------------------------- 
-            d.DrawImage(_glBmp, 0, 0);
+            //DEO d.DrawImage(_glBmp, 0, 0);
 
 
             //test print text from our GLTextPrinter 

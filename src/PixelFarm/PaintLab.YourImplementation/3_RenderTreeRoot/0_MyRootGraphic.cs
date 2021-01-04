@@ -25,7 +25,11 @@ namespace LayoutFarm.UI
 
         GraphicsTimerTask _gfxTimerTask;
 
+#if OLDRENDERER
         Func<PixelFarm.Drawing.GLES2.MyGLDrawBoard> _getDrawboard; //
+#else
+        Func<PixelFarm.Drawing.MonoGamePixel.MyMonoGamePixelDrawBoard> _getDrawboard; //
+#endif
 
         public MyRootGraphic(
             int width, int height)
@@ -68,18 +72,30 @@ namespace LayoutFarm.UI
 #endif
         }
 
+#if OLDRENDERER
         public void SetDrawboardReqDelegate(Func<PixelFarm.Drawing.GLES2.MyGLDrawBoard> getDrawboard)
         {
             _getDrawboard = getDrawboard;
         }
+#else
+        public void SetDrawboardReqDelegate(Func<PixelFarm.Drawing.MonoGamePixel.MyMonoGamePixelDrawBoard> getDrawboard)
+        {
+            _getDrawboard = getDrawboard;
+        }
+#endif
 
         List<RenderElementRequest> _fmtStrRenderReqList = new List<RenderElementRequest>();
+#if OLDRENDERER
         List<PixelFarm.DrawingGL.GLRenderVxFormattedString> _fmtList = new List<PixelFarm.DrawingGL.GLRenderVxFormattedString>();
+#else
+        List<PixelFarm.DrawingMonoGamePixel.MonoGamePixelRenderVxFormattedString> _fmtList = new List<PixelFarm.DrawingMonoGamePixel.MonoGamePixelRenderVxFormattedString>();
+#endif
 
         public override void EnqueueRenderRequest(RenderElementRequest renderReq)
         {
             if (renderReq.req == RequestCommand.ProcessFormattedString)
             {
+#if OLDRENDERER
                 if (renderReq.parameters is PixelFarm.DrawingGL.GLRenderVxFormattedString fmtStr &&
                     fmtStr.State == RenderVxFormattedString.VxState.NoStrip)
                 {
@@ -87,6 +103,15 @@ namespace LayoutFarm.UI
                     _fmtList.Add(fmtStr);
                     fmtStr.State = RenderVxFormattedString.VxState.Waiting;
                 }
+#else
+                if (renderReq.parameters is PixelFarm.DrawingMonoGamePixel.MonoGamePixelRenderVxFormattedString fmtStr &&
+                    fmtStr.State == RenderVxFormattedString.VxState.NoStrip)
+                {
+                    _fmtStrRenderReqList.Add(renderReq);
+                    _fmtList.Add(fmtStr);
+                    fmtStr.State = RenderVxFormattedString.VxState.Waiting;
+                }
+#endif
             }
             else
             {
@@ -179,7 +204,7 @@ namespace LayoutFarm.UI
                 //a root dose not have default drawboard***
                 //so we ask for some drawboard to handle these requests 
 
-                PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard = _getDrawboard();
+                var drawboard = _getDrawboard();
 
                 drawboard.PrepareWordStrips(_fmtList);
 

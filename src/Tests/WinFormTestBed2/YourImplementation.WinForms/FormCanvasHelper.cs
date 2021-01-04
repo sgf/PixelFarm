@@ -133,8 +133,11 @@ namespace LayoutFarm.UI
                     {
                         var openFontTextService = new Typography.Text.OpenFontTextService();
                         openFontTextService.SvgBmpBuilder = PaintLab.SvgBuilderHelper.ParseAndRenderSvg;
-
+#if OLDRENDERER
                         PixelFarm.Drawing.GLES2.GLES2Platform.TextService = openFontTextService;
+#else
+                        PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService = openFontTextService;
+#endif
 
                         Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient(); 
 

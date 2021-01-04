@@ -21,16 +21,20 @@ namespace YourImplementation
             {
                 case InnerViewportKind.GdiPlusOnGLES:
                 case InnerViewportKind.AggOnGLES:
-                    SetUpSoftwareRendererOverGLSurface(
+                    throw new NotImplementedException();
+
+                    //DEO
+                    /*SetUpSoftwareRendererOverGLSurface(
                         config,
                         vw.MyNativeWindow,
                         vw.GLPainterCore(),
                         vw.GetGLPainter(),
-                        vw.InnerViewportKind);
+                        vw.InnerViewportKind);*/
                     break;
             }
         }
 
+        /*
         static void SetUpSoftwareRendererOverGLSurface(
           LayoutFarm.AppHostConfig config,
           IGpuOpenGLSurfaceView myNativeWindow,
@@ -65,6 +69,7 @@ namespace YourImplementation
             rootGfx.SetPrimaryContainerElement(renderE);
             //***
         }
+        */
 
 
     }

@@ -100,7 +100,6 @@
   <ItemGroup>
     <Compile Include="2_AggPainter\AggPainter_Imgs.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="..\PixelFarm.Vectors_SH\PixelFarm.Vectors_SH.projitems" Label="Shared" />
   <Import Project="..\BackEnd.Triangulation\Triangulation.projitems" Label="Shared" />
   <Import Project="..\BackEnd.Tesselate_SH\BackEnd.Tesselate_SH.projitems" Label="Shared" />
@@ -110,8 +109,8 @@
   <Import Project="..\PixelFarm.Painter_Layer2_SH\PixelFarm.Painter_Layer2_SH.projitems" Label="Shared" />
   <Import Project="..\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
   <Import Project="..\PixelFarm.CpuBlit_Layer2\PixelFarm.CpuBlit_Layer2.projitems" Label="Shared" />
-  <Import Project="..\BackEnd.BurningMineCurve_SH\BackEnd.BurningMineCurve_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\BackEnd.BurningMineCurve_SH\BackEnd.BurningMineCurve_SH.projitems" Label="Shared" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

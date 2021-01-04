@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.DrawingGL;
+using PixelFarm.DrawingMonoGamePixel;
 
 namespace LayoutFarm.UI
 {
@@ -17,8 +18,13 @@ namespace LayoutFarm.UI
         IGpuOpenGLSurfaceView _viewport;
 
         GLPainterCore _pcx;
+#if OLDRENDERER
         GLPainter _glPainter;
         PixelFarm.Drawing.GLES2.MyGLDrawBoard _drawboard;
+#else
+        PixelFarm.DrawingMonoGamePixel.MonoGamePixelPainter _glPainter;
+        PixelFarm.Drawing.MonoGamePixel.MyMonoGamePixelDrawBoard _drawboard;
+#endif
 
         int _width;
         int _height;
@@ -27,7 +33,12 @@ namespace LayoutFarm.UI
             _width = width;
             _height = height;
         }
+
+#if OLDRENDERER
         public PixelFarm.Drawing.GLES2.MyGLDrawBoard GetDrawBoard() => _drawboard;
+#else
+        public PixelFarm.Drawing.MonoGamePixel.MyMonoGamePixelDrawBoard GetDrawBoard() => _drawboard;
+#endif
 
         public IGpuOpenGLSurfaceView MyNativeWindow => _viewport;
 
@@ -92,7 +103,7 @@ namespace LayoutFarm.UI
         //
         public RootGraphic RootGfx => _rootgfx;
         //         
-        public GLPainter GetGLPainter() => _glPainter;
+        public GLPainter GetGLPainter() => null; // _glPainter;
         public GLPainterCore GLPainterCore() => _pcx;
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
         {
@@ -140,16 +151,27 @@ namespace LayoutFarm.UI
                         int max = Math.Max(w, h);
 
                         _pcx = PixelFarm.DrawingGL.GLPainterCore.Create(max, max, w, h, true);
+#if OLDRENDERER
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterCore(_pcx);
 
- 
+
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
                         {
                             var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
                             _glPainter.TextPrinter = printer;
                         }
+#else
+                        _glPainter = new MonoGamePixelPainter();
+                        //_glPainter.BindToPainterCore(_pcx);
+                        if (PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService != null)
+                        {
+                            var printer = new MonoGamePixelBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService);
+
+                            _glPainter.TextPrinter = printer;
+                        }
+#endif
                         else
                         {
                             //warn....!
@@ -170,7 +192,11 @@ namespace LayoutFarm.UI
 
                         //TODO: review this again!
                         //3  
+#if OLDRENDERER
                         var drawboard = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
+#else
+                        var drawboard = new PixelFarm.Drawing.MonoGamePixel.MyMonoGamePixelDrawBoard(_glPainter);
+#endif
                         _glPainter.SetDrawboard(drawboard);
                         _drawboard = drawboard;
 

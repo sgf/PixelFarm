@@ -113,9 +113,11 @@ namespace YourImplementation
                 CommonTextServiceSetup.SetInstalledTypefaceCollection(InstalledTypefaceCollectionMx.GetDefaultInstalledTypefaceCollection());
             }
 
-
+            //DEO
+#if OLDRENDERER
             PixelFarm.DrawingGL.CachedBinaryShaderIO.SetActualImpl(
                () => new PixelFarm.DrawingGL.LocalFileCachedBinaryShaderIO(Application.CommonAppDataPath));
+#endif
 
             FrameworkInitGLES.SetupDefaultValues();
 
