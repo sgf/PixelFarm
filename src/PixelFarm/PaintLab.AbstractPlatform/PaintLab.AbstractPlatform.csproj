@@ -6,45 +6,6 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\PaintLab.PlatformBridge\Common\Clipboard.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Common\Clipboard.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Common\ExtensionAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Common\GeneralEventListener.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Common\GeneralEventListener.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Common\IPlatformWindowBox.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Common\Keys.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Common\Keys.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Common\UIPlatform.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Common\UIPlatform.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Common\UITimerTask.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Common\UITimerTask.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Events\IEventListener.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Events\IEventListener.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Events\IEventPortal.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Events\IEventPortal.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Events\ITopWindowEventRoot.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Events\ITopWindowEventRoot.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Events\ScrollSurfaceRequestEventArgs.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Events\ScrollSurfaceRequestEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Events\UIEventArgs.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Events\UIEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Events\UIEventNames.cs">
-      <Link>0_REF_LayoutFarm.PlatformBridge\Events\UIEventNames.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs</Link>
     </Compile>
@@ -229,6 +190,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj" />
     <ProjectReference Include="..\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj" />
+    <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj" />
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
     <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj" />
   </ItemGroup>

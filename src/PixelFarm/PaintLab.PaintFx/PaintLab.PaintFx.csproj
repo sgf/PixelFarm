@@ -56,6 +56,10 @@
     <Compile Include="IImageFilterFunc.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
+      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
+      <Name>PixelFarm.BasicVisualElements</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>

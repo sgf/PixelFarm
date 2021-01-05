@@ -12,10 +12,12 @@
     <DefineConstants>TRACE;PIXEL_FARM,PIXEL_FARM_NET20</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
+  </ItemGroup>
   <Import Project="..\PixelFarm.Vectors_SH\PixelFarm.Vectors_SH.projitems" Label="Shared" />
   <Import Project="..\BackEnd.Triangulation\Triangulation.projitems" Label="Shared" />
   <Import Project="..\BackEnd.Tesselate_SH\BackEnd.Tesselate_SH.projitems" Label="Shared" />
-  <Import Project="..\PixelFarm.BasicVisualElements_SH\PixelFarm.BasicVisualElements_SH.projitems" Label="Shared" />
   <Import Project="..\PixelFarm.Vectors_Utils_SH\PixelFarm.Vectors_Utils_SH.projitems" Label="Shared" />
   <Import Project="..\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
   <Import Project="..\PixelFarm.Painter_Layer2_SH\PixelFarm.Painter_Layer2_SH.projitems" Label="Shared" />
