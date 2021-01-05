@@ -1,60 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EC1307C6-309F-43EA-BFCC-5219E2F5A103}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.Typography</RootNamespace>
-    <AssemblyName>PixelFarm.Typography</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <LangVersion>8.0</LangVersion>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PIXEL_FARM_NET20</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;PIXEL_FARM_NET20</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs">
       <Link>System.Numerics.ForNet20.cs</Link>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj">
-      <Project>{29692043-41c3-438b-a48e-c788cab521a4}</Project>
-      <Name>Typography.One</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj" />
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="..\..\..\..\Typography\PixelFarm.Typography\PixelFarm.Typography_SH.projitems" Label="Shared" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
