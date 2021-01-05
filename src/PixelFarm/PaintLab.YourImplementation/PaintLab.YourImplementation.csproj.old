@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D88D86CD-6732-45E7-8FC9-49449EA9C737}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PaintLab.YourImplementation</RootNamespace>
+    <AssemblyName>PaintLab.YourImplementation</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>8.0</LangVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;MINIMAL OLDRENDERER</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="0_FrameworkInit\CommonTextServiceSetup.cs" />
+    <Compile Include="0_FrameworkInit\FrameworkInitGLES.cs" />
+    <Compile Include="0_FrameworkInit\ImgCodecMemBitmapIO.cs" />
+    <Compile Include="3_RenderTreeRoot\0_MyRootGraphic.cs" />
+    <Compile Include="3_RenderTreeRoot\TopWindowRenderBox.cs" />
+    <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
+    <Compile Include="1_Events\MyIntervalTaskEventArgs.cs" />
+    <Compile Include="1_Events\RenderElementEventPortal.cs" />
+    <Compile Include="1_Events\TopWindowEventRoot.cs" />
+    <Compile Include="1_Events\UIHoverMonitor.cs" />
+    <Compile Include="2_ContentManagers\ImageCacheSystem.cs" />
+    <Compile Include="2_ContentManagers\ImageContentManager.cs" />
+    <Compile Include="2_ContentManagers\TextContentManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\routes.goodorbad\PixelFarm.Drawing.MonoGame\PixelFarm.Drawing.MonoGame.csproj">
+      <Project>{323b3e61-77ff-4efe-9ffd-533a98a59343}</Project>
+      <Name>PixelFarm.Drawing.MonoGame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj">
+      <Project>{29692043-41c3-438b-a48e-c788cab521a4}</Project>
+      <Name>Typography.One</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>BackEnd.ImgCodecs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
+      <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
+      <Name>MiniOpenTK_Net20</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
+      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
+      <Name>PaintLab.AbstractPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaintLab.Svg\PaintLab.Svg.csproj">
+      <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
+      <Name>PaintLab.Svg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
+      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
+      <Name>PixelFarm.Drawing.GLES</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="0_FrameworkInit\StorageProviderImpl.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
