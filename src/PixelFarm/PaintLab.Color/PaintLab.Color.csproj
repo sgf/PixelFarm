@@ -1,74 +1,95 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9CC6310F-C116-449D-BE97-63D152F98746}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PaintLab.Color</RootNamespace>
-    <AssemblyName>PaintLab.Color</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <LangVersion>8.0</LangVersion>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PIXEL_FARM_NET20</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;PIXEL_FARM_NET20</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChromaJs\Chroma.cs" />
-    <Compile Include="ColorBlender\Algorithms\Analogue.cs" />
-    <Compile Include="ColorBlender\Algorithms\ClassicBlend.cs" />
-    <Compile Include="ColorBlender\Algorithms\ColorExplorer.cs" />
-    <Compile Include="ColorBlender\Algorithms\Complementary.cs" />
-    <Compile Include="ColorBlender\Algorithms\SingleHue.cs" />
-    <Compile Include="ColorBlender\Algorithms\SplitComplementary.cs" />
-    <Compile Include="ColorBlender\Algorithms\Square.cs" />
-    <Compile Include="ColorBlender\Algorithms\Triadic.cs" />
-    <Compile Include="ColorBlender\Blend.cs" />
-    <Compile Include="ColorBlender\ColorMatch.cs" />
-    <Compile Include="ColorBlender\HSV.cs" />
-    <Compile Include="ColorBlender\IAlgorithm.cs" />
-    <Compile Include="ColorBlender\MathHelpers.cs" />
-    <Compile Include="ColorBlender\RGB.cs" />
-    <Compile Include="ColorToolExtensions.cs" />
-    <Compile Include="KnownColors.cs" />
+    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
-      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
-      <Name>PixelFarm.BasicVisualElements</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
+    <Compile Remove="Colorful_SH\Colors\HunterLabColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\IColorVector.cs" />
+    <Compile Remove="Colorful_SH\Colors\Illuminants.cs" />
+    <Compile Remove="Colorful_SH\Colors\IRGBWorkingSpace.cs" />
+    <Compile Remove="Colorful_SH\Colors\LabColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\LChabColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\LChuvColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\LinearRGBColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\LMSColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\LuvColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\MacbethColorChecker.cs" />
+    <Compile Remove="Colorful_SH\Colors\RGBColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\RGBWorkingSpaces.cs" />
+    <Compile Remove="Colorful_SH\Colors\xyChromaticityCoordinates.cs" />
+    <Compile Remove="Colorful_SH\Colors\xyYColor.cs" />
+    <Compile Remove="Colorful_SH\Colors\XYZColor.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.Adapt.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToHunterLab.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToLab.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToLChab.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToLChuv.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToLinearRGB.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToLMS.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToLuv.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToRGB.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToxyY.cs" />
+    <Compile Remove="Colorful_SH\Conversion\ColourfulConverter.ToXYZ.cs" />
+    <Compile Remove="Colorful_SH\Conversion\IChromaticAdaptation.cs" />
+    <Compile Remove="Colorful_SH\Conversion\VonKriesChromaticAdaptation.cs" />
+    <Compile Remove="Colorful_SH\Difference\CIE76ColorDifference.cs" />
+    <Compile Remove="Colorful_SH\Difference\CIE94ColorDifference.cs" />
+    <Compile Remove="Colorful_SH\Difference\CIEDE2000ColorDifference.cs" />
+    <Compile Remove="Colorful_SH\Difference\CMCColorDifference.cs" />
+    <Compile Remove="Colorful_SH\Difference\IColorDifference.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\CIEConstants.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\HunterLab\HunterLabToXYZConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\HunterLab\XYZAndHunterLabConverterBase.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\HunterLab\XYZToHunterLabConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\IColorConversion.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\Lab\LabToXYZConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\Lab\XYZToLabConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\LChab\LabToLChabConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\LChab\LChabToLabConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\LChuv\LChuvToLuvConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\LChuv\LuvToLChuvConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\LMS\LMSTransformationMatrix.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\LMS\XYZAndLMSConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\Luv\LuvToXYZConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\Luv\XYZToLuvConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\RGB\LinearRGBAndXYZConverterBase.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\RGB\LinearRGBToRGBConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\RGB\LinearRGBToXYZConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\RGB\RGBToLinearRGBConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\RGB\XYZToLinearRGBConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Conversion\xyY\xyYAndXYZConverter.cs" />
+    <Compile Remove="Colorful_SH\Implementation\RGB\GammaCompanding.cs" />
+    <Compile Remove="Colorful_SH\Implementation\RGB\ICompanding.cs" />
+    <Compile Remove="Colorful_SH\Implementation\RGB\LCompanding.cs" />
+    <Compile Remove="Colorful_SH\Implementation\RGB\Rec2020Companding.cs" />
+    <Compile Remove="Colorful_SH\Implementation\RGB\Rec709Companding.cs" />
+    <Compile Remove="Colorful_SH\Implementation\RGB\RGBPrimariesChromaticityCoordinates.cs" />
+    <Compile Remove="Colorful_SH\Implementation\RGB\RGBWorkingSpace.cs" />
+    <Compile Remove="Colorful_SH\Implementation\RGB\sRGBCompanding.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Utils\Angle.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Utils\Extensions.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Utils\MathUtils.cs" />
+    <Compile Remove="Colorful_SH\Implementation\Utils\MatrixFactory.cs" />
+    <Compile Remove="Colorful_SH\NET20Impl.cs" />
+    <Compile Remove="Colorful_SH\Other\CCTConverter.cs" />
+    <Compile Remove="Colorful_SH\Other\SaturationLChFormulas.cs" />
   </ItemGroup>
   <Import Project="Colorful_SH\Colorful_SH.projitems" Label="Shared" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
