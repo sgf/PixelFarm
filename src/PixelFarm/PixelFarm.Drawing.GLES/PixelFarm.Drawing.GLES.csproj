@@ -60,6 +60,10 @@
     <Compile Include="TextPrinter\WordPlateAndWordPlateMx.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj">
+      <Project>{29692043-41c3-438b-a48e-c788cab521a4}</Project>
+      <Name>Typography.One</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
       <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
       <Name>MiniOpenTK_Net20</Name>
@@ -75,10 +79,6 @@
     <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
       <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
