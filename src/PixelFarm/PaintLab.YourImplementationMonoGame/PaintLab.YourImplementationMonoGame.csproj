@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <LangVersion>8.0</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;MINIMAL</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\routes.goodorbad\PixelFarm.Drawing.MonoGame\PixelFarm.Drawing.MonoGame.csproj" />
+    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj" />
+    <ProjectReference Include="..\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj" />
+    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj" />
+    <ProjectReference Include="..\PaintLab.Svg\PaintLab.Svg.csproj" />
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
+    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PaintLab.Platforms.WinForms</RootNamespace>
+    <AssemblyName>PaintLab.Platforms.Win32</AssemblyName>
+    <LangVersion>8.0</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;__DESKTOP__</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\backend.win32utils\MyWin32.cs">
+      <Link>0_REF_Win32Utils\MyWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.win32utils\NativeWin32MemoryDc.cs">
+      <Link>0_REF_Win32Utils\NativeWin32MemoryDc.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\routes.goodorbad\PixelFarm.Drawing.MonoGame\PixelFarm.Drawing.MonoGame.csproj" />
+    <ProjectReference Include="..\..\..\..\routes.goodorbad\PixelFarm.Two.Renderer\PixelFarm.Two.Renderer.csproj" />
+    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj" />
+    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj" />
+    <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj" />
+    <ProjectReference Include="..\PaintLab.YourImplementationMonoGame\PaintLab.YourImplementationMonoGame.csproj" />
+    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
+    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj" />
+  </ItemGroup>
+  <Import Project="..\PaintLab.Platforms.MonoGame_SH\PaintLab.Platforms.MonoGame_SH.projitems" Label="Shared" />
+</Project>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E7F0EB14-357A-402A-BA2D-0870F0122410}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PaintLab.Platforms.WinForms</RootNamespace>
+    <AssemblyName>PaintLab.Platforms.Win32</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>8.0</LangVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;__DESKTOP__</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\backend.win32utils\MyWin32.cs">
+      <Link>0_REF_Win32Utils\MyWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.win32utils\NativeWin32MemoryDc.cs">
+      <Link>0_REF_Win32Utils\NativeWin32MemoryDc.cs</Link>
+    </Compile>
+    <Compile Include="1_GraphicsViewAndBridges\GLESContext.cs" />
+    <Compile Include="1_GraphicsViewAndBridges\GLControlFactory.cs" />
+    <Compile Include="1_GraphicsViewAndBridges\IGLControl.cs" />
+    <Compile Include="1_GraphicsViewAndBridges\WinGLControl.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\routes.goodorbad\PixelFarm.Drawing.MonoGame\PixelFarm.Drawing.MonoGame.csproj">
+      <Project>{323b3e61-77ff-4efe-9ffd-533a98a59343}</Project>
+      <Name>PixelFarm.Drawing.MonoGame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\routes.goodorbad\PixelFarm.Two.Renderer\PixelFarm.Two.Renderer.csproj">
+      <Project>{7c2af9d9-b608-439f-8b59-422ee3dbc443}</Project>
+      <Name>PixelFarm.Two.Renderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj">
+      <Project>{29692043-41c3-438b-a48e-c788cab521a4}</Project>
+      <Name>Typography.One</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
+      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
+      <Name>PaintLab.AbstractPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj">
+      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
+      <Name>PaintLab.PlatformBridge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaintLab.YourImplementationMonoGame\PaintLab.YourImplementationMonoGame.csproj">
+      <Project>{63dca87e-b6d4-44a2-956d-6dfcfff62018}</Project>
+      <Name>PaintLab.YourImplementationMonoGame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
+      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
+      <Name>PixelFarm.BasicVisualElements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\PaintLab.Platforms.MonoGame_SH\PaintLab.Platforms.MonoGame_SH.projitems" Label="Shared" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
