@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using GeonBit.UI;
 using PixelFarm.DrawingGL;
 using PixelFarm.DrawingMonoGamePixel;
 
@@ -17,12 +18,13 @@ namespace LayoutFarm.UI
         InnerViewportKind _innerViewportKind;
         IGpuOpenGLSurfaceView _viewport;
 
-        
+
 #if OLDRENDERER
         GLPainterCore _pcx;
         GLPainter _glPainter;
         PixelFarm.Drawing.GLES2.MyGLDrawBoard _drawboard;
 #else
+        IGameUI _pcx;
         PixelFarm.DrawingMonoGamePixel.MonoGamePixelPainter _glPainter;
         PixelFarm.Drawing.MonoGamePixel.MyMonoGamePixelDrawBoard _drawboard;
 #endif
@@ -105,7 +107,7 @@ namespace LayoutFarm.UI
         public RootGraphic RootGfx => _rootgfx;
         //         
         public MonoGamePixelPainter GetGLPainter() => _glPainter;
-        //DEO public GLPainterCore GLPainterCore() => _pcx;
+        public IGameUI GLPainterCore() => _pcx;
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
         {
             //TODO: use Agg 
@@ -120,7 +122,8 @@ namespace LayoutFarm.UI
             ITopWindowEventRoot topWinEventRoot,
             InnerViewportKind innerViewportKind,
             IGpuOpenGLSurfaceView nativeWindow,
-            AbstractTopWindowBridge bridge)
+            AbstractTopWindowBridge bridge,
+            IGameUI pcx)
         {
             //create a proper bridge****
             _rootgfx = rootgfx;
@@ -136,6 +139,7 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.GdiPlusOnGLES:
                 case InnerViewportKind.AggOnGLES:
                 case InnerViewportKind.GLES:
+                case InnerViewportKind.MonoGame:
                     {
                         _winBridge.OnHostControlLoaded();
                         try
@@ -166,7 +170,7 @@ namespace LayoutFarm.UI
                         }
 #else
                         _glPainter = new MonoGamePixelPainter();
-                        //_glPainter.BindToPainterCore(_pcx);
+                        _glPainter.BindToPainterCore(_pcx);
                         if (PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService != null)
                         {
                             var printer = new MonoGamePixelBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService);

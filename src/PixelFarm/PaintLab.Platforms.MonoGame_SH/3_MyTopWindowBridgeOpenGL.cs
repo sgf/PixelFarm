@@ -13,10 +13,10 @@ namespace LayoutFarm.UI.OpenGL
         OpenGLCanvasViewport _openGLViewport;
         RootGraphic _rootgfx;
 
-        Cursor _defaultCur;
-        Cursor _IBeamCur;
-        Cursor _pointerCur;
-        Cursor _arrowCur;
+        //Cursor _defaultCur;
+        //Cursor _IBeamCur;
+        //Cursor _pointerCur;
+        //Cursor _arrowCur;
 
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
@@ -25,10 +25,10 @@ namespace LayoutFarm.UI.OpenGL
 
             _rootgfx = root;
 
-            _defaultCur = UIPlatform.CreateCursor(new CursorRequest("system:Default"));
-            _IBeamCur = UIPlatform.CreateCursor(new CursorRequest("system:IBeam"));
-            _pointerCur = UIPlatform.CreateCursor(new CursorRequest("system:Pointer"));
-            _arrowCur = UIPlatform.CreateCursor(new CursorRequest("system:Arrow"));
+            //_defaultCur = UIPlatform.CreateCursor(new CursorRequest("system:Default"));
+            //_IBeamCur = UIPlatform.CreateCursor(new CursorRequest("system:IBeam"));
+            //_pointerCur = UIPlatform.CreateCursor(new CursorRequest("system:Pointer"));
+            //_arrowCur = UIPlatform.CreateCursor(new CursorRequest("system:Arrow"));
         }
 
         public override void PaintToOutputWindow(Rectangle invalidateArea)
@@ -120,7 +120,7 @@ namespace LayoutFarm.UI.OpenGL
         }
         protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
-            switch (cursorStyle)
+            /*DEO TODO switch (cursorStyle)
             {
                 case MouseCursorStyle.Pointer:
                     _windowControl.CurrentCursor = _pointerCur;
@@ -134,7 +134,7 @@ namespace LayoutFarm.UI.OpenGL
                 default:
                     _windowControl.CurrentCursor = _defaultCur;
                     break;
-            }
+            }*/
         }
 
 #if DEBUG
@@ -153,7 +153,7 @@ namespace LayoutFarm.UI.OpenGL
 #endif
             _windowControl.MakeCurrent();
             _openGLViewport.PaintMe();
-            _windowControl.SwapBuffers();
+            //DEO _windowControl.SwapBuffers();
             //
 #if DEBUG
             _stopWatch.Stop();
