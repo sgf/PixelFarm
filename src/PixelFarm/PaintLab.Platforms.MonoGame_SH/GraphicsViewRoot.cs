@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using GeonBit.UI;
+using PixelFarm.Drawing.MonoGame;
 using PixelFarm.DrawingGL;
 using PixelFarm.DrawingMonoGamePixel;
 
@@ -24,7 +25,7 @@ namespace LayoutFarm.UI
         GLPainter _glPainter;
         PixelFarm.Drawing.GLES2.MyGLDrawBoard _drawboard;
 #else
-        IGameUI _pcx;
+        IGameHTMLUI _pcx;
         PixelFarm.DrawingMonoGamePixel.MonoGamePixelPainter _glPainter;
         PixelFarm.Drawing.MonoGamePixel.MyMonoGamePixelDrawBoard _drawboard;
 #endif
@@ -123,7 +124,7 @@ namespace LayoutFarm.UI
             InnerViewportKind innerViewportKind,
             IGpuOpenGLSurfaceView nativeWindow,
             AbstractTopWindowBridge bridge,
-            IGameUI pcx)
+            IGameHTMLUI pcx)
         {
             //create a proper bridge****
             _rootgfx = rootgfx;
