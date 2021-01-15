@@ -236,7 +236,10 @@ namespace PixelFarm.Drawing
     public abstract class DrawboardBuffer : System.IDisposable
     {
         public abstract Image GetImage();
-        public bool IsValid { get; set; }
+        public bool IsValid { 
+            get; 
+            set; 
+        }
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract void Dispose();
