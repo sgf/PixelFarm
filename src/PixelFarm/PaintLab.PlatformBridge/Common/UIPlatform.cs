@@ -73,7 +73,7 @@ namespace LayoutFarm
             UIMsgQueueSystem.InternalMsgPumpRegister(timerTask);
             timerTask.Enabled = true;
         }
-        protected static void InvokeMsgPumpOneStep()
+        public static void InvokeMsgPumpOneStep()
         {
             if (s_Closing) return;
             //

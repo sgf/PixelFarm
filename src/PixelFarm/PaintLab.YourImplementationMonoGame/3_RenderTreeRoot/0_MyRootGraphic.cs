@@ -48,14 +48,14 @@ namespace LayoutFarm.UI
             //create default render box***
             _topWindowRenderBox = new TopWindowRenderBox(this, width, height);
             _topWindowEventRoot = new TopWindowEventRoot(this, _topWindowRenderBox);
-            _gfxTimerTask = this.SubscribeGraphicsIntervalTask(_normalUpdateTask,
-                TaskIntervalPlan.Animation,
+            _gfxTimerTask = null; //DEO interesting this.SubscribeGraphicsIntervalTask(_normalUpdateTask,
+            /*    TaskIntervalPlan.Animation,
                 20,
                 (s, e) =>
                 {
                     this.PrepareRender();
                     this.FlushAccumGraphics();
-                });
+                }); */
 
             _primaryContainerElement = _topWindowRenderBox;
         }
