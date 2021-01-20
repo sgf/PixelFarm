@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.UI
 {
-    class GraphicsTimerTaskManager
+    public class GraphicsTimerTaskManager
     {
         readonly Dictionary<object, GraphicsTimerTask> _registeredTasks = new Dictionary<object, GraphicsTimerTask>();
         readonly List<GraphicsTimerTask> _fastIntervalTaskList = new List<GraphicsTimerTask>();
@@ -34,6 +34,8 @@ namespace LayoutFarm.UI
             get => _uiTimerTask.Enabled;
             set => _uiTimerTask.Enabled = value;
         }
+        public bool NeedsUpdate { get; set; }
+
         public void CloseAllWorkers()
         {
             _uiTimerTask.Enabled = false;
@@ -160,8 +162,9 @@ namespace LayoutFarm.UI
             //remainnig tasks
             if (needUpdate > 0)
             {
-                _rootgfx.PrepareRender();
-                _rootgfx.FlushAccumGraphics();
+                NeedsUpdate = true;
+                //_rootgfx.PrepareRender();
+                //_rootgfx.FlushAccumGraphics();
             }
         }
 

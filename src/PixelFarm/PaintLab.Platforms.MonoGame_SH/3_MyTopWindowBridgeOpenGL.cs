@@ -153,6 +153,7 @@ namespace LayoutFarm.UI.OpenGL
 #endif
             _windowControl.MakeCurrent();
             _openGLViewport.PaintMe();
+            
             //DEO _windowControl.SwapBuffers();
             //
 #if DEBUG

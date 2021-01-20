@@ -14,7 +14,7 @@ namespace LayoutFarm.UI
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider, IDisposable
     {
         List<RenderElementRequest> _renderRequestList = new List<RenderElementRequest>();
-        GraphicsTimerTaskManager _gfxTimerTaskMx;
+        public GraphicsTimerTaskManager _gfxTimerTaskMx;
         static object _normalUpdateTask = new object();
         readonly TopWindowEventRoot _topWindowEventRoot;
         readonly TopWindowRenderBox _topWindowRenderBox;
@@ -297,6 +297,9 @@ namespace LayoutFarm.UI
 
         //
         ITopWindowEventRoot ITopWindowEventRootProvider.EventRoot => _topWindowEventRoot;
+
+        public override bool NeedsUpdate { get { return _gfxTimerTaskMx.NeedsUpdate; } set { _gfxTimerTaskMx.NeedsUpdate = value; } }
+
         //
 #if DEBUG
 

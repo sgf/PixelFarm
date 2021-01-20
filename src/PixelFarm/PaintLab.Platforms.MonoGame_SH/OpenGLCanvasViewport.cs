@@ -1,6 +1,8 @@
 ﻿
 using System.Collections.Generic;
 using PixelFarm.Drawing;
+using PixelFarm.Drawing.MonoGamePixel;
+
 namespace LayoutFarm.UI.OpenGL
 {
 
@@ -137,10 +139,13 @@ namespace LayoutFarm.UI.OpenGL
 
             if (_rootgfx.HasAccumInvalidateRect)
             {
+                _drawboard.EnterNewDrawboardBuffer(((MyMonoGamePixelDrawBoard)_drawboard)._mainbuffer); //DEO
 
                 //evaluate  
                 _gfxUpdatePlan.SetUpdatePlanForFlushAccum();
+                //_gfxUpdatePlan.ResetUpdatePlan(); //DEO
                 int j = _gfxUpdatePlan.UpdateListCount;
+
 
                 if (j > 0)
                 {
@@ -189,9 +194,13 @@ namespace LayoutFarm.UI.OpenGL
                     _gfxUpdatePlan.ResetUpdatePlan();
                     ReleaseUpdateArea(u);
                 }
+                _drawboard.ExitCurrentDrawboardBuffer(); //DEO
                 //-----------
             }
             _rootgfx.EndRenderPhase();
+
+            _drawboard.DrawImage(((MyMonoGamePixelDrawBoard)_drawboard)._mainbuffer.GetImage(), new RectangleF(_drawboard.OriginX, _drawboard.OriginY, _drawboard.Width, _drawboard.Height));
+
             GlobalRootGraphic.CurrentRootGfx = backup;
 #if DEBUG
 
