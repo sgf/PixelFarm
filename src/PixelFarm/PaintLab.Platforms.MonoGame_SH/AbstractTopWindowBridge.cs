@@ -333,6 +333,18 @@ namespace LayoutFarm.UI
 
         void PrepareRenderAndFlushAccumGraphics()
         {
+            //DEO
+            /*
+            //TODO: review here
+            RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
+            GlobalRootGraphic.CurrentRootGfx = _rootgfx;
+            _rootgfx.PrepareRender();
+            _rootgfx.FlushAccumGraphics();
+            GlobalRootGraphic.CurrentRootGfx = backup;//restore */
+        }
+
+        public void PrepareRenderAndFlushAccumGraphics2()
+        {
             //TODO: review here
             RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
             GlobalRootGraphic.CurrentRootGfx = _rootgfx;

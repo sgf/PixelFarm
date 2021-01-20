@@ -220,6 +220,10 @@ namespace LayoutFarm.UI
                     break;
             }
         }
+        public void PaintToOutputWindow(PixelFarm.Drawing.Rectangle invalidateArea)
+        {
+            _winBridge.PaintToOutputWindow(invalidateArea);
+        }
         public void PaintToOutputWindow()
         {
             _winBridge.PaintToOutputWindow();

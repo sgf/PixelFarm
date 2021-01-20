@@ -44,7 +44,7 @@ namespace LayoutFarm.UI.OpenGL
                 {
                     RootGraphic.InvalidateRectArea(_rootgfx, invalidateArea);
                     _rootgfx.FlushAccumGraphics();
-                    //PaintToOutputWindow();
+                    PaintToOutputWindow(); //DEO
                 }
             }
         }
