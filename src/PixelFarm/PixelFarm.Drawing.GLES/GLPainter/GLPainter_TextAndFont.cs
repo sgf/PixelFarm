@@ -178,6 +178,7 @@ namespace PixelFarm.DrawingGL
 
                 WordPlate wordPlate = _wordPlateMx.GetWordPlate(vxFmtStr);
 
+                /*DEO
                 if (latestWordplate != wordPlate)
                 {
                     if (latestWordplate != null)
@@ -187,7 +188,7 @@ namespace PixelFarm.DrawingGL
 
                     latestWordplate = wordPlate;
                     _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
-                }
+                }*/
 
                 //if (vxFmtStr.RequestFont != null)
                 //{

@@ -79,7 +79,7 @@ namespace LayoutFarm.TextEditing
 #endif
                     float backupViewportW = painter.ViewportWidth; //backup
                     float backupViewportH = painter.ViewportHeight; //backup
-                    painter.AttachTo(_builtInBackBuffer); //*** switch to builtInBackbuffer 
+                    //DEO painter.AttachTo(_builtInBackBuffer); //*** switch to builtInBackbuffer 
                     painter.SetViewportSize(this.Width, this.Height);
                     if (!_hasAccumRect)
                     {
@@ -139,7 +139,7 @@ namespace LayoutFarm.TextEditing
                     _builtInBackBuffer.IsValid = true;
                     _hasAccumRect = false;
 
-                    painter.AttachToNormalBuffer();//*** switch back
+                    //DEO painter.AttachToNormalBuffer();//*** switch back
                     painter.SetViewportSize(backupViewportW, backupViewportH);//restore viewport size
                 }
 
