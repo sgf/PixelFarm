@@ -172,8 +172,8 @@ namespace LayoutFarm.UI
                         }
 #else
                         _pcx = pcx;
-                        _glPainter = new MonoGamePixelPainter();
-                        _glPainter.BindToPainterCore(_pcx);
+                        _glPainter = new MonoGamePixelPainter(_pcx);
+                        //DEO _glPainter.BindToPainterCore(_pcx);
                         if (PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService != null)
                         {
                             var printer = new MonoGamePixelBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService);
