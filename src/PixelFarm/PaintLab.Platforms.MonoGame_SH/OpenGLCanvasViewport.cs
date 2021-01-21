@@ -194,12 +194,12 @@ namespace LayoutFarm.UI.OpenGL
                     _gfxUpdatePlan.ResetUpdatePlan();
                     ReleaseUpdateArea(u);
                 }
-                _drawboard.ExitCurrentDrawboardBuffer(); //DEO
+                _drawboard.ExitCurrentDrawboardBuffer(); //DEO... THIS IS CLEARING THE SCREEN...
                 //-----------
             }
             _rootgfx.EndRenderPhase();
 
-            _drawboard.DrawImage(((MyMonoGamePixelDrawBoard)_drawboard)._mainbuffer.GetImage(), new RectangleF(_drawboard.OriginX, _drawboard.OriginY, _drawboard.Width, _drawboard.Height));
+            //_drawboard.DrawImage(((MyMonoGamePixelDrawBoard)_drawboard)._mainbuffer.GetImage(), new RectangleF(_drawboard.OriginX, _drawboard.OriginY, _drawboard.Width, _drawboard.Height));
 
             GlobalRootGraphic.CurrentRootGfx = backup;
 #if DEBUG

@@ -3,6 +3,8 @@
 using PixelFarm.Drawing;
 using LayoutFarm.CustomWidgets;
 using LayoutFarm.UI;
+using PixelFarm.Drawing.MonoGame;
+
 namespace LayoutFarm
 {
     public abstract class SmartApp : App
@@ -11,7 +13,7 @@ namespace LayoutFarm
         AppHost _appHost;
 
         protected AppHost AppHost => _appHost;
-        protected sealed override void OnStart(AppHost host)
+        protected sealed override void OnStart(AppHost host, IGameHTMLUI pcx)
         {
             _appHost = host;
             OnInitializing();

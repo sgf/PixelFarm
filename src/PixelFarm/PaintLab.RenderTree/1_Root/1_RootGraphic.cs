@@ -273,7 +273,7 @@ namespace LayoutFarm
             this.Height = heigth;
         }
        
-        public abstract bool NeedsUpdate { get; set; } 
+        //DEO added public abstract bool NeedsUpdate { get; set; } 
         public abstract RequestFont DefaultTextEditFontInfo { get; }
         public abstract IRenderElement TopWindowRenderBox { get; }
         public abstract void AddChild(RenderElement renderE);

@@ -1,16 +1,18 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 
+using PixelFarm.Drawing.MonoGame;
+
 namespace LayoutFarm
 {
 
     public abstract class App
     {
-        internal void StartApp(AppHost host)
+        internal void StartApp(AppHost host, IGameHTMLUI pcx)
         {
-            OnStart(host);
+            OnStart(host, pcx);
         }
-        protected virtual void OnStart(AppHost host)
+        protected virtual void OnStart(AppHost host, IGameHTMLUI pcx)
         {
         }
         public virtual void OnClosing()

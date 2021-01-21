@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using GeonBit.UI;
+using Microsoft.Xna.Framework.Graphics;
 using PixelFarm.Drawing.MonoGame;
 using PixelFarm.DrawingGL;
 using PixelFarm.DrawingMonoGamePixel;
@@ -224,6 +225,15 @@ namespace LayoutFarm.UI
         {
             _winBridge.PaintToOutputWindow(invalidateArea);
         }
+
+        public RenderTarget2D PaintFinalize()
+        {
+            var image = _drawboard._mainbuffer.GetImage();
+            var glbmp = _glPainter.Core.HtmlCore.ResolveForGLBitmap(image);
+            var renderresult = glbmp.RenderTarget;
+            return renderresult;
+        }
+
         public void PaintToOutputWindow()
         {
             _winBridge.PaintToOutputWindow();

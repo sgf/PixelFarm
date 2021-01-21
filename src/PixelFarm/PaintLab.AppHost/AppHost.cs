@@ -4,6 +4,7 @@ using System.IO;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PaintLab.Svg;
+using PixelFarm.Drawing.MonoGame;
 
 namespace LayoutFarm
 {
@@ -12,8 +13,9 @@ namespace LayoutFarm
 
         protected int _primaryScreenWorkingAreaW;
         protected int _primaryScreenWorkingAreaH;
-        public AppHost()
+        public AppHost(IGameHTMLUI pcx)
         {
+            _pcx = pcx;
         }
         //override this to get exact executable path
         public virtual string ExecutablePath => System.IO.Directory.GetCurrentDirectory();
@@ -22,7 +24,7 @@ namespace LayoutFarm
         {
             if (PreviewApp(app))
             {
-                app.StartApp(this);
+                app.StartApp(this, _pcx);
             }
         }
         protected virtual bool PreviewApp(App app) => true;
@@ -45,7 +47,7 @@ namespace LayoutFarm
         }
         public virtual Image LoadImage(string imgName, int reqW, int reqH)
         {
-            if (!File.Exists(imgName)) //resolve to actual img 
+            if (!_pcx.Game.FileExistsAppData(imgName))//!File.Exists(imgName)) //DEO //resolve to actual img 
             {
                 return null;
             }
@@ -73,9 +75,15 @@ namespace LayoutFarm
                     {
                         try
                         {
-                            byte[] rawImgBuff = File.ReadAllBytes(imgName);
-                            using (MemoryStream ms = new MemoryStream(rawImgBuff))
+                            //byte[] rawImgBuff;
+                            
+                            using (MemoryStream ms = new MemoryStream())
                             {
+                                using (Stream img = _pcx.Game.FileOpenAppData(imgName, FileMode.Open, FileAccess.Read, FileShare.Read)) //DEO = File.ReadAllBytes(imgName);
+                                {
+                                    img.CopyTo(ms);
+                                }
+
                                 ms.Position = 0;
                                 return PixelFarm.Platforms.ImageIOPortal.ReadImageDataFromMemStream(ms, ext);
                             }
@@ -163,6 +171,8 @@ namespace LayoutFarm
         public virtual void CustomContentRequest(object customContentReq) { }
 
         RootGraphic _rootgfx;
+        private IGameHTMLUI _pcx;
+
         public void Setup(AppHostConfig appHostConfig)
         {
 

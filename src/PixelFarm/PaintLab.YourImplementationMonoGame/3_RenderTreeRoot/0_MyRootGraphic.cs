@@ -298,7 +298,7 @@ namespace LayoutFarm.UI
         //
         ITopWindowEventRoot ITopWindowEventRootProvider.EventRoot => _topWindowEventRoot;
 
-        public override bool NeedsUpdate { get { return _gfxTimerTaskMx.NeedsUpdate; } set { _gfxTimerTaskMx.NeedsUpdate = value; } }
+        //DEO added public override bool NeedsUpdate { get { return _gfxTimerTaskMx.NeedsUpdate; } set { _gfxTimerTaskMx.NeedsUpdate = value; } }
 
         //
 #if DEBUG
