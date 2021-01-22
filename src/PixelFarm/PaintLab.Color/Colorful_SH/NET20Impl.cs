@@ -1,9 +1,11 @@
 ﻿//MIT, 2020, WinterDev
 #if PIXEL_FARM_NET20
+/*
 namespace System.Runtime.CompilerServices
 {
     partial class ExtensionAttribute { }
 }
+*/
 namespace PaintLab.Colourful
 {
     public class Vector : IReadOnlyList<double>

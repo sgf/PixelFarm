@@ -108,7 +108,9 @@ namespace System
     public delegate R MyFunc<T1, T2, R>(T1 t1, T2 t2);
     public delegate R MyFunc<T, R>(T t); 
 }
+/*
 namespace System.Runtime.CompilerServices
 {
     public partial class ExtensionAttribute : Attribute { }
 }
+*/
