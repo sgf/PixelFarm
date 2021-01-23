@@ -152,6 +152,8 @@ namespace LayoutFarm.UI.OpenGL
             _stopWatch.Start();
 #endif
             _windowControl.MakeCurrent();
+
+
             _openGLViewport.PaintMe();
             
             //DEO _windowControl.SwapBuffers();

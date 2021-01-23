@@ -234,8 +234,28 @@ namespace LayoutFarm.UI
             return renderresult;
         }
 
-        public void PaintToOutputWindow()
+        public void PaintToOutputWindow(int w, int h)
         {
+
+            if (RootGfx.Width != w || RootGfx.Height != h)
+            {
+                RootGfx.Width = w; //DEO NOT SURE IF THIS IS RIGHT, need to reflow the html. Not sure how to force that yet.
+                RootGfx.Height = h;
+                _drawboard.Dispose();
+                //fit viewport
+                _glPainter = new MonoGamePixelPainter(_pcx);
+                if (PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService != null)
+                {
+                    var printer = new MonoGamePixelBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.MonoGamePixel.MonoGamePixelPlatform.TextService);
+
+                    _glPainter.TextPrinter = printer;
+                }
+
+                var drawboard = new PixelFarm.Drawing.MonoGamePixel.MyMonoGamePixelDrawBoard(_glPainter);
+                _glPainter.SetDrawboard(drawboard);
+                _drawboard = drawboard;
+                ((OpenGL.MyTopWindowBridgeOpenGL)_winBridge).SetCanvas(drawboard);
+            }
             _winBridge.PaintToOutputWindow();
         }
         public void PaintToPixelBuffer(IntPtr outputPixelBuffer)

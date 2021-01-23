@@ -279,8 +279,8 @@ namespace LayoutFarm
         public abstract void AddChild(RenderElement renderE);
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
         public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
-        public int Width { get; internal set; }
-        public int Height { get; internal set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
 
         /// <summary>
         /// close window box root
