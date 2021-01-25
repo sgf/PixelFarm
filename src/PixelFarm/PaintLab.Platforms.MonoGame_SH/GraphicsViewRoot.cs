@@ -17,7 +17,7 @@ namespace LayoutFarm.UI
         AbstractTopWindowBridge _winBridge;
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
-        InnerViewportKind _innerViewportKind;
+ //       InnerViewportKind _innerViewportKind;
         IGpuOpenGLSurfaceView _viewport;
 
 
@@ -104,7 +104,7 @@ namespace LayoutFarm.UI
         public int Width => _width;
         public int Height => _height;
         //
-        public InnerViewportKind InnerViewportKind => _innerViewportKind;
+        //public InnerViewportKind InnerViewportKind => _innerViewportKind;
         //
         public RootGraphic RootGfx => _rootgfx;
         //         
@@ -122,7 +122,7 @@ namespace LayoutFarm.UI
 
         public void InitRootGraphics(RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
-            InnerViewportKind innerViewportKind,
+//            InnerViewportKind innerViewportKind,
             IGpuOpenGLSurfaceView nativeWindow,
             AbstractTopWindowBridge bridge,
             IGameHTMLUI pcx)
@@ -130,18 +130,18 @@ namespace LayoutFarm.UI
             //create a proper bridge****
             _rootgfx = rootgfx;
             _topWinEventRoot = topWinEventRoot;
-            _innerViewportKind = innerViewportKind;
+            //_innerViewportKind = innerViewportKind;
             _viewport = nativeWindow;
             _winBridge = bridge;
 
             nativeWindow.SetSize(rootgfx.Width, rootgfx.Height);
 
-            switch (innerViewportKind)
+            //switch (innerViewportKind)
             {
-                case InnerViewportKind.GdiPlusOnGLES:
-                case InnerViewportKind.AggOnGLES:
-                case InnerViewportKind.GLES:
-                case InnerViewportKind.MonoGame:
+                //case InnerViewportKind.GdiPlusOnGLES:
+                //case InnerViewportKind.AggOnGLES:
+                //case InnerViewportKind.GLES:
+                //case InnerViewportKind.MonoGame:
                     {
                         _winBridge.OnHostControlLoaded();
                         try
@@ -218,7 +218,7 @@ namespace LayoutFarm.UI
                         ((OpenGL.MyTopWindowBridgeOpenGL)_winBridge).SetCanvas(drawboard);
 
                     }
-                    break;
+                    //break;
             }
         }
         public void PaintToOutputWindow(PixelFarm.Drawing.Rectangle invalidateArea)

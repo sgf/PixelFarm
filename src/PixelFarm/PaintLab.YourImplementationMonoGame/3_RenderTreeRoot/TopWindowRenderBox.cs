@@ -18,7 +18,7 @@ namespace LayoutFarm
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             //TODO: implement FillRect() with no blending ... , or FastClear() 
-            if (!WaitForStartRenderElement)
+            if (false && !WaitForStartRenderElement) //DEO...
             {
                 //just clear with white?
                 d.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
