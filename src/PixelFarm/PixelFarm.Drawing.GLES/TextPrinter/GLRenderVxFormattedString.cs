@@ -83,7 +83,7 @@ namespace PixelFarm.DrawingGL
             base.Dispose();
         }
 
-#if DEBUG
+//#if DEBUG
         public string dbugText;
         public override string ToString()
         {
@@ -94,7 +94,7 @@ namespace PixelFarm.DrawingGL
             return base.ToString();
         }
         public override string dbugName => "GL";
-#endif
+//#endif
 
     }
     public class GLRenderVxFormattedStringSpan

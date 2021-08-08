@@ -21,9 +21,9 @@ namespace PixelFarm.Drawing
             Waiting,
             Ready,
         }
-#if DEBUG
+//#if DEBUG
         public abstract string dbugName { get; }
-#endif
+//#endif
     }
 
 
