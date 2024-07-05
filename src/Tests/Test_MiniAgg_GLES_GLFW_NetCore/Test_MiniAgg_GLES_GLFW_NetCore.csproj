@@ -111,7 +111,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj" />
     <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj" />
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Glfw\PaintLab.Platforms.Glfw.csproj" />
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj" />

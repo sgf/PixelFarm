@@ -29,6 +29,6 @@ namespace PixelFarm.CpuBlit
 //#if DEBUG
         public string OriginalString { get; set; }
         public override string dbugName => "Agg";
-//#endif
+#endif
     }
 }

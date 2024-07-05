@@ -56,7 +56,6 @@
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
     <Compile Include="0_Start\GLESAppModule.cs" />
-    <Compile Include="0_Start\RelativePathBuilder.cs" />
     <Compile Include="FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,10 +151,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
-      <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
-      <Name>MiniOpenTK_Net20</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
       <Name>PaintLab.Platforms.Win32</Name>
@@ -164,9 +159,9 @@
       <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
       <Name>PaintLab.Svg.One</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One\PixelFarm.One.csproj">
-      <Project>{48687c19-8f1a-46a5-8a3a-31c3abd78b5d}</Project>
-      <Name>PixelFarm.One</Name>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Marius.Yoga\Marius.Yoga.csproj">
       <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>

@@ -16,7 +16,6 @@
     <ProjectReference Include="..\..\..\..\routes.goodorbad\PixelFarm.Drawing.MonoGame\PixelFarm.Drawing.MonoGame.csproj" />
     <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj" />
     <ProjectReference Include="..\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj" />
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj" />
     <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj" />
     <ProjectReference Include="..\PaintLab.Svg\PaintLab.Svg.csproj" />
     <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj" />
