@@ -14,11 +14,17 @@ namespace PixelFarm.CpuBlit
         }
     }
 
+
     public class AggRenderVxFormattedString : RenderVxFormattedString
     {
         internal AggRenderVxFormattedString()
         {
         }
+        public object Seq { get; set; }
+        public override int StripCount => throw new System.NotImplementedException();
+        public string DelayString { get; internal set; }
+        public bool IsDelay { get; internal set; }
+#if DEBUG
         public RenderVxGlyphPlan[] GlyphList { get; set; }
 //#if DEBUG
         public string OriginalString { get; set; }

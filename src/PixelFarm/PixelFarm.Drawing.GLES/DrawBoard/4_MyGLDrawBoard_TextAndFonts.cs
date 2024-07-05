@@ -25,6 +25,32 @@ namespace PixelFarm.Drawing.GLES2
                 _gpuPainter.TextPrinter?.ChangeFillColor(value);
             }
         }
+        public override RenderVxFormattedString CreateFormattedString(int[] buffer, int startAt, int len, bool delay)
+        {
+            if (_gpuPainter.TextPrinter == null)
+            {
+#if DEBUG
+                throw new System.Exception("no text printer");
+#endif
+            }
+            //create blank render vx
+            var fmtstr = new DrawingGL.GLRenderVxFormattedString();
+            fmtstr.Delay = delay;
+#if DEBUG
+            //fmtstr.dbugText = new string(buffer, startAt, len);
+#endif
+
+            //we create
+            //1. texture coords for this string
+            //2. (if not delay) => an image for this string  inside a larger img texture
+            _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
+            if (!fmtstr.Delay)
+            {
+                fmtstr.ReleaseIntermediateStructures();
+            }
+            return fmtstr;
+
+        }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay)
         {
             if (_gpuPainter.TextPrinter == null)
@@ -34,27 +60,21 @@ namespace PixelFarm.Drawing.GLES2
 #endif
             }
             //create blank render vx
-            var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
-            renderVxFmtStr.Delay = delay;
+            var fmtstr = new DrawingGL.GLRenderVxFormattedString();
+            fmtstr.Delay = delay;
 #if DEBUG
-            renderVxFmtStr.dbugText = new string(buffer, startAt, len);
+            fmtstr.dbugText = new string(buffer, startAt, len);
 #endif
-            if (_gpuPainter.TextPrinter != null)
+
+            //we create
+            //1. texture coords for this string
+            //2. (if not delay) => an image for this string  inside a larger img texture
+            _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
+            if (!fmtstr.Delay)
             {
-                //we create
-                //1. texture coords for this string
-                //2. (if not delay) => an image for this string  inside a larger img texture
-                _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-                return renderVxFmtStr;
+                fmtstr.ReleaseIntermediateStructures();
             }
-            else
-            {
-#if DEBUG
-                throw new System.NotSupportedException();
-#else
-                return null;
-#endif
-            }
+            return fmtstr;
         }
         public void PrepareWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
         {
@@ -65,20 +85,28 @@ namespace PixelFarm.Drawing.GLES2
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
             {
-                _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
+                DrawingGL.IGLTextPrinter textPrinter = _gpuPainter.TextPrinter;
+                DrawingGL.GlyphTexturePrinterDrawingTechnique prev = textPrinter.TextDrawingTechnique;//save
+                DrawingGL.GlyphTexturePrinterDrawingTechnique cur = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
+                switch (this.TextDrawingTech)
+                {
+                    //temp fix
+                    case TextDrawingTech.LcdSubPix:
+                        cur = DrawingGL.GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+                        break;
+                    case TextDrawingTech.Stencil:
+                        cur = DrawingGL.GlyphTexturePrinterDrawingTechnique.Stencil;
+                        break;
+                    case TextDrawingTech.Copy:
+                        cur = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
+                        break;
+                }
 
-                //if (vxFmtStr.BmpOnTransparentBackground)
-                //{
-                //    DrawingGL.GlyphTexturePrinterDrawingTechnique prevTech = _gpuPainter.TextPrinterDrawingTechnique; //save
-                //    _gpuPainter.TextPrinterDrawingTechnique = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
-                //    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                //    _gpuPainter.TextPrinterDrawingTechnique = prevTech;//restore
-                //}
-                //else
-                //{
-                //    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                //}
+                textPrinter.TextDrawingTechnique = cur;
 
+                textPrinter.DrawString(vxFmtStr, x, y);
+
+                textPrinter.TextDrawingTechnique = prev;//restore
             }
         }
 

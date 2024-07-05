@@ -155,15 +155,8 @@ namespace PixelFarm
                 arc.Init(50, 50, 10, 20, Math.PI, 0);
                 arc.SetStartEndLimit(40, 50, 60, 50);
 
-                foreach (VertexData vertexData in arc.GetVertexIter())
-                {
-                    if (VertexHelper.IsEmpty(vertexData.command))
-                    {
-                        break;
-                    }
-                    v1.AddVertex(vertexData.x, vertexData.y, vertexData.command);
-                }
-
+               
+                arc.MakeVxs(v1);
                 //--------------------------
                 v1.ScaleToNewVxs(3, v2);
                 flattener.MakeVxs(v2, v3);
@@ -448,7 +441,6 @@ namespace PixelFarm
 
                     selectedVxs.RotateDegToNewVxs(i * (360 / 8), v1);
                     p.Fill(v1);
-
                     v1.Clear();
                 }
 

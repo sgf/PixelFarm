@@ -11,6 +11,8 @@ namespace LayoutFarm.CustomWidgets
         CustomImageRenderBox _imgRenderBox;
         ImageBinder _imageBinder;
         EventHandler _imgChangedSubscribe;
+         
+
         public ImageBox() : this(16, 16)
         {
             //if user does not provide width and height,
@@ -54,18 +56,16 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
+         
         public override RenderElement GetPrimaryRenderElement()
         {
             if (_imgRenderBox == null)
             {
-                var renderBox = new CustomImageRenderBox(this.Width, this.Height);
-                SetCommonProperties(renderBox, this);
-                renderBox.ImageBinder = _imageBinder;
-
-                SetPrimaryRenderElement(renderBox);
-                _imgRenderBox = renderBox;
+                var imgBox = new CustomImageRenderBox(this.Width, this.Height);
+                SetCommonProperties(imgBox, this);
+                imgBox.ImageBinder = _imageBinder; 
+                SetPrimaryRenderElement(imgBox);
+                _imgRenderBox = imgBox;
             }
             return _imgRenderBox;
         }
@@ -76,8 +76,8 @@ namespace LayoutFarm.CustomWidgets
             this.CurrentPrimaryRenderElement?.SetSize(width, height);
         }
         public override void SetInnerContentSize(int w, int h)
-        { 
-            this.CurrentPrimaryRenderElement?.SetSize(w, h); 
+        {
+            this.CurrentPrimaryRenderElement?.SetSize(w, h);
         }
         void OnContentUpdate()
         {

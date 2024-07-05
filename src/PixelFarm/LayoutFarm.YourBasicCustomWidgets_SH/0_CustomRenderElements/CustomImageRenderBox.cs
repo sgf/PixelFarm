@@ -1,8 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 namespace LayoutFarm.CustomWidgets
 {
+
+
     public class CustomImageRenderBox : CustomRenderBox
     {
         //
@@ -13,9 +17,9 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void ClearAllChildren()
         {
-        }
-        public ImageBinder ImageBinder { get; set; }
 
+        }
+        public ImageBinder ImageBinder { get; set; } //img source
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             //this render element dose not have child node, so
@@ -25,13 +29,18 @@ namespace LayoutFarm.CustomWidgets
 
             if (WaitForStartRenderElement) { return; }
 
-            if (ImageBinder == null) { return; }
+            if (ImageBinder == null)
+            {
+                return;
+            }
 
             //----------------------------------
             switch (ImageBinder.State)
             {
                 case BinderState.Loaded:
                     {
+                        //may not need background 
+
                         d.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
                         d.DrawImage(ImageBinder,
                             new RectangleF(
@@ -50,11 +59,8 @@ namespace LayoutFarm.CustomWidgets
                         else if (ImageBinder is AtlasImageBinder)
                         {
                             //resolve this and draw
-                            d.DrawImage(ImageBinder,
-                               new RectangleF(
-                               ContentLeft, ContentTop,
-                               ContentWidth,
-                               ContentHeight));
+                            goto case BinderState.Loaded;
+
                         }
                     }
                     break;

@@ -12,6 +12,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One\PixelFarm.One.csproj">
+      <Project>{48687c19-8f1a-46a5-8a3a-31c3abd78b5d}</Project>
+      <Name>PixelFarm.One</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PaintLab.CssBase\PaintLab.CssBase.csproj" />
     <ProjectReference Include="..\PaintLab.PaintFx\PaintLab.PaintFx.csproj" />
     <ProjectReference Include="..\PaintLab.WebDom\PaintLab.WebDom.csproj" />

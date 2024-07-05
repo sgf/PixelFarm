@@ -77,7 +77,7 @@ namespace PixelFarm.DrawingGL
         public bool IsPrimary { get; }
         public bool IsValid { get; private set; }
 
-        public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
+        public GLBitmap GetGLBitmap() => _frameBuffer?.GetGLBitmap();
 
         public InnerGLData GetInnerGLData() => (_frameBuffer != null) ? new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.GetGLBitmap()) : new InnerGLData();
 
@@ -326,6 +326,7 @@ namespace PixelFarm.DrawingGL
             _shareRes.SetOrthoViewOffset(0, 0);
             rendersx.SetAsCurrentSurface();
             SetCanvasOrigin(0, 0);//reset
+            //TODO: width, height?
             SetClipRect(0, 0, rendersx.Height, rendersx.Height);
         }
 
@@ -424,6 +425,7 @@ namespace PixelFarm.DrawingGL
                 return glBmp;
             }
             //2. 
+
             glBmp = Image.GetCacheInnerImage(image) as GLBitmap;
             if (glBmp != null)
             {
@@ -462,9 +464,9 @@ namespace PixelFarm.DrawingGL
             //   PixelType.UnsignedByte,
             //   outputBuffer);
             GL.ReadPixels(x, y, w, h,
-            OpenTK.Graphics.ES20.PixelFormat.Rgba,
-            PixelType.UnsignedByte,
-            outputBuffer);
+                OpenTK.Graphics.ES20.PixelFormat.Rgba,
+                PixelType.UnsignedByte,
+                outputBuffer);
 
         }
         //
@@ -586,6 +588,9 @@ namespace PixelFarm.DrawingGL
             switch (bmp.BitmapFormat)
             {
                 default: throw new NotSupportedException();
+                case BitmapBufferFormat.RGBO:
+                    _rgbTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                    break;
                 case BitmapBufferFormat.RGBA:
                     _rgbaTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
                     break;
@@ -1851,16 +1856,31 @@ namespace PixelFarm.DrawingGL
         int _orgBmpW;
         int _orgBmpH;
         bool _bmpYFlipped;
-
         RenderSurfaceOriginKind _pcxOrgKind;
 
-        internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
-        internal PixelFarm.CpuBlit.ArrayList<ushort> _indexList = new CpuBlit.ArrayList<ushort>();
+        ArrayList<float> _vertexList;
+        ArrayList<ushort> _indexList;
+
+        int _v_startIndex;
+        int _i_startIndex;
+
+        ushort _indexCount = 0;
 
         public TextureCoordVboBuilder()
         {
-
         }
+        public void SetArrayLists(ArrayList<float> vertexList, ArrayList<ushort> indexlist)
+        {
+            _v_startIndex = vertexList.Count;
+            _i_startIndex = indexlist.Count;
+
+            _indexCount = 0;//***
+            _vertexList = vertexList;
+            _indexList = indexlist;
+        }
+        public ArrayListSegment<float> CreateVertextListSpan() => new ArrayListSegment<float>(_vertexList, _v_startIndex, _vertexList.Count - _v_startIndex);
+        public ArrayListSegment<ushort> CreateIndexListSpan() => new ArrayListSegment<ushort>(_indexList, _i_startIndex, _indexList.Count - _i_startIndex);
+
         public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOriginKind pcxOrgKind)
         {
             _orgBmpW = width;
@@ -1868,11 +1888,7 @@ namespace PixelFarm.DrawingGL
             _bmpYFlipped = isYFlipped;
             _pcxOrgKind = pcxOrgKind;
         }
-        public void Clear()
-        {
-            _buffer.Clear();
-            _indexList.Clear();
-        }
+
 
         public void WriteRect(
             in PixelFarm.Drawing.Rectangle srcRect,
@@ -1897,42 +1913,45 @@ namespace PixelFarm.DrawingGL
 
             // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
-            ushort indexCount = (ushort)_indexList.Count;
+            //ushort indexCount = (ushort)_indexList.Count;
 
-            if (indexCount > 0)
+            ArrayList<float> vertexLst = _vertexList;
+            ArrayList<ushort> indxLst = _indexList;
+            if (_indexCount > 0)
             {
 
-                //add degenerative triangle
-                int buff_count = _buffer.Count;
-                float prev_5 = _buffer[buff_count - 5];
-                float prev_4 = _buffer[buff_count - 4];
-                float prev_3 = _buffer[buff_count - 3];
-                float prev_2 = _buffer[buff_count - 2];
-                float prev_1 = _buffer[buff_count - 1];
+                //add degenerative triangle 
+                int buff_count = vertexLst.Count;
+                float prev_5 = vertexLst[buff_count - 5];
+                float prev_4 = vertexLst[buff_count - 4];
+                float prev_3 = vertexLst[buff_count - 3];
+                float prev_2 = vertexLst[buff_count - 2];
+                float prev_1 = vertexLst[buff_count - 1];
 
-                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
-                _buffer.Append(prev_2); _buffer.Append(prev_1);
+                vertexLst.Append(prev_5); vertexLst.Append(prev_4); vertexLst.Append(prev_3);
+                vertexLst.Append(prev_2); vertexLst.Append(prev_1);
 
 
-                _indexList.Append((ushort)(indexCount));
-                _indexList.Append((ushort)(indexCount + 1));
+                indxLst.Append((ushort)(_indexCount));
+                indxLst.Append((ushort)(_indexCount + 1));
 
-                indexCount += 2;
+                _indexCount += 2;
             }
 
             //---------
             RectangleF normalizedSrc = srcRect.CreateNormalizedRect(_orgBmpW, _orgBmpH);
             RectangleF target = new RectangleF(targetLeft, targetTop, srcRect.Width, srcRect.Height);
-            WriteToVboStream(_buffer, indexCount > 0,
+            WriteToVboStream(vertexLst, _indexCount > 0,
                 normalizedSrc,
                 target,
                 _bmpYFlipped);
 
-            _indexList.Append(indexCount);
-            _indexList.Append((ushort)(indexCount + 1));
-            _indexList.Append((ushort)(indexCount + 2));
-            _indexList.Append((ushort)(indexCount + 3));
-            //--- 
+            indxLst.Append(_indexCount);
+            indxLst.Append((ushort)(_indexCount + 1));
+            indxLst.Append((ushort)(_indexCount + 2));
+            indxLst.Append((ushort)(_indexCount + 3));
+
+            _indexCount += 4;
         }
 
 
@@ -1959,27 +1978,27 @@ namespace PixelFarm.DrawingGL
 
             // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
-            ushort indexCount = (ushort)_indexList.Count;
-
-            if (indexCount > 0)
+            ArrayList<float> vertexLst = _vertexList;
+            ArrayList<ushort> indxLst = _indexList;
+            if (_indexCount > 0)
             {
 
                 //add degenerative triangle
-                int buff_count = _buffer.Count;
-                float prev_5 = _buffer[buff_count - 5];
-                float prev_4 = _buffer[buff_count - 4];
-                float prev_3 = _buffer[buff_count - 3];
-                float prev_2 = _buffer[buff_count - 2];
-                float prev_1 = _buffer[buff_count - 1];
+                int buff_count = vertexLst.Count;
+                float prev_5 = vertexLst[buff_count - 5];
+                float prev_4 = vertexLst[buff_count - 4];
+                float prev_3 = vertexLst[buff_count - 3];
+                float prev_2 = vertexLst[buff_count - 2];
+                float prev_1 = vertexLst[buff_count - 1];
 
-                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
-                _buffer.Append(prev_2); _buffer.Append(prev_1);
+                vertexLst.Append(prev_5); vertexLst.Append(prev_4); vertexLst.Append(prev_3);
+                vertexLst.Append(prev_2); vertexLst.Append(prev_1);
 
 
-                _indexList.Append((ushort)(indexCount));
-                _indexList.Append((ushort)(indexCount + 1));
+                indxLst.Append((ushort)(_indexCount));
+                indxLst.Append((ushort)(_indexCount + 1));
 
-                indexCount += 2;
+                _indexCount += 2;
             }
 
             //---------
@@ -1996,38 +2015,41 @@ namespace PixelFarm.DrawingGL
 
             RectangleF normalizedSrcRect = srcRect.CreateNormalizedRect(_orgBmpW, _orgBmpH);
 
-            WriteToVboStream(_buffer,
-                 indexCount > 0,
+            WriteToVboStream(vertexLst,
+                 _indexCount > 0,
                  normalizedSrcRect,
                  quad,
                  _bmpYFlipped);
 
-            _indexList.Append(indexCount);
-            _indexList.Append((ushort)(indexCount + 1));
-            _indexList.Append((ushort)(indexCount + 2));
-            _indexList.Append((ushort)(indexCount + 3));
-            //--- 
+            indxLst.Append(_indexCount);
+            indxLst.Append((ushort)(_indexCount + 1));
+            indxLst.Append((ushort)(_indexCount + 2));
+            indxLst.Append((ushort)(_indexCount + 3));
+
+            _indexCount += 4;
         }
 
         public void AppendDegenerativeTriangle()
         {
 
-            ushort indexCount = (ushort)_indexList.Count;
-            if (indexCount > 0)
+            if (_indexCount > 0)
             {
-
+                ArrayList<float> vertexLst = _vertexList;
+                ArrayList<ushort> indxLst = _indexList;
                 //add degenerative triangle
-                int buff_count = _buffer.Count;
-                float prev_5 = _buffer[buff_count - 5];
-                float prev_4 = _buffer[buff_count - 4];
-                float prev_3 = _buffer[buff_count - 3];
-                float prev_2 = _buffer[buff_count - 2];
-                float prev_1 = _buffer[buff_count - 1];
+                int buff_count = vertexLst.Count;
+                float prev_5 = vertexLst[buff_count - 5];
+                float prev_4 = vertexLst[buff_count - 4];
+                float prev_3 = vertexLst[buff_count - 3];
+                float prev_2 = vertexLst[buff_count - 2];
+                float prev_1 = vertexLst[buff_count - 1];
 
-                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
-                _buffer.Append(prev_2); _buffer.Append(prev_1);
-                _indexList.Append((ushort)(indexCount));
-                _indexList.Append((ushort)(indexCount + 1));
+                vertexLst.Append(prev_5); vertexLst.Append(prev_4); vertexLst.Append(prev_3);
+                vertexLst.Append(prev_2); vertexLst.Append(prev_1);
+                indxLst.Append((ushort)(_indexCount));
+                indxLst.Append((ushort)(_indexCount + 1));
+
+                _indexCount += 2;
             }
         }
 
