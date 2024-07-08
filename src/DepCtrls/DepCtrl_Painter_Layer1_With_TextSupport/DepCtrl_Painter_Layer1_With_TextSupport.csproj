@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DepCtrl_Painter_Layer1_With_TextSupport</RootNamespace>
     <AssemblyName>DepCtrl_Painter_Layer1_With_TextSupport</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>8.0</LangVersion>
     <Deterministic>true</Deterministic>
