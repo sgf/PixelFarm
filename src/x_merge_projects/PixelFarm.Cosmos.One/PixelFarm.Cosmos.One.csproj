@@ -10,7 +10,7 @@
     <RootNamespace>PixelFarm.Cosmos.One</RootNamespace>
     <AssemblyName>PixelFarm.Cosmos.One</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-	  <LangVersion>8.0</LangVersion>
+	  <LangVersion>latest</LangVersion>
 	  <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

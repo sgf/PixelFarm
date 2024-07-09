@@ -1,6 +1,5 @@
 ﻿//MIT, 2017-present, WinterDev
 using System;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 

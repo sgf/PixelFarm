@@ -10,7 +10,7 @@
     <AssemblyName>PaintLabResTool</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>

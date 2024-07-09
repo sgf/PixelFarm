@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using PointF = PixelFarm.VectorMath.PointF;
 
 
 // Utility class for calculating a Cubic multi-segment (Hermite) spline in 2D

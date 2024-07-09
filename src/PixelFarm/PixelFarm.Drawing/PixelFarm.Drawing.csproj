@@ -1,27 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;DEBUG;PIXEL_FARM,PIXEL_FARM_NET20,WIN32</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DefineConstants>TRACE;PIXEL_FARM,PIXEL_FARM_NET20</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
-  </ItemGroup>
-  <Import Project="..\PixelFarm.Vectors_SH\PixelFarm.Vectors_SH.projitems" Label="Shared" />
-  <Import Project="..\BackEnd.Triangulation\Triangulation.projitems" Label="Shared" />
-  <Import Project="..\BackEnd.Tesselate_SH\BackEnd.Tesselate_SH.projitems" Label="Shared" />
-  <Import Project="..\PixelFarm.Vectors_Utils_SH\PixelFarm.Vectors_Utils_SH.projitems" Label="Shared" />
-  <Import Project="..\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
-  <Import Project="..\PixelFarm.Painter_Layer2_SH\PixelFarm.Painter_Layer2_SH.projitems" Label="Shared" />
-  <Import Project="..\BackEnd.BurningMineCurve_SH\BackEnd.BurningMineCurve_SH.projitems" Label="Shared" />
-  <Import Project="..\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
-  <Import Project="..\PixelFarm.CpuBlit_Layer2\PixelFarm.CpuBlit_Layer2.projitems" Label="Shared" />
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<OutputType>Library</OutputType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DefineConstants>TRACE;DEBUG;PIXEL_FARM,PIXEL_FARM_NET20,WIN32</DefineConstants>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineConstants>TRACE;PIXEL_FARM,PIXEL_FARM_NET20</DefineConstants>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
+	</ItemGroup>
+	<Import Project="..\PixelFarm.Vectors_SH\PixelFarm.Vectors_SH.projitems" Label="Shared" />
+	<Import Project="..\BackEnd.Triangulation\Triangulation.projitems" Label="Shared" />
+	<Import Project="..\BackEnd.Tesselate_SH\BackEnd.Tesselate_SH.projitems" Label="Shared" />
+	<Import Project="..\PixelFarm.Vectors_Utils_SH\PixelFarm.Vectors_Utils_SH.projitems" Label="Shared" />
+	<Import Project="..\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
+	<Import Project="..\PixelFarm.Painter_Layer2_SH\PixelFarm.Painter_Layer2_SH.projitems" Label="Shared" />
+	<Import Project="..\BackEnd.BurningMineCurve_SH\BackEnd.BurningMineCurve_SH.projitems" Label="Shared" />
+	<Import Project="..\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
+	<Import Project="..\PixelFarm.CpuBlit_Layer2\PixelFarm.CpuBlit_Layer2.projitems" Label="Shared" />
 </Project>

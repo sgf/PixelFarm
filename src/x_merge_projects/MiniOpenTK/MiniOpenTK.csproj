@@ -11,7 +11,7 @@
     <AssemblyName>MiniOpenTK</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>
