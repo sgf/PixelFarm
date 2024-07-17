@@ -52,6 +52,20 @@
     <Compile Include="..\BackEnd.Win32Utils\NativeWin32MemoryDc.cs">
       <Link>0_REF_Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="GdiPlus\0_Start\WinGdiPlusPlatform.cs" />
+    <Compile Include="GdiPlus\DrawBoard\1_GdiPlusDrawBoard_Specific.cs" />
+    <Compile Include="GdiPlus\DrawBoard\2_GdiPlusDrawBoard_CoordinateAndClip.cs" />
+    <Compile Include="GdiPlus\DrawBoard\3_GdiPlusDrawBoard_DrawGraphics.cs" />
+    <Compile Include="GdiPlus\DrawBoard\4_GdiPlusDrawBoard_TextAndFonts.cs" />
+    <Compile Include="GdiPlus\DrawBoard\Conv.cs" />
+    <Compile Include="GdiPlus\Painter\BitmapHelper.cs" />
+    <Compile Include="GdiPlus\Painter\BufferBitmapStore.cs" />
+    <Compile Include="GdiPlus\Painter\FontFace.cs" />
+    <Compile Include="GdiPlus\Painter\GdiMemBitmapIO.cs" />
+    <Compile Include="GdiPlus\Painter\GdiPlusRenderVx.cs" />
+    <Compile Include="GdiPlus\Painter\NativeTextWin32.cs" />
+    <Compile Include="GdiPlus\Painter\VxsHelper.cs" />
+    <Compile Include="GdiPlus\RenderSurface\GdiPlusRenderSurface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -84,7 +98,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <Import Project="..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -20,7 +20,7 @@
 
 
 #define PIXEL_FARM
-#define PIXEL_FARM_NET20
+
 
 using System;
 using System.Collections.Generic;
@@ -209,7 +209,7 @@ namespace burningmime.curves
         /// <param name="aCrossB">"a.X*b.Y - b.X*a.Y" This would be the Z-component of (⟪a.X, a.Y, 0⟫ ⨯ ⟪b.X, b.Y, 0⟫) in 3-space.</param>
         /// <param name="p">The point to test.</param>
         /// <returns>The perpendicular distance to the line.</returns>
-#if !UNITY && !PIXEL_FARM_NET20
+#if !UNITY
         [MethodImpl(MethodImplOptions.AggressiveInlining)] // originally this method wasn't be inlined
 #endif
         private static FLOAT PerpendicularDistance(VECTOR a, VECTOR b, FLOAT abDist, FLOAT aCrossB, VECTOR p)

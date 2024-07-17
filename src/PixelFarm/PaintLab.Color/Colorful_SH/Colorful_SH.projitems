@@ -79,6 +79,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Implementation\Utils\MatrixFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Other\CCTConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Other\SaturationLChFormulas.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NET20Impl.cs" />
   </ItemGroup>
 </Project>
