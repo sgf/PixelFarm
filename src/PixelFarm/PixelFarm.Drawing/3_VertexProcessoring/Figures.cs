@@ -1368,7 +1368,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 #if DEBUG
     public static class dbugTessPainterExtensions
     {
-        public static void dbugDrawPoly2TriPolygon(this Painter painter, List<Poly2Tri.Polygon> polygons)
+        public static void dbugDrawPoly2TriPolygon(this IPainter painter, List<Poly2Tri.Polygon> polygons)
         {
             foreach (Poly2Tri.Polygon polygon in polygons)
             {
@@ -1384,7 +1384,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
-        public static void dbugDrawTessTriangles(this Painter painter, float[] tessArea)
+        public static void dbugDrawTessTriangles(this IPainter painter, float[] tessArea)
         {
             int count = tessArea.Length;
             for (int i = 0; i < count;)
@@ -1402,7 +1402,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 i += 6;
             }
         }
-        public static void dbugDrawTessTriangles(this Painter painter, float[] tessArea, ushort[] indexList)
+        public static void dbugDrawTessTriangles(this IPainter painter, float[] tessArea, ushort[] indexList)
         {
             int count = indexList.Length;
             for (int i = 0; i < count;)

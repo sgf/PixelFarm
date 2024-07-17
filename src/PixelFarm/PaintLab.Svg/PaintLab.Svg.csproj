@@ -1,26 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <OutputType>Library</OutputType>
-    <LangVersion>latest</LangVersion>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\PixelFarm.BasicVisualElements_SH\ExtensionAttribute.cs">
-      <Link>ExtensionAttribute.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One\PixelFarm.One.csproj">
-      <Project>{48687c19-8f1a-46a5-8a3a-31c3abd78b5d}</Project>
-      <Name>PixelFarm.One</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PaintLab.CssBase\PaintLab.CssBase.csproj" />
-    <ProjectReference Include="..\PaintLab.PaintFx\PaintLab.PaintFx.csproj" />
-    <ProjectReference Include="..\PaintLab.WebDom\PaintLab.WebDom.csproj" />
-    <ProjectReference Include="..\PaintLab.WebLexer\PaintLab.WebLexer.csproj" />
-    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<OutputType>Library</OutputType>
+		<LangVersion>latest</LangVersion>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\PixelFarm.BasicVisualElements_SH\ExtensionAttribute.cs">
+			<Link>ExtensionAttribute.cs</Link>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\PaintLab.PaintFx\PaintLab.PaintFx.csproj" />
+	</ItemGroup>
 </Project>

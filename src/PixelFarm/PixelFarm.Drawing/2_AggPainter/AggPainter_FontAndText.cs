@@ -45,7 +45,7 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        public override RequestFont CurrentFont
+        public RequestFont CurrentFont
         {
             get => _currentFont;
             set
@@ -61,7 +61,7 @@ namespace PixelFarm.CpuBlit
 
         public int CurrentLineSpaceHeight => (_textPrinter != null) ? _textPrinter.CurrentLineSpaceHeight : 0;
 
-        public override void DrawString(
+        public void DrawString(
            string text,
            double x,
            double y)
@@ -84,7 +84,7 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
-        public override void DrawString(RenderVxFormattedString renderVx, double left, double top)
+        public void DrawString(RenderVxFormattedString renderVx, double left, double top)
         {
             //draw string from render vx 
             AggRenderVxFormattedString aggVxString = (AggRenderVxFormattedString)renderVx;
@@ -117,7 +117,7 @@ namespace PixelFarm.CpuBlit
                 return CreateRenderVx(text);
             }
         }
-        public override RenderVxFormattedString CreateRenderVx(string textspan)
+        public RenderVxFormattedString CreateRenderVx(string textspan)
         {
             var renderVxFmtStr = new AggRenderVxFormattedString();
             if (_textPrinter != null)
@@ -128,7 +128,7 @@ namespace PixelFarm.CpuBlit
             }
             return renderVxFmtStr;
         }
-        public override RenderVxFormattedString CreateRenderVx(IFormattedGlyphPlanList formattedGlyphPlans)
+        public RenderVxFormattedString CreateRenderVx(IFormattedGlyphPlanList formattedGlyphPlans)
         {
             var renderVxFmtStr = new AggRenderVxFormattedString();
             if (_textPrinter != null)
@@ -137,7 +137,7 @@ namespace PixelFarm.CpuBlit
             }
             return renderVxFmtStr;
         }
-        public override RenderVxFormattedString CreateRenderVx(char[] textspanBuff, int startAt, int len)
+        public RenderVxFormattedString CreateRenderVx(char[] textspanBuff, int startAt, int len)
         {
             var renderVxFmtStr = new AggRenderVxFormattedString();
             if (_textPrinter != null)

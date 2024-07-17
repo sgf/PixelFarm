@@ -15,7 +15,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
+    <ProjectReference Include="..\..\PixelFarm.Core\PixelFarm.Core.csproj" />
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
   </ItemGroup>
   <ItemGroup>

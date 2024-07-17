@@ -113,7 +113,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj" />
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Glfw\PaintLab.Platforms.Glfw.csproj" />
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj" />
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj" />
     <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj" />
     <ProjectReference Include="..\TestSamples_Painting_Focus\TestSamples_Painting_Focus.csproj" />
     <ProjectReference Include="..\TestSamples_RenderTreeFocus\TestSamples_RenderTreeFocus.csproj" />

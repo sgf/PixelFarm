@@ -8,7 +8,7 @@ using PixelFarm.CpuBlit.PixelProcessing;
 namespace PixelFarm.CpuBlit
 {
 
-    public partial class AggPainter : Painter
+    public partial class AggPainter : IPainter
     {
 
         AggRenderSurface _aggsx; //target rendering surface   
@@ -51,13 +51,13 @@ namespace PixelFarm.CpuBlit
             //
             FillingRule = FillingRule.NonZero;
         }
-        public override FillingRule FillingRule
+        public FillingRule FillingRule
         {
             //TODO: set filling for both aggsx (default and mask)
             get => _aggsx.FillingRule;
             set => _aggsx.FillingRule = value;
         }
-        public override float FillOpacity
+        public float FillOpacity
         {
             get => _fillOpacity;
             set
@@ -82,7 +82,7 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        public override TargetBuffer TargetBuffer
+        public TargetBuffer TargetBuffer
         {
             get => _targetBuffer;
             set
@@ -102,12 +102,12 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
-        public override bool EnableMask
+        public bool EnableMask
         {
             get => EnableBuiltInMaskComposite;
             set => EnableBuiltInMaskComposite = value;
         }
-        public override ICoordTransformer CoordTransformer
+        public ICoordTransformer CoordTransformer
         {
             get => _aggsx.CurrentTransformMatrix;
             set => _aggsx.CurrentTransformMatrix = value;
@@ -116,22 +116,22 @@ namespace PixelFarm.CpuBlit
         public DrawBoard DrawBoard { get; set; }
         public AggRenderSurface RenderSurface => _aggsx;
         public BitmapBlenderBase DestBitmapBlender => _aggsx.DestBitmapBlender;
-        public override int Width => _aggsx.Width;
-        public override int Height => _aggsx.Height;
-        public override float OriginX => _aggsx.ScanlineRasOriginX;
-        public override float OriginY => _aggsx.ScanlineRasOriginY;
-        public override void Clear(Color color) => _aggsx.Clear(color);
+        public int Width => _aggsx.Width;
+        public int Height => _aggsx.Height;
+        public float OriginX => _aggsx.ScanlineRasOriginX;
+        public float OriginY => _aggsx.ScanlineRasOriginY;
+        public void Clear(Color color) => _aggsx.Clear(color);
         public void Clear(Color color, int left, int top, int width, int height) => _aggsx.Clear(color, left, top, width, height);
-        public override void SetOrigin(float x, float y) => _aggsx.SetScanlineRasOrigin(x, y);
+        public void SetOrigin(float x, float y) => _aggsx.SetScanlineRasOrigin(x, y);
 
-        public override RenderQuality RenderQuality { get; set; }
+        public RenderQuality RenderQuality { get; set; }
 
-        public override RenderSurfaceOriginKind Orientation
+        public RenderSurfaceOriginKind Orientation
         {
             get => _orientation;
             set => _orientation = value;
         }
-        public override SmoothingMode SmoothingMode
+        public SmoothingMode SmoothingMode
         {
             get => _smoothingMode;
             set
@@ -153,7 +153,7 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
-        public override void Render(RenderVx renderVx)
+        public void Render(RenderVx renderVx)
         {
             //VG Render?
             //if (renderVx is VgRenderVx)
@@ -166,7 +166,7 @@ namespace PixelFarm.CpuBlit
             //    throw new NotSupportedException();
             //}
         }
-        public override RenderVx CreateRenderVx(VertexStore vxs)
+        public RenderVx CreateRenderVx(VertexStore vxs)
         {
             return new AggRenderVx(vxs);
         }

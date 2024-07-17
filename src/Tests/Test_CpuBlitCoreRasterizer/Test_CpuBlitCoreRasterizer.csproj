@@ -18,12 +18,4 @@
 	  <PackageReference Include="System.Drawing.Common" Version="9.0.0-preview.5.24306.5" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\PixelFarm\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
-	</ItemGroup>
-
-	<Import Project="..\..\PixelFarm\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
-
-	<Import Project="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
-
 </Project>

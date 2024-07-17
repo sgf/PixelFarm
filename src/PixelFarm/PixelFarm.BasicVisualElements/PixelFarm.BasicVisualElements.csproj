@@ -5,5 +5,4 @@
 		<OutputType>Library</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
-	<Import Project="..\PixelFarm.BasicVisualElements_SH\PixelFarm.BasicVisualElements_SH.projitems" Label="Shared" />
 </Project>

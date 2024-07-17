@@ -7,55 +7,53 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 
-namespace PaintLab.Svg
+namespace PaintLab.Svg;
+
+public abstract class VgVisitorBase
 {
-    public abstract class VgVisitorBase
+    public VgVisualElement Current;
+    public ICoordTransformer _currentTx;
+    internal VgVisitorBase() { }
+    internal virtual void Reset()
     {
-        public VgVisualElement Current;
-        public ICoordTransformer _currentTx;
-        internal VgVisitorBase() { }
-        internal virtual void Reset()
-        {
-            _currentTx = null;
-            Current = null;
-        }
+        _currentTx = null;
+        Current = null;
     }
+}
 
-    public class VgVisitorArgs : VgVisitorBase
+public class VgVisitorArgs : VgVisitorBase
+{
+    internal VgVisitorArgs() { }
+    public Action<VertexStore, VgVisitorArgs> VgElemenVisitHandler;
+
+    /// <summary>
+    /// use for finding vg boundaries
+    /// </summary>
+    public float TempCurrentStrokeWidth { get; internal set; }
+
+    internal override void Reset()
     {
-        internal VgVisitorArgs() { }
-        public Action<VertexStore, VgVisitorArgs> VgElemenVisitHandler;
+        base.Reset();//*** reset base class fiels too
 
-        /// <summary>
-        /// use for finding vg boundaries
-        /// </summary>
-        public float TempCurrentStrokeWidth { get; internal set; }
-
-        internal override void Reset()
-        {
-            base.Reset();//*** reset base class fiels too
-
-            //-------
-            TempCurrentStrokeWidth = 1;
-            VgElemenVisitHandler = null;
-        }
+        //-------
+        TempCurrentStrokeWidth = 1;
+        VgElemenVisitHandler = null;
     }
+}
 
 
-    public static class VgVistorArgsPool
+public static class VgVistorArgsPool
+{
+
+    public static PixelFarm.TempContext<VgVisitorArgs> Borrow(out VgVisitorArgs visitor)
     {
-
-        public static PixelFarm.TempContext<VgVisitorArgs> Borrow(out VgVisitorArgs visitor)
+        if (!PixelFarm.Temp<VgVisitorArgs>.IsInit())
         {
-            if (!PixelFarm.Temp<VgVisitorArgs>.IsInit())
-            {
-                PixelFarm.Temp<VgVisitorArgs>.SetNewHandler(
-                    () => new VgVisitorArgs(),
-                    p => p.Reset());//when relese back
-            }
-
-            return PixelFarm.Temp<VgVisitorArgs>.Borrow(out visitor);
+            PixelFarm.Temp<VgVisitorArgs>.SetNewHandler(
+                () => new VgVisitorArgs(),
+                p => p.Reset());//when relese back
         }
-    }
 
+        return PixelFarm.Temp<VgVisitorArgs>.Borrow(out visitor);
+    }
 }

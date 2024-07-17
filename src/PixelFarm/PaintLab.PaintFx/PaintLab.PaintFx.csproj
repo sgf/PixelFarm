@@ -7,7 +7,6 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
 		<ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
 	</ItemGroup>
 	<Import Project="..\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />

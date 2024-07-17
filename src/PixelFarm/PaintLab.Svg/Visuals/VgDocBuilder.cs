@@ -5,148 +5,147 @@ using System.Collections.Generic;
 
 using LayoutFarm.WebDom.Parser;
 
-namespace PaintLab.Svg
+namespace PaintLab.Svg;
+
+/// <summary>
+/// svg dom builder
+/// </summary>
+public class VgDocBuilder : ISvgDocBuilder
 {
-    /// <summary>
-    /// svg dom builder
-    /// </summary>
-    public class VgDocBuilder : ISvgDocBuilder
+    Stack<SvgElement> _elems = new Stack<SvgElement>();
+    Stack<VgElemCreator> _creatorStack = new Stack<VgElemCreator>();
+    VgElemCreator _currentCreator;
+
+
+    SvgElement _currentElem;
+    VgDocument _svgDoc;
+
+    CssParser _cssParser = new CssParser();
+    Dictionary<string, VgElemCreator> _creators = new Dictionary<string, VgElemCreator>();
+    public VgDocBuilder()
     {
-        Stack<SvgElement> _elems = new Stack<SvgElement>();
-        Stack<VgElemCreator> _creatorStack = new Stack<VgElemCreator>();
-        VgElemCreator _currentCreator;
+        RegisterSvgElementCreators();
+    }
+    public VgDocument ResultDocument
+    {
+        get => _svgDoc;
+        set => _svgDoc = value;
+    }
+    public SvgElement CurrentSvgElem => _currentElem;
 
+    public void OnBegin()
+    {
+        _elems.Clear();//** reset
 
-        SvgElement _currentElem;
-        VgDocument _svgDoc;
-
-        CssParser _cssParser = new CssParser();
-        Dictionary<string, VgElemCreator> _creators = new Dictionary<string, VgElemCreator>();
-        public VgDocBuilder()
+        if (_svgDoc == null)
         {
-            RegisterSvgElementCreators();
+            _svgDoc = new VgDocument();
         }
-        public VgDocument ResultDocument
+        _currentElem = _svgDoc.Root;
+    }
+    public void OnVisitNewElement(string elemName)
+    {
+        SvgElement newElem = CreateElement(elemName);
+        if (_currentElem != null)
         {
-            get => _svgDoc;
-            set => _svgDoc = value;
+            _elems.Push(_currentElem);
+            _currentElem.AddElement(newElem);
         }
-        public SvgElement CurrentSvgElem => _currentElem;
+        _currentElem = newElem;
+    }
+    public void OnAttribute(string attrName, string value)
+    {
+        _currentCreator.AssignAttribute(attrName, value);
+    }
+    public void OnEnteringElementBody()
+    {
 
-        public void OnBegin()
+    }
+    public void OnTextNode(string text)
+    {
+        //a text node is a kind of child node
+        //a text node may interleave with other kind of node
+        _currentCreator.OnTextNode(text);
+    }
+    public void OnExitingElementBody()
+    {
+        if (_elems.Count > 0)
         {
-            _elems.Clear();//** reset
+            _currentElem = _elems.Pop();
+        }
+    }
+    public void OnEnd()
+    {
+    }
 
-            if (_svgDoc == null)
+    SvgElement CreateElement(string elemName)
+    {
+        if (_creators.TryGetValue(elemName, out VgElemCreator creator))
+        {
+            if (_currentCreator != null)
             {
-                _svgDoc = new VgDocument();
+                _creatorStack.Push(_currentCreator);
             }
-            _currentElem = _svgDoc.Root;
+            _currentCreator = creator;
+            _currentCreator.CreateNewAndAssignAsCurrent();
+            return _currentCreator.CurrentElem;
         }
-        public void OnVisitNewElement(string elemName)
+        else
         {
-            SvgElement newElem = CreateElement(elemName);
-            if (_currentElem != null)
-            {
-                _elems.Push(_currentElem);
-                _currentElem.AddElement(newElem);
-            }
-            _currentElem = newElem;
-        }
-        public void OnAttribute(string attrName, string value)
-        {
-            _currentCreator.AssignAttribute(attrName, value);
-        }
-        public void OnEnteringElementBody()
-        {
-
-        }
-        public void OnTextNode(string text)
-        {
-            //a text node is a kind of child node
-            //a text node may interleave with other kind of node
-            _currentCreator.OnTextNode(text);
-        }
-        public void OnExitingElementBody()
-        {
-            if (_elems.Count > 0)
-            {
-                _currentElem = _elems.Pop();
-            }
-        }
-        public void OnEnd()
-        {
-        }
-
-        SvgElement CreateElement(string elemName)
-        {
-            if (_creators.TryGetValue(elemName, out VgElemCreator creator))
-            {
-                if (_currentCreator != null)
-                {
-                    _creatorStack.Push(_currentCreator);
-                }
-                _currentCreator = creator;
-                _currentCreator.CreateNewAndAssignAsCurrent();
-                return _currentCreator.CurrentElem;
-            }
-            else
-            {
-                //for unknown
+            //for unknown
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine("UN-IMPL Elem:" + elemName);
+            System.Diagnostics.Debug.WriteLine("UN-IMPL Elem:" + elemName);
 #endif
-                return new SvgElement(WellknownSvgElementName.Unknown, elemName);
-                //not found creator for a specific element
-                //throw new NotSupportedException();
-            }
+            return new SvgElement(WellknownSvgElementName.Unknown, elemName);
+            //not found creator for a specific element
+            //throw new NotSupportedException();
         }
+    }
 
 
 
-        void RegisterSvgElementCreators()
+    void RegisterSvgElementCreators()
+    {
+        //you can use reflection technique here
+        //or register it manually
+
+        RegisterSvgElementCreator(
+            new SvgBoxElemCr(),
+            new DefsElemCr(),
+            new TitleElemCr(),
+            new FilterElemCr(),
+            new FeColorMatrixElemCr(),
+            new MaskElemCr(),
+            //
+            new StyleElemCr(),
+            //
+            new TextElemCr(),
+            new ClipPathElemCr(),
+            new GroupElemCr(),
+            new RectElemCr(),
+            new LineElemCr(),
+            new PolylineElemCr(),
+            new PolygonElemCr(),
+            new CircleElemCr(),
+            new EllipseElemCr(),
+            new UseElemCr(),
+            new PathElemCr(),
+            new ImageElemCr(),
+            new LinearGradientElemCr(),
+            new RadialGradientElemCr(),
+            new StopElemCr(),
+            new MarkerElemCr()
+            );
+
+    }
+    void RegisterSvgElementCreator(params VgElemCreator[] creators)
+    {
+        for (int i = 0; i < creators.Length; ++i)
         {
-            //you can use reflection technique here
-            //or register it manually
-
-            RegisterSvgElementCreator(
-                new SvgBoxElemCr(),
-                new DefsElemCr(),
-                new TitleElemCr(),
-                new FilterElemCr(),
-                new FeColorMatrixElemCr(),
-                new MaskElemCr(),
-                //
-                new StyleElemCr(),
-                //
-                new TextElemCr(),
-                new ClipPathElemCr(),
-                new GroupElemCr(),
-                new RectElemCr(),
-                new LineElemCr(),
-                new PolylineElemCr(),
-                new PolygonElemCr(),
-                new CircleElemCr(),
-                new EllipseElemCr(),
-                new UseElemCr(),
-                new PathElemCr(),
-                new ImageElemCr(),
-                new LinearGradientElemCr(),
-                new RadialGradientElemCr(),
-                new StopElemCr(),
-                new MarkerElemCr()
-                );
-
+            VgElemCreator creator = creators[i];
+            creator._cssParser = _cssParser; //use common css parser
+            _creators.Add(creator.TagName, creator);
         }
-        void RegisterSvgElementCreator(params VgElemCreator[] creators)
-        {
-            for (int i = 0; i < creators.Length; ++i)
-            {
-                VgElemCreator creator = creators[i];
-                creator._cssParser = _cssParser; //use common css parser
-                _creators.Add(creator.TagName, creator);
-            }
 
-        }
     }
 }

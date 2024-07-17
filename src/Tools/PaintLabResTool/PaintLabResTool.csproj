@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PaintLab.Svg.One">
-      <HintPath>..\..\PixelFarm\PaintLab.Svg.One\bin\Debug\PaintLab.Svg.One.dll</HintPath>
+    <Reference Include="PaintLab.Svg">
+      <HintPath>..\..\PixelFarm\PaintLab.Svg\bin\Debug\PaintLab.Svg.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />

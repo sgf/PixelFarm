@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PixelFarm.Drawing.GLES</RootNamespace>
     <AssemblyName>PixelFarm.Drawing.GLES</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>latest</LangVersion>
     <TargetFrameworkProfile />
@@ -60,17 +60,13 @@
     <Compile Include="TextPrinter\WordPlateAndWordPlateMx.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj">
-      <Project>{29692043-41c3-438b-a48e-c788cab521a4}</Project>
-      <Name>Typography.One</Name>
+    <ProjectReference Include="..\..\PixelFarm.Core\PixelFarm.Core.csproj">
+      <Project>{a1ba555a-359f-4953-988d-1d59e0a8f8d6}</Project>
+      <Name>PixelFarm.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
       <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
       <Name>MiniOpenTK_Net20</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
-      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
-      <Name>PixelFarm.BasicVisualElements</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>

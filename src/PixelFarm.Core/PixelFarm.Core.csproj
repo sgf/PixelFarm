@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CpuBlit_Layer2\x_backup\2_ImgSpanGenRGB.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\4_ImgSpanGenGray.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\AggRenderSurface_RenderImages.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\AlphaMask.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\AlphaMaskAdaptor.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\FilterImageSpanGenerator.ImageBufferAccessor.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\FilterImageSpanGenerator.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\FilterRGBAImageSpanGen.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\FilterRGBImageSpanGen.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\PixelBlenderGray.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\PixelBlenderRGB.txt" />
+    <None Remove="CpuBlit_Layer2\x_backup\ScanlineRasToDestBitmapRendererExtension.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="CpuBlit_Layer2\x_backup\2_ImgSpanGenRGB.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\4_ImgSpanGenGray.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\AggRenderSurface_RenderImages.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\AlphaMask.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\AlphaMaskAdaptor.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\FilterImageSpanGenerator.ImageBufferAccessor.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\FilterImageSpanGenerator.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\FilterRGBAImageSpanGen.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\FilterRGBImageSpanGen.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\PixelBlenderGray.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\PixelBlenderRGB.txt" />
+    <Content Include="CpuBlit_Layer2\x_backup\ScanlineRasToDestBitmapRendererExtension.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Shapes\" />
+  </ItemGroup>
+
+</Project>

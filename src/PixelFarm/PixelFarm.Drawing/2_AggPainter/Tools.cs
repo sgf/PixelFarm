@@ -273,57 +273,57 @@ namespace PixelFarm.CpuBlit
     public static class PainterExtensions
     {
 
-        public static void Line(this Painter p, double x1, double y1, double x2, double y2, Color color)
+        public static void Line(this IPainter p, double x1, double y1, double x2, double y2, Color color)
         {
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
             p.DrawLine(x1, y1, x2, y2);
             p.StrokeColor = prevColor;
         }
-        public static void DrawRectangle(this Painter p, double left, double top, double width, double height, Color color)
+        public static void DrawRectangle(this IPainter p, double left, double top, double width, double height, Color color)
         {
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
             p.DrawRect(left, top, width, height);
             p.StrokeColor = prevColor;
         }
-        public static void DrawCircle(this Painter p, double centerX, double centerY, double radius)
+        public static void DrawCircle(this IPainter p, double centerX, double centerY, double radius)
         {
             p.DrawEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
         }
-        public static void FillCircle(this Painter p, double centerX, double centerY, double radius)
+        public static void FillCircle(this IPainter p, double centerX, double centerY, double radius)
         {
             p.FillEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
         }
-        public static void FillCircle(this Painter p, double x, double y, double radius, Color color)
+        public static void FillCircle(this IPainter p, double x, double y, double radius, Color color)
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;
             p.FillCircle(x, y, radius);
             p.FillColor = prevColor;
         }
-        public static void FillRect(this Painter p, double left, double top, double width, double height, Color color)
+        public static void FillRect(this IPainter p, double left, double top, double width, double height, Color color)
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;
             p.FillRect(left, top, width, height);
             p.FillColor = prevColor;
         }
-        public static void Fill(this Painter p, VertexStore vxs, Color color)
+        public static void Fill(this IPainter p, VertexStore vxs, Color color)
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;
             p.Fill(vxs);
             p.FillColor = prevColor;
         }
-        public static void Draw(this Painter p, VertexStore vxs, Color color)
+        public static void Draw(this IPainter p, VertexStore vxs, Color color)
         {
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
             p.Draw(vxs);
             p.StrokeColor = prevColor;
         }
-        public static void Fill(this Painter p, Region rgn, Color color)
+        public static void Fill(this IPainter p, Region rgn, Color color)
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;
@@ -338,7 +338,7 @@ namespace PixelFarm.CpuBlit
         /// <param name="vxs"></param>
         /// <param name="strokeW"></param>
         /// <param name="color"></param>
-        public static void FillStroke(this Painter p, VertexStore vxs, float strokeW, Color color)
+        public static void FillStroke(this IPainter p, VertexStore vxs, float strokeW, Color color)
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;

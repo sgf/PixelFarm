@@ -10,16 +10,4 @@
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\PixelFarm\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj" />
-	</ItemGroup>
-
-	<Import Project="..\..\PixelFarm\PixelFarm.Vectors_Utils_SH\PixelFarm.Vectors_Utils_SH.projitems" Label="Shared" />
-
-	<Import Project="..\..\PixelFarm\PixelFarm.Vectors_SH\PixelFarm.Vectors_SH.projitems" Label="Shared" />
-
-	<Import Project="..\..\PixelFarm\BackEnd.Tesselate_SH\BackEnd.Tesselate_SH.projitems" Label="Shared" />
-
-	<Import Project="..\..\PixelFarm\BackEnd.Triangulation\Triangulation.projitems" Label="Shared" />
-
 </Project>

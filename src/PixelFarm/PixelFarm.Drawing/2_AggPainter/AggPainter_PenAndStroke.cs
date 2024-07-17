@@ -31,7 +31,7 @@ namespace PixelFarm.CpuBlit
         Rasterization.Lines.LineProfileAnitAlias _lineProfileAA;
         Rasterization.Lines.OutlineAARasterizer _outlineRas; //low-level outline aa
         Rasterization.Lines.PreBuiltLineAAGammaTable _lineAAGamma = Rasterization.Lines.PreBuiltLineAAGammaTable.None;//default
-        public override Pen CurrentPen
+        public Pen CurrentPen
         {
             get => _curPen;
             set => _curPen = value;
@@ -86,23 +86,23 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override Color StrokeColor
+        public Color StrokeColor
         {
             get => _strokeColor;
             set => _strokeColor = value;
         }
-        public override LineJoin LineJoin
+        public LineJoin LineJoin
         {
             get => _stroke.LineJoin;
             set => _stroke.LineJoin = value;
         }
-        public override LineCap LineCap
+        public LineCap LineCap
         {
             get => _stroke.LineCap;
             set => _stroke.LineCap = value;
         }
 
-        public override IDashGenerator LineDashGen
+        public IDashGenerator LineDashGen
         {
             get => _lineDashGen;
             set => _lineDashGen = (LineDashGenerator)value;
@@ -117,7 +117,7 @@ namespace PixelFarm.CpuBlit
         /// <param name="x1"></param>
         /// <param name="y1"></param>
         /// <param name="color"></param>
-        public override void DrawLine(double x0, double y0, double x1, double y1)
+        public void DrawLine(double x0, double y0, double x1, double y1)
         {
             //BitmapExt
             if (this.RenderQuality == RenderQuality.Fast)
@@ -165,12 +165,12 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override void DrawRenderVx(RenderVx renderVx)
+        public void DrawRenderVx(RenderVx renderVx)
         {
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
             Draw(aggRenderVx._vxs);
         }
-        public override double StrokeWidth
+        public double StrokeWidth
         {
             get => _strokeW;
             set
@@ -191,7 +191,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override void Draw(VertexStore vxs)
+        public void Draw(VertexStore vxs)
         {
             if (RenderQuality == RenderQuality.Fast)
             {
@@ -297,7 +297,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override void DrawRect(double left, double top, double width, double height)
+        public void DrawRect(double left, double top, double width, double height)
         {
 
             //BitmapExt
@@ -369,7 +369,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override void DrawEllipse(double left, double top, double width, double height)
+        public void DrawEllipse(double left, double top, double width, double height)
         {
 
             double ox = (left + width / 2);

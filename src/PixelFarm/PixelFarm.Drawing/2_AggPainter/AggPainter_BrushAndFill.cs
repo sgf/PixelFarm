@@ -20,7 +20,7 @@ namespace PixelFarm.CpuBlit
         TessTool _tessTool;
         List<int> _reusablePolygonList = new List<int>();
 
-        public override Brush CurrentBrush
+        public Brush CurrentBrush
         {
             get => _curBrush;
 
@@ -53,7 +53,7 @@ namespace PixelFarm.CpuBlit
 #endif
             }
         }
-        public override Color FillColor
+        public Color FillColor
         {
             get => _fillColor;
             set
@@ -67,13 +67,13 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override bool UseLcdEffectSubPixelRendering
+        public bool UseLcdEffectSubPixelRendering
         {
             get => _aggsx.UseSubPixelLcdEffect;
             set => _aggsx.UseSubPixelLcdEffect = value;
         }
 
-        public override void FillRenderVx(Brush brush, RenderVx renderVx)
+        public void FillRenderVx(Brush brush, RenderVx renderVx)
         {
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
             //fill with brush 
@@ -89,7 +89,7 @@ namespace PixelFarm.CpuBlit
                 Fill(aggRenderVx._vxs);
             }
         }
-        public override void FillRenderVx(RenderVx renderVx)
+        public void FillRenderVx(RenderVx renderVx)
         {
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
             Fill(aggRenderVx._vxs);
@@ -108,7 +108,7 @@ namespace PixelFarm.CpuBlit
         /// fill vxs, we do NOT store vxs
         /// </summary>
         /// <param name="vxs"></param>
-        public override void Fill(VertexStore vxs)
+        public void Fill(VertexStore vxs)
         {
 
             if (!_useDefaultBrush)
@@ -239,7 +239,7 @@ namespace PixelFarm.CpuBlit
 
             SetOrigin(ox, oy);
         }
-        public override void FillEllipse(double left, double top, double width, double height)
+        public void FillEllipse(double left, double top, double width, double height)
         {
             double ox = (left + width / 2);
             double oy = (top + height / 2);
@@ -284,7 +284,7 @@ namespace PixelFarm.CpuBlit
             }
             return radialSpanGen;
         }
-        public override void FillRect(double left, double top, double width, double height)
+        public void FillRect(double left, double top, double width, double height)
         {
 
             //Agg 

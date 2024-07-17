@@ -63,7 +63,7 @@ namespace PixelFarm.CpuBlit
             //restore...
             this.UseLcdEffectSubPixelRendering = useSubPix;
         }
-        public override void DrawImage(Image img, double left, double top, int srcLeft, int srcTop, int srcW, int srcH)
+        public void DrawImage(Image img, double left, double top, int srcLeft, int srcTop, int srcW, int srcH)
         {
             if (!(img is MemBitmap memBmp))
             {
@@ -75,7 +75,7 @@ namespace PixelFarm.CpuBlit
                 DrawBitmap(memBmp, left, top, srcLeft, srcTop, srcW, srcH);
             }
         }
-        public override void DrawImage(Image img, double left, double top)
+        public void DrawImage(Image img, double left, double top)
         {
             if (!(img is MemBitmap memBmp))
             {
@@ -87,7 +87,7 @@ namespace PixelFarm.CpuBlit
                 DrawBitmap(memBmp, left, top);
             }
         }
-        public override void DrawImage(Image img)
+        public void DrawImage(Image img)
         {
             if (!(img is MemBitmap memBmp))
             {
@@ -105,7 +105,7 @@ namespace PixelFarm.CpuBlit
             //restore...
             this.UseLcdEffectSubPixelRendering = useSubPix;
         }
-        public override void DrawImage(Image img, in AffineMat aff)
+        public void DrawImage(Image img, in AffineMat aff)
         {
             if (!(img is MemBitmap memBmp))
             {
@@ -122,7 +122,7 @@ namespace PixelFarm.CpuBlit
             this.UseLcdEffectSubPixelRendering = useSubPix;
 
         }
-        public override void DrawImage(Image img, double left, double top, ICoordTransformer coordTx)
+        public void DrawImage(Image img, double left, double top, ICoordTransformer coordTx)
         {
             //draw img with transform coord
             //
@@ -152,7 +152,7 @@ namespace PixelFarm.CpuBlit
             //restore...
             this.UseLcdEffectSubPixelRendering = useSubPix;
         }
-        public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
+        public void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
             //check if we can use this imgFilter
             if (!(imgFilter is PixelFarm.CpuBlit.PixelProcessing.ICpuBlitImgFilter cpuBlitImgFx)) return;

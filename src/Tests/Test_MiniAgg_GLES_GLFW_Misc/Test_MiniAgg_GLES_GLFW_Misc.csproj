@@ -202,9 +202,9 @@
       <Project>{fae4c438-ecbd-4751-b38c-5b75996a5caf}</Project>
       <Name>PaintLab.Platforms.Glfw</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
       <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
-      <Name>PaintLab.Svg.One</Name>
+      <Name>PaintLab.Svg</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
       <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>

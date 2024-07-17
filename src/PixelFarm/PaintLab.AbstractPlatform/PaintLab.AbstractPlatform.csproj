@@ -173,7 +173,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Typography\Build\NetStandard\Typography.One\Typography.One.csproj" />
     <ProjectReference Include="..\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj" />
     <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj" />
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />

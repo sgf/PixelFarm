@@ -47,7 +47,7 @@ namespace PixelFarm.CpuBlit
         /// we DO NOT store vxs
         /// </summary>
         /// <param name="vxs"></param>
-        public override void SetClipRgn(VertexStore vxs)
+        public void SetClipRgn(VertexStore vxs)
         {
             //clip rgn implementation
             //this version replace only
@@ -93,17 +93,17 @@ namespace PixelFarm.CpuBlit
                 ClearClipRgn();
             }
         }
-        public override Rectangle ClipBox
+        public Rectangle ClipBox
         {
             get => throw new NotImplementedException();
             set => throw new NotImplementedException();
         }
-        //public override RectInt ClipBox
+        //public RectInt ClipBox
         //{
         //    get => _aggsx.GetClippingRect();
         //    set => _aggsx.SetClippingRect(value);
         //}
-        public override void SetClipBox(int x1, int y1, int x2, int y2)
+        public void SetClipBox(int x1, int y1, int x2, int y2)
         {
             _aggsx.SetClippingRect(new Q1Rect(x1, y1, x2, y2));
         }
@@ -209,7 +209,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override void FillRegion(Region rgn)
+        public void FillRegion(Region rgn)
         {
             if (!(rgn is CpuBlitRegion region)) return;
             switch (region.Kind)
@@ -241,7 +241,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override void DrawRegion(Region rgn)
+        public void DrawRegion(Region rgn)
         {
             if (!(rgn is PixelFarm.CpuBlit.CpuBlitRegion region)) return;
             switch (region.Kind)
@@ -268,7 +268,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override void FillRegion(VertexStore vxs)
+        public void FillRegion(VertexStore vxs)
         {
 
 
@@ -287,7 +287,7 @@ namespace PixelFarm.CpuBlit
             SetClipRgn(null);
             SetOrigin(ox, oy);
         }
-        public override void DrawRegion(VertexStore vxs)
+        public void DrawRegion(VertexStore vxs)
         {
             throw new NotImplementedException();
         }
