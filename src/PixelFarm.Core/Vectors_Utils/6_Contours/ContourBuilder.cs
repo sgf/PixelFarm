@@ -1,48 +1,51 @@
 ﻿//MIT, 2016-present, WinterDev
-using System;
-using System.Collections.Generic;
-
 namespace PixelFarm.Contours
 {
-
     //this is PixelFarm version ***
-    //render with MiniAgg 
+    //render with MiniAgg
 
     public interface IContourBuilder
     {
         void MoveTo(float x0, float y0);
+
         void LineTo(float x1, float y1);
+
         void Curve3(float x1, float y1, float x2, float y2);
+
         void Curve4(float x1, float y1, float x2, float y2, float x3, float y3);
+
         void CloseContour();
+
         void BeginRead(int contourCount);
+
         void EndRead();
     }
 
     public class ContourBuilder : IContourBuilder
     {
+        private List<Contour> _contours;
+        private float _curX;
+        private float _curY;
+        private float _latestMoveToX;
+        private float _latestMoveToY;
+        private Contour _currentCnt;
+        private ContourPart _latestPart;
 
-        List<Contour> _contours;
-        float _curX;
-        float _curY;
-        float _latestMoveToX;
-        float _latestMoveToY;
-        Contour _currentCnt;
-        ContourPart _latestPart;
         //
         public ContourBuilder()
         {
-
         }
+
         public List<Contour> GetContours() => _contours;
+
         public void MoveTo(float x0, float y0)
         {
             _latestMoveToX = _curX = x0;
             _latestMoveToY = _curY = y0;
             _latestPart = null;
             //----------------------------
-
         }
+
         public void LineTo(float x1, float y1)
         {
             if (_latestPart != null)
@@ -56,7 +59,6 @@ namespace PixelFarm.Contours
             _curX = x1;
             _curY = y1;
         }
-
 
         public void Curve3(float x1, float y1, float x2, float y2)
         {
@@ -78,6 +80,7 @@ namespace PixelFarm.Contours
             _curX = x2;
             _curY = y2;
         }
+
         public void Curve4(float x1, float y1, float x2, float y2, float x3, float y3)
         {
             if (_latestPart != null)
@@ -104,7 +107,7 @@ namespace PixelFarm.Contours
         {
             if (_curX == _latestMoveToX && _curY == _latestMoveToY)
             {
-                //we not need to close 
+                //we not need to close
             }
             else
             {
@@ -130,6 +133,7 @@ namespace PixelFarm.Contours
             //
             _currentCnt = new Contour();
         }
+
         public void BeginRead(int contourCount)
         {
             //reset all
@@ -140,13 +144,9 @@ namespace PixelFarm.Contours
             _currentCnt = new Contour();
             //new contour, but not add
         }
+
         public void EndRead()
         {
-
         }
-
     }
-
-
-
 }

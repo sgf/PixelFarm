@@ -20,8 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-using System;
-using System.Runtime.InteropServices;
 namespace PixelFarm.VectorMath
 {
     /// <summary>Represents a 4D vector using four double-precision floating-point numbers.</summary>
@@ -29,52 +27,60 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector4 : IEquatable<Vector4>
     {
-
         /// <summary>
         /// The X component of the Vector4d.
         /// </summary>
         public double x;
+
         /// <summary>
         /// The Y component of the Vector4d.
         /// </summary>
         public double y;
+
         /// <summary>
         /// The Z component of the Vector4d.
         /// </summary>
         public double z;
+
         /// <summary>
         /// The W component of the Vector4d.
         /// </summary>
         public double w;
+
         /// <summary>
         /// Defines a unit-length Vector4d that points towards the X-axis.
         /// </summary>
         public static Vector4 UnitX = new Vector4(1, 0, 0, 0);
+
         /// <summary>
         /// Defines a unit-length Vector4d that points towards the Y-axis.
         /// </summary>
         public static Vector4 UnitY = new Vector4(0, 1, 0, 0);
+
         /// <summary>
         /// Defines a unit-length Vector4d that points towards the Z-axis.
         /// </summary>
         public static Vector4 UnitZ = new Vector4(0, 0, 1, 0);
+
         /// <summary>
         /// Defines a unit-length Vector4d that points towards the W-axis.
         /// </summary>
         public static Vector4 UnitW = new Vector4(0, 0, 0, 1);
+
         /// <summary>
         /// Defines a zero-length Vector4d.
         /// </summary>
         public static Vector4 Zero = new Vector4(0, 0, 0, 0);
+
         /// <summary>
         /// Defines an instance with all components set to 1.
         /// </summary>
         public static readonly Vector4 One = new Vector4(1, 1, 1, 1);
+
         /// <summary>
         /// Defines the size of the Vector4d struct in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(new Vector4());
-
 
         /// <summary>
         /// Constructs a new Vector4d.
@@ -140,9 +146,6 @@ namespace PixelFarm.VectorMath
             w = v.w;
         }
 
-
-
-
         public double this[int index]
         {
             get
@@ -151,12 +154,16 @@ namespace PixelFarm.VectorMath
                 {
                     case 0:
                         return x;
+
                     case 1:
                         return y;
+
                     case 2:
                         return z;
+
                     case 3:
                         return w;
+
                     default:
                         return 0;
                 }
@@ -169,23 +176,24 @@ namespace PixelFarm.VectorMath
                     case 0:
                         x = value;
                         break;
+
                     case 1:
                         y = value;
                         break;
+
                     case 2:
                         z = value;
                         break;
+
                     case 3:
                         w = value;
                         break;
+
                     default:
                         throw new Exception();
                 }
             }
         }
-
-
-
 
         /// <summary>
         /// Gets the length (magnitude) of the vector.
@@ -199,8 +207,6 @@ namespace PixelFarm.VectorMath
                 return System.Math.Sqrt(x * x + y * y + z * z + w * w);
             }
         }
-
-
 
         /// <summary>
         /// Gets the square of the vector length (magnitude).
@@ -218,8 +224,6 @@ namespace PixelFarm.VectorMath
             }
         }
 
-
-
         /// <summary>
         /// Scales the Vector4d to unit length.
         /// </summary>
@@ -231,12 +235,6 @@ namespace PixelFarm.VectorMath
             z *= scale;
             w *= scale;
         }
-
-
-
-
-
-
 
         /// <summary>
         /// Adds two vectors.
@@ -261,8 +259,6 @@ namespace PixelFarm.VectorMath
             result = new Vector4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
         }
 
-
-
         /// <summary>
         /// Subtract one Vector from another
         /// </summary>
@@ -285,8 +281,6 @@ namespace PixelFarm.VectorMath
         {
             result = new Vector4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
         }
-
-
 
         /// <summary>
         /// Multiplies a vector by a scalar.
@@ -334,8 +328,6 @@ namespace PixelFarm.VectorMath
             result = new Vector4(vector.x * scale.x, vector.y * scale.y, vector.z * scale.z, vector.w * scale.w);
         }
 
-
-
         /// <summary>
         /// Divides a vector by a scalar.
         /// </summary>
@@ -382,8 +374,6 @@ namespace PixelFarm.VectorMath
             result = new Vector4(vector.x / scale.x, vector.y / scale.y, vector.z / scale.z, vector.w / scale.w);
         }
 
-
-
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
         /// </summary>
@@ -413,8 +403,6 @@ namespace PixelFarm.VectorMath
             result.w = a.w < b.w ? a.w : b.w;
         }
 
-
-
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
         /// </summary>
@@ -443,8 +431,6 @@ namespace PixelFarm.VectorMath
             result.z = a.z > b.z ? a.z : b.z;
             result.w = a.w > b.w ? a.w : b.w;
         }
-
-
 
         /// <summary>
         /// Clamp a vector to the given minimum and maximum vectors
@@ -477,8 +463,6 @@ namespace PixelFarm.VectorMath
             result.w = vec.y < min.w ? min.w : vec.w > max.w ? max.w : vec.w;
         }
 
-
-
         /// <summary>
         /// Scale a vector to unit length
         /// </summary>
@@ -508,8 +492,6 @@ namespace PixelFarm.VectorMath
             result.w = vec.w * scale;
         }
 
-
-
         /// <summary>
         /// Calculate the dot product of two vectors
         /// </summary>
@@ -531,8 +513,6 @@ namespace PixelFarm.VectorMath
         {
             result = left.x * right.x + left.y * right.y + left.z * right.z + left.w * right.w;
         }
-
-
 
         /// <summary>
         /// Returns a new Vector that is the linear blend of the 2 given Vectors
@@ -564,8 +544,6 @@ namespace PixelFarm.VectorMath
             result.z = blend * (b.z - a.z) + a.z;
             result.w = blend * (b.w - a.w) + a.w;
         }
-
-
 
         /// <summary>
         /// Interpolate 3 Vectors using Barycentric coordinates
@@ -600,8 +578,6 @@ namespace PixelFarm.VectorMath
             Multiply(ref temp, v, out temp);
             Add(ref result, ref temp, out result);
         }
-
-
 
         /// <summary>Transform a Vector by the given Matrix</summary>
         /// <param name="vec">The vector to transform</param>
@@ -655,9 +631,6 @@ namespace PixelFarm.VectorMath
             result = new Vector4(v.X, v.Y, v.Z, v.W);
         }
 
-
-
-
         /// <summary>
         /// Gets or sets an OpenTK.Vector2d with the X and Y components of this instance.
         /// </summary>
@@ -667,8 +640,6 @@ namespace PixelFarm.VectorMath
         /// Gets or sets an OpenTK.Vector3d with the X, Y and Z components of this instance.
         /// </summary>
         public Vector3 Xyz { get { return new Vector3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
-
-
 
         /// <summary>
         /// Adds two instances.
@@ -782,9 +753,6 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-
-
-
         /// <summary>
         /// Returns a System.String that represents the current Vector4d.
         /// </summary>
@@ -804,8 +772,6 @@ namespace PixelFarm.VectorMath
             return x.ToString(format) + ", " + y.ToString(format) + ", " + z.ToString(format) + ", " + w.ToString(format);
         }
 
-
-
         /// <summary>
         /// Returns the hashcode for this instance.
         /// </summary>
@@ -814,8 +780,6 @@ namespace PixelFarm.VectorMath
         {
             return new { x, y, z, w }.GetHashCode();
         }
-
-
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -829,10 +793,6 @@ namespace PixelFarm.VectorMath
             return this.Equals((Vector4)obj);
         }
 
-
-
-
-
         /// <summary>Indicates whether the current vector is equal to another vector.</summary>
         /// <param name="other">A vector to compare with this vector.</param>
         /// <returns>true if the current vector is equal to the vector parameter; otherwise, false.</returns>
@@ -844,6 +804,5 @@ namespace PixelFarm.VectorMath
                 z == other.z &&
                 w == other.w;
         }
-
     }
 }

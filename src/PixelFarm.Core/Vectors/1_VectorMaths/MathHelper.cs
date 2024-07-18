@@ -2,7 +2,7 @@
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
- * 
+ *
  * Contributions by Andy Gill, James Talton and Georg Wächter.
  */
 /*
@@ -10,13 +10,13 @@ Copyright (c) 2014, Lars Brubaker
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -30,12 +30,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The views and conclusions contained in the software and documentation are those
-of the authors and should not be interpreted as representing official policies, 
+of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 
-
-using System;
 namespace PixelFarm.VectorMath
 {
     /// <summary>
@@ -43,50 +41,57 @@ namespace PixelFarm.VectorMath
     /// </summary>
     public static class MathHelper
     {
-
-
         /// <summary>
         /// Defines the value of Pi as a <see cref="System.Single"/>.
         /// </summary>
         public const double Pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930382f;
+
         public const double Tau = Pi * 2;
+
         /// <summary>
         /// Defines the value of Pi divided by two as a <see cref="System.Single"/>.
         /// </summary>
         public const double PiOver2 = Pi / 2;
+
         /// <summary>
         /// Defines the value of Pi divided by three as a <see cref="System.Single"/>.
         /// </summary>
         public const double PiOver3 = Pi / 3;
+
         /// <summary>
         /// Defines the value of Pi divided by four as a <see cref="System.Single"/>.
         /// </summary>
         public const double PiOver4 = Pi / 4;
+
         /// <summary>
         /// Defines the value of Pi divided by six as a <see cref="System.Single"/>.
         /// </summary>
         public const double PiOver6 = Pi / 6;
+
         /// <summary>
         /// Defines the value of Pi multiplied by two as a <see cref="System.Single"/>.
         /// </summary>
         public const double TwoPi = 2 * Pi;
+
         /// <summary>
         /// Defines the value of Pi multiplied by 3 and divided by two as a <see cref="System.Single"/>.
         /// </summary>
         public const double ThreePiOver2 = 3 * Pi / 2;
+
         /// <summary>
         /// Defines the value of E as a <see cref="System.Single"/>.
         /// </summary>
         public const double E = 2.71828182845904523536f;
+
         /// <summary>
         /// Defines the base-10 logarithm of E.
         /// </summary>
         public const double Log10E = 0.434294482f;
+
         /// <summary>
         /// Defines the base-2 logarithm of E.
         /// </summary>
         public const double Log2E = 1.442695041f;
-
 
         /// <summary>
         /// Returns the next power of two that is larger than the specified number.
@@ -132,7 +137,6 @@ namespace PixelFarm.VectorMath
             return System.Math.Pow(2, System.Math.Ceiling(System.Math.Log((double)n, 2)));
         }
 
-
         /// <summary>Calculates the factorial of a given natural number.
         /// </summary>
         /// <param name="n">The number.</param>
@@ -145,7 +149,6 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-
         /// <summary>
         /// Calculates the binomial coefficient <paramref name="n"/> above <paramref name="k"/>.
         /// </summary>
@@ -157,8 +160,7 @@ namespace PixelFarm.VectorMath
             return Factorial(n) / (Factorial(k) * Factorial(n - k));
         }
 
-
-        static public double Range0ToTau(double Value)
+        public static double Range0ToTau(double Value)
         {
             if (Value < 0)
             {
@@ -174,8 +176,7 @@ namespace PixelFarm.VectorMath
             return Value;
         }
 
-
-        static public double GetDeltaAngle(double StartAngle, double EndAngle)
+        public static double GetDeltaAngle(double StartAngle, double EndAngle)
         {
             if (StartAngle != Range0ToTau(StartAngle)) throw new Exception("StartAngle != Range0ToTau(StartAngle)");
             if (EndAngle != Range0ToTau(EndAngle)) throw new Exception("EndAngle != Range0ToTau(EndAngle)");
@@ -193,8 +194,9 @@ namespace PixelFarm.VectorMath
             return DeltaAngle;
         }
 
-        const double degToRad = System.Math.PI / 180.0f;
-        const double radToDeg = 180.0f / System.Math.PI;
+        private const double degToRad = System.Math.PI / 180.0f;
+        private const double radToDeg = 180.0f / System.Math.PI;
+
         /// <summary>
         /// Convert degrees to radians
         /// </summary>
@@ -202,7 +204,6 @@ namespace PixelFarm.VectorMath
         /// <returns>The angle expressed in radians</returns>
         public static double DegreesToRadians(double degrees)
         {
-           
             return degrees * degToRad;
         }
 
@@ -213,7 +214,6 @@ namespace PixelFarm.VectorMath
         /// <returns>The angle expressed in degrees</returns>
         public static double RadiansToDegrees(double radians)
         {
-           
             return radians * radToDeg;
         }
 
@@ -240,7 +240,6 @@ namespace PixelFarm.VectorMath
             a = b;
             b = temp;
         }
-
 
         public static bool AlmostEqual(double a, double b, double differenceAllowed)
         {

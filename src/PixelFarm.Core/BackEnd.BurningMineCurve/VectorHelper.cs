@@ -1,14 +1,12 @@
-﻿
-
-#define PIXEL_FARM
-
+﻿#define PIXEL_FARM
 
 #if SYSTEM_WINDOWS_VECTOR
 using VECTOR = System.Windows.Vector;
 using FLOAT = System.Double;
 #elif SYSTEM_NUMERICS_VECTOR
-using VECTOR = System.Numerics.Vector2;
+
 using FLOAT = System.Single;
+using VECTOR = System.Numerics.Vector2;
 
 #elif UNITY
 using VECTOR = UnityEngine.Vector2;
@@ -32,6 +30,7 @@ public static class VectorHelper
     /// Below this, don't trust the results of floating point calculations.
     /// </summary>
     public const FLOAT EPSILON = 1.2e-12f;
+
 #if SYSTEM_WINDOWS_VECTOR
     [MethodImpl(MethodImplOptions.AggressiveInlining)] public static FLOAT Distance(VECTOR a, VECTOR b) { return (a - b).Length; }
     [MethodImpl(MethodImplOptions.AggressiveInlining)] public static FLOAT DistanceSquared(VECTOR a, VECTOR b) { return (a - b).LengthSquared; }
@@ -53,15 +52,33 @@ public static class VectorHelper
     public static FLOAT GetX(VECTOR v) { return v.x; }
     public static FLOAT GetY(VECTOR v) { return v.y; }
 #elif SYSTEM_NUMERICS_VECTOR
-    public static FLOAT Distance(VECTOR a, VECTOR b) { return VECTOR.Distance(a, b); }
-    public static FLOAT DistanceSquared(VECTOR a, VECTOR b) { return VECTOR.DistanceSquared(a, b); }
-    public static FLOAT Dot(VECTOR a, VECTOR b) { return VECTOR.Dot(a, b); }
-    public static VECTOR Normalize(VECTOR v) { return VECTOR.Normalize(v); }
-    public static FLOAT Length(VECTOR v) { return v.Length(); }
-    public static FLOAT LengthSquared(VECTOR v) { return v.LengthSquared(); }
-    public static VECTOR Lerp(VECTOR a, VECTOR b, FLOAT amount) { return VECTOR.Lerp(a, b, amount); }
-    public static FLOAT GetX(VECTOR v) { return v.X; }
-    public static FLOAT GetY(VECTOR v) { return v.Y; }
+
+    public static FLOAT Distance(VECTOR a, VECTOR b)
+    { return VECTOR.Distance(a, b); }
+
+    public static FLOAT DistanceSquared(VECTOR a, VECTOR b)
+    { return VECTOR.DistanceSquared(a, b); }
+
+    public static FLOAT Dot(VECTOR a, VECTOR b)
+    { return VECTOR.Dot(a, b); }
+
+    public static VECTOR Normalize(VECTOR v)
+    { return VECTOR.Normalize(v); }
+
+    public static FLOAT Length(VECTOR v)
+    { return v.Length(); }
+
+    public static FLOAT LengthSquared(VECTOR v)
+    { return v.LengthSquared(); }
+
+    public static VECTOR Lerp(VECTOR a, VECTOR b, FLOAT amount)
+    { return VECTOR.Lerp(a, b, amount); }
+
+    public static FLOAT GetX(VECTOR v)
+    { return v.X; }
+
+    public static FLOAT GetY(VECTOR v)
+    { return v.Y; }
 
 #else // SYSTEM_NUMERICS_VECTOR -- also works for SharpDX.Vector2 and Microsoft.Xna.Framework.Vector2 AFAICT
     [MethodImpl(MethodImplOptions.AggressiveInlining)] public static FLOAT Distance(VECTOR a, VECTOR b) { return VECTOR.Distance(a, b); }
@@ -82,6 +99,7 @@ public static class VectorHelper
     /// <param name="v2">Second vector to compare.</param>
     /// <returns>True iff the vectors are almost equal.</returns>
 #if !UNITY
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
     public static bool EqualsOrClose(VECTOR v1, VECTOR v2)

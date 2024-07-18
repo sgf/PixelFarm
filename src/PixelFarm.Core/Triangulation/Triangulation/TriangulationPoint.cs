@@ -29,35 +29,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System.Collections.Generic;
 namespace Poly2Tri
 {
     public sealed class TriangulationPoint
     {
-        // List of edges this point constitutes an upper ending point (CDT) 
+        // List of edges this point constitutes an upper ending point (CDT)
         public readonly double X;
+
         public readonly double Y;
-        internal byte tempName; 
+        internal byte tempName;
         public object userData;
-        
 
         //TODO: review myEdges...
-        List<DTSweepConstraint> _myEdges = new List<DTSweepConstraint>(3);
+        private List<DTSweepConstraint> _myEdges = new List<DTSweepConstraint>(3);
+
 #if DEBUG
-        static int dbugTotalId;
+        private static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
+
         public TriangulationPoint(double x, double y)
         {
             X = x;
             Y = y;
         }
+
         public TriangulationPoint(double x, double y, object userData)
         {
             X = x;
             Y = y;
             this.userData = userData;
         }
+
         public override string ToString() => "[" + X + "," + Y + "]";
 
         public float Xf => (float)X;
@@ -73,10 +76,12 @@ namespace Poly2Tri
         internal List<DTSweepConstraint> GetInternalEdgeList() => _myEdges;
 
 #if DEBUG
+
         public static bool dbugIsEqualPointCoord(TriangulationPoint a, TriangulationPoint b)
         {
             return a.X == b.X && a.Y == b.Y;
         }
+
 #endif
     }
 }

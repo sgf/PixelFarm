@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -27,17 +27,20 @@
 //#include <math.h>
 //#include "agg_basics.h"
 
-
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public interface ICoordTransformer
     {
         void Transform(ref double x, ref double y);
+
         ICoordTransformer MultiplyWith(ICoordTransformer another);
+
         ICoordTransformer CreateInvert();
+
         CoordTransformerKind Kind { get; }
         bool IsIdentity { get; }
     }
+
     public enum CoordTransformerKind
     {
         Unknown,
@@ -46,6 +49,4 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         Bilinear,
         TransformChain,
     }
-
-
 }

@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,24 +18,25 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //Gouraud shading
     //============================================================span_gouraud
     public sealed class GouraudVerticeBuilder
     {
-        CoordAndColor _coord_0;
-        CoordAndColor _coord_1;
-        CoordAndColor _coord_2;
-        readonly double[] _x = new double[8];
-        readonly double[] _y = new double[8];
-        readonly VertexCmd[] _cmd = new VertexCmd[8];
+        private CoordAndColor _coord_0;
+        private CoordAndColor _coord_1;
+        private CoordAndColor _coord_2;
+        private readonly double[] _x = new double[8];
+        private readonly double[] _y = new double[8];
+        private readonly VertexCmd[] _cmd = new VertexCmd[8];
 
         public struct CoordAndColor
         {
             public double x;
             public double y;
-            public Drawing.Color color; 
+            public Drawing.Color color;
         }
 
         public GouraudVerticeBuilder()
@@ -43,6 +44,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _cmd[0] = VertexCmd.NoMore;
             DilationValue = 0.175f;//init value
         }
+
         public void SetColor(Drawing.Color c1, Drawing.Color c2, Drawing.Color c3)
         {
             _coord_0.color = c1;
@@ -51,11 +53,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         }
 
         public float DilationValue { get; set; }
+
         //--------------------------------------------------------------------
         // Sets the triangle and dilates it if needed.
-        // The trick here is to calculate beveled joins in the vertices of the 
-        // triangle and render it as a 6-vertex polygon. 
-        // It's necessary to achieve numerical stability. 
+        // The trick here is to calculate beveled joins in the vertices of the
+        // triangle and render it as a 6-vertex polygon.
+        // It's necessary to achieve numerical stability.
         // However, the coordinates to interpolate colors are calculated
         // as miter joins (calc_intersection).
         public void SetTriangle(double x1, double y1,
@@ -93,6 +96,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 _cmd[6] = VertexCmd.NoMore;
             }
         }
+
         public VertexStore MakeVxs(VertexStore outputVxs)
         {
             for (int i = 0; i < 8; ++i)
@@ -107,7 +111,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             return outputVxs;
         }
 
-        // Vertex Source Interface to feed the coordinates to the rasterizer 
+        // Vertex Source Interface to feed the coordinates to the rasterizer
         public void GetArrangedVertices(out CoordAndColor c0, out CoordAndColor c1, out CoordAndColor c2)
         {
             c0 = _coord_0;

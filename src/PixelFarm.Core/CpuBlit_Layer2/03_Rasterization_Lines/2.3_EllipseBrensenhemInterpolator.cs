@@ -4,8 +4,8 @@
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,17 +18,18 @@
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     //====================================================================ellipse_bresenham_interpolator
-    struct EllipseBresenhamInterpolator
+    internal struct EllipseBresenhamInterpolator
     {
-        int _rx2;
-        int _ry2;
-        int _two_rx2;
-        int _two_ry2;
-        int _dx;
-        int _dy;
-        int _inc_x;
-        int _inc_y;
-        int _cur_f;
+        private int _rx2;
+        private int _ry2;
+        private int _two_rx2;
+        private int _two_ry2;
+        private int _dx;
+        private int _dy;
+        private int _inc_x;
+        private int _inc_y;
+        private int _cur_f;
+
         public EllipseBresenhamInterpolator(int rx, int ry)
         {
             _rx2 = (rx * rx);
@@ -41,9 +42,12 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _inc_y = (-ry * _two_rx2);
             _cur_f = (0);
         }
+
         //
         public int Dx => _dx;
+
         public int Dy => _dy;
+
         //
         public void Next()
         {

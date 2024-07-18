@@ -40,17 +40,17 @@
 ///   We have a lot of Add/Clear methods -- we may prefer to just expose the container
 ///   Some self-explanitory methods may deserve commenting anyways
 
-
-using System;
-using System.Collections.Generic;
 namespace Poly2Tri
 {
     public sealed class Polygon : Triangulable
     {
-        TriangulationPoint[] _points;
+        private TriangulationPoint[] _points;
+
         //List<TriangulationPoint> _steinerPoints;
-        Polygon[] _holes;
-        List<DelaunayTriangle> _triangles;
+        private Polygon[] _holes;
+
+        private List<DelaunayTriangle> _triangles;
+
         /// <summary>
         /// Create a polygon from a list of at least 3 points with no duplicates.
         /// </summary>
@@ -60,7 +60,7 @@ namespace Poly2Tri
             _points = points;
             if (points.Length < 3) throw new ArgumentException("List has fewer than 3 points", "points");
             // Lets do one sanity check that first and last point hasn't got same position
-            // Its something that often happen when importing polygon data from other formats 
+            // Its something that often happen when importing polygon data from other formats
             if (points[0].Equals(points[points.Length - 1]))
             {
                 //reduce last ***
@@ -74,7 +74,6 @@ namespace Poly2Tri
         {
             //for clean clone
         }
-
 
         //public Polygon CleanClone()
         //{
@@ -165,7 +164,7 @@ namespace Poly2Tri
         ///// <param name="newPoint">The point to insert into the polygon</param>
         //public void InsertPointAfter(PolygonPoint point, PolygonPoint newPoint)
         //{
-        //    // Validate that 
+        //    // Validate that
         //    int index = _points.IndexOf(point);
         //    if (index == -1) throw new ArgumentException("Tried to insert a point into a Polygon after a point not belonging to the Polygon", "point");
         //    newPoint.Next = point.Next;

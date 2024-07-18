@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -26,10 +26,8 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-    
     public static class BoundingRect
     {
-
         public static Q1RectD GetBoundingRect(this VertexStore vxs)
         {
             Q1RectD bounds = Q1RectD.ZeroIntersection();
@@ -37,6 +35,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         bounds :
                         new Q1RectD();
         }
+
         public static bool GetBoundingRect(this VertexStore vxs, ref Q1RectD rect)
         {
             bool rValue = GetBoundingRectSingle(vxs,
@@ -63,15 +62,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             return rValue;
         }
-         
+
         //-----------------------------------------------------bounding_rect_single
-        //template<class VertexSource, class CoordT> 
-        static bool GetBoundingRectSingle(
+        //template<class VertexSource, class CoordT>
+        private static bool GetBoundingRectSingle(
           VertexStore vxs,
           out double x1, out double y1,
           out double x2, out double y2)
         {
-
             x1 = double.MaxValue;
             y1 = double.MaxValue;
             x2 = double.MinValue;
@@ -88,6 +86,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     case VertexCmd.Close:
                         //in this case we don't include that x,y
                         break;
+
                     case VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:
@@ -104,7 +103,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-
     //----------------------------------------------------
     //public static class BoundingRectInt
     //{
@@ -117,6 +115,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     //        rect.Bottom = (int)System.Math.Round(rect1.Bottom);
     //        rect.Right = (int)System.Math.Round(rect1.Right);
     //        rect.Top = (int)System.Math.Round(rect1.Top);
-    //    } 
+    //    }
     //}
 }

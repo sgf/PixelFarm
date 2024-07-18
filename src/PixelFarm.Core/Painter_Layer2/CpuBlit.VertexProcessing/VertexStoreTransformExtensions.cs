@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -27,14 +27,12 @@
 //#include <math.h>
 //#include "agg_basics.h"
 
-
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-
     public static class VertexStoreTransformExtensions
     {
-
         /// <summary>
         /// we do NOT store vxs, return original outputVxs
         /// </summary>
@@ -60,7 +58,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //outputVxs.HasMoreThanOnePart = src.HasMoreThanOnePart;
             return outputVxs;
         }
-         
+
         public static VertexStore TransformToVxs(this in AffineMat aff, VertexStore src, VertexStore outputVxs)
         {
 #if DEBUG
@@ -69,7 +67,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 System.Diagnostics.Debugger.Break();
             }
 #endif
-
 
             int count = src.Count;
             VertexCmd cmd;
@@ -97,7 +94,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
 #endif
 
-
             int count = src.Count;
             VertexCmd cmd;
             for (int i = 0; i < count; ++i)
@@ -108,6 +104,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return outputVxs;
         }
+
         /// <summary>
         /// we do NOT store vxs, return original outputVxs
         /// </summary>
@@ -122,7 +119,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
 #endif
 
-
             int count = src.Count;
             VertexCmd cmd;
             for (int i = 0; i < count; ++i)
@@ -133,6 +129,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return outputVxs;
         }
+
         /// <summary>
         /// we do NOT store vxs, return original outputVxs
         /// </summary>
@@ -158,8 +155,4 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return outputVxs;
         }
     }
-
-
-
-
 }

@@ -31,21 +31,23 @@
 
 namespace Poly2Tri
 {
-
 #if DEBUG
+
     public class dbugDTSweepContext : TriangulationDebugContext
     {
         /*
          * Fields used for visual representation of current triangulation
          */
 
-        DelaunayTriangle _primaryTriangle;
-        DelaunayTriangle _secondaryTriangle;
-        TriangulationPoint _activePoint;
-        AdvancingFrontNode _activeNode;
-        DTSweepConstraint _activeConstraint;
+        private DelaunayTriangle _primaryTriangle;
+        private DelaunayTriangle _secondaryTriangle;
+        private TriangulationPoint _activePoint;
+        private AdvancingFrontNode _activeNode;
+        private DTSweepConstraint _activeConstraint;
 
-        public dbugDTSweepContext(DTSweepContext tcx) : base(tcx) { }
+        public dbugDTSweepContext(DTSweepContext tcx) : base(tcx)
+        {
+        }
 
         public DelaunayTriangle PrimaryTriangle
         {
@@ -56,6 +58,7 @@ namespace Poly2Tri
                 _tcx.Update("set PrimaryTriangle");
             }
         }
+
         public DelaunayTriangle SecondaryTriangle
         {
             get => _secondaryTriangle;
@@ -65,6 +68,7 @@ namespace Poly2Tri
                 _tcx.Update("set SecondaryTriangle");
             }
         }
+
         public TriangulationPoint ActivePoint
         {
             get => _activePoint;
@@ -74,6 +78,7 @@ namespace Poly2Tri
                 _tcx.Update("set ActivePoint");
             }
         }
+
         internal AdvancingFrontNode ActiveNode
         {
             get => _activeNode;
@@ -83,6 +88,7 @@ namespace Poly2Tri
                 _tcx.Update("set ActiveNode");
             }
         }
+
         public DTSweepConstraint ActiveConstraint
         {
             get => _activeConstraint;
@@ -92,6 +98,7 @@ namespace Poly2Tri
                 _tcx.Update("set ActiveConstraint");
             }
         }
+
         public bool IsDebugContext => true;
 
         public override void Clear()
@@ -103,5 +110,6 @@ namespace Poly2Tri
             ActiveConstraint = DTSweepConstraint.Empty;
         }
     }
+
 #endif
 }

@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,7 +18,6 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
     /// <summary>
@@ -26,7 +25,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// </summary>
     public class SubBitmapBlender : BitmapBlenderBase
     {
-        IBitmapSrc _sourceImage;
+        private IBitmapSrc _sourceImage;
 
         public SubBitmapBlender(IBitmapBlender image,
             int arrayOffset32,
@@ -58,25 +57,28 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
         }
+
         public SubBitmapBlender(IBitmapSrc image,
             PixelBlender32 blender,
             int distanceBetweenPixelsInclusive,
             int arrayOffset32,
             int bitsPerPixel)
         {
-
             this.OutputPixelBlender = blender;
             Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
+
         public SubBitmapBlender(IBitmapSrc image, PixelBlender32 blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
+
         public override void WriteBuffer(int[] newbuffer)
         {
             _sourceImage?.WriteBuffer(newbuffer);
         }
-        void AttachBuffer(TempMemPtr buffer,
+
+        private void AttachBuffer(TempMemPtr buffer,
           int elemOffset,
           int width,
           int height,
@@ -90,7 +92,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             SetBuffer(buffer, elemOffset);
         }
 
-        void Attach(IBitmapSrc sourceImage,
+        private void Attach(IBitmapSrc sourceImage,
           PixelBlender32 outputPxBlender,
           int distanceBetweenPixelsInclusive,
           int arrayElemOffset,
@@ -107,6 +109,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             SetBuffer(sourceImage.GetBufferPtr(), srcOffset32 + arrayElemOffset);
             this.OutputPixelBlender = outputPxBlender;
         }
+
         //bool Attach(IBitmapBlender sourceImage, int x1, int y1, int x2, int y2)
         //{
         //    _sourceImage = sourceImage;
@@ -128,7 +131,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         //    return false;
         //}
 
-        void SetBuffer(TempMemPtr src, int arrayElemOffset)
+        private void SetBuffer(TempMemPtr src, int arrayElemOffset)
         {
             int height = this.Height;
 
@@ -142,17 +145,13 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
             if (this.Stride < 0) //stride in bytes
             {
-                //TODO: review here 
+                //TODO: review here
                 int addAmount = -((height - 1) * Width);
                 _int32ArrayStartPixelAt = addAmount + arrayElemOffset;
             }
             SetUpLookupTables();
         }
     }
-
-
-
-
 
     public static class BitmapBlenderExtension
     {
@@ -178,5 +177,4 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             return new SubBitmapBlender(parentImage, parentImage.GetBufferOffsetXY32(left, bottom), width, height);
         }
     }
-
 }

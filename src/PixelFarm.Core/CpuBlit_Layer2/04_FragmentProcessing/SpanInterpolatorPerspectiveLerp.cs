@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,22 +18,23 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
 using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //============================================span_interpolator_persp_lerp
 
-    sealed class SpanInterpolatorPerspectiveLerp : FragmentProcessing.ISpanInterpolator
+    internal sealed class SpanInterpolatorPerspectiveLerp : FragmentProcessing.ISpanInterpolator
     {
-        Perspective _trans_dir;
-        Perspective _trans_inv;
-        LineInterpolatorDDA2 _coord_x;
-        LineInterpolatorDDA2 _coord_y;
-        LineInterpolatorDDA2 _scale_x;
-        LineInterpolatorDDA2 _scale_y;
-        const int SUBPIXEL_SHIFT = 8;
-        const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
+        private Perspective _trans_dir;
+        private Perspective _trans_inv;
+        private LineInterpolatorDDA2 _coord_x;
+        private LineInterpolatorDDA2 _coord_y;
+        private LineInterpolatorDDA2 _scale_x;
+        private LineInterpolatorDDA2 _scale_y;
+        private const int SUBPIXEL_SHIFT = 8;
+        private const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
+
         //--------------------------------------------------------------------
         public SpanInterpolatorPerspectiveLerp()
         {
@@ -50,7 +51,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         }
 
         //--------------------------------------------------------------------
-        // Direct transformations 
+        // Direct transformations
         public SpanInterpolatorPerspectiveLerp(double x1, double y1,
                                      double x2, double y2,
                                      double[] quad)
@@ -60,7 +61,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         }
 
         //--------------------------------------------------------------------
-        // Reverse transformations 
+        // Reverse transformations
         public SpanInterpolatorPerspectiveLerp(double[] quad,
                                      double x1, double y1,
                                      double x2, double y2)
@@ -89,7 +90,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             quad_to_quad(src, quad);
         }
 
-
         //--------------------------------------------------------------------
         // Set the reverse transformations, i.e., quadrangle -> rectangle
         public void quad_to_rect(double[] quad,
@@ -105,12 +105,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
         //--------------------------------------------------------------------
         // Check if the equations were solved successfully
-        public bool IsValid =>_trans_dir.IsValid; 
+        public bool IsValid => _trans_dir.IsValid;
 
         //----------------------------------------------------------------
         public void Begin(double x, double y, int len)
         {
-            // Calculate transformed coordinates at x1,y1 
+            // Calculate transformed coordinates at x1,y1
             double xt = x;
             double yt = y;
             _trans_dir.Transform(ref xt, ref yt);
@@ -133,7 +133,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             dx -= x;
             dy -= y;
             int sy1 = (int)AggMath.uround(SUBPIXEL_SCALE / Math.Sqrt(dx * dx + dy * dy)) >> SUBPIXEL_SHIFT;
-            // Calculate transformed coordinates at x2,y2 
+            // Calculate transformed coordinates at x2,y2
             x += len;
             xt = x;
             yt = y;
@@ -160,13 +160,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _scale_x = new LineInterpolatorDDA2(sx1, sx2, len);
             _scale_y = new LineInterpolatorDDA2(sy1, sy2, len);
         }
-         
+
         public VertexProcessing.ICoordTransformer Transformer
         {
             get { throw new System.NotImplementedException(); }
             set { throw new System.NotImplementedException(); }
         }
-
 
         //----------------------------------------------------------------
         public void Next()
@@ -182,7 +181,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         {
             x = _coord_x.Y;
             y = _coord_y.Y;
-        } 
+        }
+
         //----------------------------------------------------------------
         public void transform(ref double x, ref double y)
         {

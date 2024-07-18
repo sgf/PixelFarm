@@ -1,14 +1,10 @@
 ﻿//MIT, 2017-present, WinterDev
-using System;
-using System.Collections.Generic;
 using PixelFarm.VectorMath;
 
 namespace PixelFarm.Contours
 {
-
     public abstract class OutlineWalker
     {
-
         public OutlineWalker()
         {
             //default
@@ -95,21 +91,25 @@ namespace PixelFarm.Contours
                         break;
                     }
                     OnEdgeN(points[m].E0);
-
                 }
             }
             Stop = true;
         }
 
-
-
         protected abstract void OnTriangle(AnalyzedTriangle tri);
+
         protected abstract void OnJoint(Joint joint);
+
         protected abstract void OnBeginBoneLinks(Vector2f branchHeadPos, int startAt, int endAt);
+
         protected abstract void OnEndBoneLinks();
+
         protected abstract void OnBone(Bone bone, int boneIndex);
+
         protected abstract void OnStartLineHub(float centerX, float centerY);
+
         protected abstract void OnEndLineHub(float centerX, float centerY, Joint joint);
+
         protected abstract void OnEdgeN(EdgeLine edge);
     }
 }

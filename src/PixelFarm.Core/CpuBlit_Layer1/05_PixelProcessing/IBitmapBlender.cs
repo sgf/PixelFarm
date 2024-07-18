@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,8 +18,9 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
     /// <summary>
@@ -28,29 +29,42 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     public interface IBitmapBlender : IBitmapSrc
     {
         void SetPixel(int x, int y, Color color);
+
         PixelBlender32 OutputPixelBlender { get; set; }
 
         ////-------------------------------------------------------------------------------------------
-       void BlendHL(int x, int y, int x2, Color sourceColor, byte cover); //**
-       void BlendVL(int x, int y1, int y2, Color sourceColor, byte cover);
+        void BlendHL(int x, int y, int x2, Color sourceColor, byte cover); //**
+
+        void BlendVL(int x, int y1, int y2, Color sourceColor, byte cover);
 
         void SetBlendColor(Color srcColor);
+
         void SetCovers(byte[] covers);
+
         void BlendHL(int x, int y, int x2, int coversIndex);
+
         void BlendSolidHSpan(int x, int y, int len, int coversIndex);//use color from SetBlendColor()
-        //------------------------------------------------------------------------------------------- 
+
+        //-------------------------------------------------------------------------------------------
 
         void CopyFrom(IBitmapSrc sourceImage, Q1Rect sourceImageRect, int destXOffset, int destYOffset); //not used
+
         // line stuff
         void CopyHL(int x, int y, int len, Color sourceColor);//not used
+
         void CopyVL(int x, int y, int len, Color sourceColor);//not used
+
         // color stuff
         void CopyColorHSpan(int x, int y, int len, Color[] colors, int colorIndex); //**
-        void CopyColorVSpan(int x, int y, int len, Color[] colors, int colorIndex); // 
 
-        void BlendSolidHSpan(int x, int y, int len, Color sourceColor, byte[] covers, int coversIndex);//  
-        void BlendSolidVSpan(int x, int y, int len, Color sourceColor, byte[] covers, int coversIndex);// 
-        void BlendColorHSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);// 
+        void CopyColorVSpan(int x, int y, int len, Color[] colors, int colorIndex); //
+
+        void BlendSolidHSpan(int x, int y, int len, Color sourceColor, byte[] covers, int coversIndex);//
+
+        void BlendSolidVSpan(int x, int y, int len, Color sourceColor, byte[] covers, int coversIndex);//
+
+        void BlendColorHSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);//
+
         void BlendColorVSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll); //not used
     }
 }

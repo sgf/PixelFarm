@@ -2,17 +2,20 @@
 
 namespace PixelFarm.Contours
 {
-
     public enum VertexKind : byte
     {
         LineStart,
         LineStop,
+
         //
         C3Start,
+
         C3Control1,
         C3End,
+
         //
         C4Start,
+
         C4Control1,
         C4Control2,
         C4End,
@@ -20,28 +23,30 @@ namespace PixelFarm.Contours
         CurveInbetween,
     }
 
-
     public class Vertex
     {
-        readonly float _ox; //original x
-        readonly float _oy; //original y
-        readonly VertexKind _kind;
+        private readonly float _ox; //original x
+        private readonly float _oy; //original y
+        private readonly VertexKind _kind;
 
-        float _newX;
-        float _newY;
-        //----------------------------------------  
-        //float _adjust_fit_x; //not use 
-        float _adjust_fit_y; //px scale specific y fitting value
-        //------------------------------------- 
+        private float _newX;
+        private float _newY;
+
+        //----------------------------------------
+        //float _adjust_fit_x; //not use
+        private float _adjust_fit_y; //px scale specific y fitting value
+
+        //-------------------------------------
 
         /// <summary>
-        /// outside inward edge ?, TODO: review inward, outward concept again 
+        /// outside inward edge ?, TODO: review inward, outward concept again
         /// </summary>
-        OutsideEdgeLine _e0;
+        private OutsideEdgeLine _e0;
+
         /// <summary>
-        /// outside outward edge ? TODO: review inward, outward concept again 
+        /// outside outward edge ? TODO: review inward, outward concept again
         /// </summary>
-        OutsideEdgeLine _e1;
+        private OutsideEdgeLine _e1;
 
         public Vertex(float x, float y, VertexKind kind)
         {
@@ -49,6 +54,7 @@ namespace PixelFarm.Contours
             _oy = _newY = y;
             _kind = kind;
         }
+
         public int SeqNo { get; internal set; }
         public VertexKind PointKind => _kind;
 
@@ -58,19 +64,21 @@ namespace PixelFarm.Contours
         /// original X
         /// </summary>
         public float OX => _ox;
+
         /// <summary>
         /// original Y
         /// </summary>
         public float OY => _oy;
+
         /// <summary>
         /// modified X
         /// </summary>
         public float X => _newX;
+
         /// <summary>
         /// modified Y
         /// </summary>
         public float Y => _newY;
-
 
         //in this version, we don't use this _adjust_fit_x for each point
         //public float FitAdjustX
@@ -94,7 +102,7 @@ namespace PixelFarm.Contours
 #if DEBUG
                 _dbug_has_adjust_y = true;
                 _dbug_fit_analyzed = true;
-#endif 
+#endif
             }
         }
 
@@ -115,6 +123,7 @@ namespace PixelFarm.Contours
             _newX = x;
             _newY = y;
         }
+
         //-----------
 
         /// <summary>
@@ -127,8 +136,7 @@ namespace PixelFarm.Contours
         /// </summary>
         internal OutsideEdgeLine E1 => _e1;//TODO: review inward and outward edge again
 
-
-        /// <summary>         
+        /// <summary>
         /// set outside edge that link with this glyph point
         /// </summary>
         /// <param name="edge">edge must be outside edge</param>
@@ -155,7 +163,6 @@ namespace PixelFarm.Contours
 #if DEBUG
             if (edge == null)
             {
-
             }
             if (_e0 == _e1)
             {
@@ -164,18 +171,17 @@ namespace PixelFarm.Contours
 #endif
         }
 
-
         internal static bool SameCoordAs(Vertex a, Vertex b)
         {
             return a._ox == b._ox && a._oy == b._oy;
         }
 
 #if DEBUG
-        bool _dbug_fit_analyzed;
-        bool _dbug_has_adjust_x;
-        bool _dbug_has_adjust_y;
+        private bool _dbug_fit_analyzed;
+        private bool _dbug_has_adjust_x;
+        private bool _dbug_has_adjust_y;
         public readonly int dbugId = dbugTotalId++;
-        static int dbugTotalId;
+        private static int dbugTotalId;
         internal ContourPart dbugOwnerPart;  //link back to owner part
         public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
 
@@ -185,8 +191,7 @@ namespace PixelFarm.Contours
             return this.dbugId + " :" +
                     (_ox + "," + _oy + " " + PointKind.ToString());
         }
+
 #endif
     }
-
 }
-

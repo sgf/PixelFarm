@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -17,14 +17,12 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using System;
-using PixelFarm.VectorMath;
-using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
+using PixelFarm.VectorMath;
+
 namespace PixelFarm.CpuBlit
 {
-
-
     //https://en.wikipedia.org/wiki/B%C3%A9zier_curve
     //--------------------
     //Line, has 2 points..
@@ -33,32 +31,31 @@ namespace PixelFarm.CpuBlit
     //--------------------
     //Curve3 (Quadratic Bézier curves), has 3 points
     //  (x0,y0)  begin point
-    //  (x1,y1)  1st control point 
+    //  (x1,y1)  1st control point
     //  (x2,y2)  end point
     //--------------------
     //Curve4 (Cubic  Bézier curves), has 4 points
     //  (x0,y0)  begin point
-    //  (x1,y1)  1st control point 
+    //  (x1,y1)  1st control point
     //  (x2,y2)  2nd control point
-    //  (x3,y3)  end point    
-    //-------------------- 
+    //  (x3,y3)  end point
+    //--------------------
     //please note that TrueType font
     //compose of Quadractic Bezier Curve ***
-    //--------------------- 
-
+    //---------------------
 
     //---------------------------------------------------------------path_base
-    // A container to store vertices with their flags. 
-    // A path consists of a number of contours separated with "move_to" 
+    // A container to store vertices with their flags.
+    // A path consists of a number of contours separated with "move_to"
     // commands. The path storage can keep and maintain more than one
-    // path. 
+    // path.
     // To navigate to the beginning of a particular path, use rewind(path_id);
     // Where path_id is what start_new_path() returns. So, when you call
     // start_new_path() you need to store its return value somewhere else
     // to navigate to the path afterwards.
     //
     // See also: vertex_source concept
-    //------------------------------------------------------------------------ 
+    //------------------------------------------------------------------------
 
     public enum SvgPathCommand : byte
     {
@@ -73,44 +70,47 @@ namespace PixelFarm.CpuBlit
         ZClosePath
     }
 
-
     /// <summary>
     /// forward path writer
     /// </summary>
     public sealed class PathWriter
     {
-
-        double _latest_moveTo_X;
-        double _latest_moveTo_Y;
+        private double _latest_moveTo_X;
+        private double _latest_moveTo_Y;
 
         internal Curve4Points _c4_points = new Curve4Points();//reusable
 
         /// <summary>
         /// latest X
         /// </summary>
-        double _latest_x;
+        private double _latest_x;
+
         /// <summary>
         /// latest Y
         /// </summary>
-        double _latest_y;
+        private double _latest_y;
 
         /// <summary>
         /// 1st curve control point
         /// </summary>
-        Vector2 _c1;
+        private Vector2 _c1;
+
         /// <summary>
-        /// 2nd curve control point 
+        /// 2nd curve control point
         /// </summary>
-        Vector2 _c2;
+        private Vector2 _c2;
+
         //
-        SvgPathCommand _latestSVGPathCmd;
-        int _figureCount = 0;
-        VertexStore _myvxs;
+        private SvgPathCommand _latestSVGPathCmd;
 
+        private int _figureCount = 0;
+        private VertexStore _myvxs;
 
-        public PathWriter() { }
+        public PathWriter()
+        { }
 
         public int Count => _myvxs.Count;
+
         public void BindVxs(VertexStore vxs)
         {
             _myvxs = vxs;
@@ -127,6 +127,7 @@ namespace PixelFarm.CpuBlit
             _latestSVGPathCmd = SvgPathCommand.MoveTo;
             _figureCount = 0;
         }
+
         public void Clear()
         {
             if (_myvxs != null)
@@ -143,6 +144,7 @@ namespace PixelFarm.CpuBlit
 
         //-------------------------------------------------------------------
         public double LatestMoveToX => _latest_moveTo_X;
+
         public double LatestMoveToY => _latest_moveTo_Y;
         public double CurrentX => _latest_x;
         public double CurrentY => _latest_y;
@@ -160,6 +162,7 @@ namespace PixelFarm.CpuBlit
             _figureCount++;
             return _myvxs.Count;
         }
+
         public void Stop()
         {
             //TODO: review stop command again
@@ -182,6 +185,7 @@ namespace PixelFarm.CpuBlit
                       _latest_moveTo_Y = _latest_y = y0);
             }
         }
+
         public void MoveToRel(double dx0, double dy0)
         {
             if (dx0 == 0 && dy0 == 0)
@@ -203,11 +207,13 @@ namespace PixelFarm.CpuBlit
                     _latest_moveTo_Y = (_latest_y += dy0));
             }
         }
+
         public void LineTo(double x1, double y1)
         {
             _latestSVGPathCmd = SvgPathCommand.LineTo;
             _myvxs.AddLineTo(_latest_x = x1, _latest_y = y1);
         }
+
         public void LineToRel(double dx1, double dy1)
         {
             //*** line to to, relative to last(x,y) ***
@@ -216,22 +222,26 @@ namespace PixelFarm.CpuBlit
                _latest_x += dx1,
                _latest_y += dy1);
         }
+
         public void HorizontalLineTo(double x1)
         {
             _latestSVGPathCmd = SvgPathCommand.HorizontalLineTo;
             _myvxs.AddLineTo(_latest_x = x1, _latest_y);
         }
+
         public void HorizontalLineToRel(double dx1)
         {
             //relative ***
             _latestSVGPathCmd = SvgPathCommand.HorizontalLineTo;
             _myvxs.AddLineTo(_latest_x += dx1, _latest_y);
         }
+
         public void VerticalLineTo(double y1)
         {
             _latestSVGPathCmd = SvgPathCommand.VerticalLineTo;
             _myvxs.AddLineTo(_latest_x, _latest_y = y1);
         }
+
         public void VerticalLineToRel(double dy1)
         {
             //relative ***
@@ -252,8 +262,8 @@ namespace PixelFarm.CpuBlit
             _myvxs.AddC3To(
                 _c1.x = x1, _c1.y = y1,
                 _latest_x = x2, _latest_y = y2);
-
         }
+
         /// <summary>
         /// Draws a quadratic Bezier curve from the current point to (x,y) using (xControl,yControl) as the control point.
         /// </summary>
@@ -269,7 +279,7 @@ namespace PixelFarm.CpuBlit
               _latest_x += dx2, _latest_y += dy2);
         }
 
-        /// <summary> 
+        /// <summary>
         /// <para>Draws a quadratic Bezier curve from the current point to (x,y).</para>
         /// <para>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.</para>
         /// <para>(If there is no previous command or if the previous command was not a curve, assume the control point is coincident with the current point.)</para>
@@ -289,6 +299,7 @@ namespace PixelFarm.CpuBlit
                         Curve3(new_c1.X, new_c1.Y, x2, y2);
                     }
                     break;
+
                 case SvgPathCommand.CurveTo:
                 case SvgPathCommand.SmoothCurveTo:
                     {
@@ -298,6 +309,7 @@ namespace PixelFarm.CpuBlit
                         Curve3(new_c1.X, new_c1.Y, x2, y2);
                     }
                     break;
+
                 default:
                     {
                         Curve3(_latest_x, _latest_y, x2, y2);
@@ -307,12 +319,13 @@ namespace PixelFarm.CpuBlit
         }
 
         //-------------------------------------------------------------------
-        static Vector2 CreateMirrorPoint(Vector2 mirrorPoint, Vector2 fixedPoint)
+        private static Vector2 CreateMirrorPoint(Vector2 mirrorPoint, Vector2 fixedPoint)
         {
             return new Vector2(
                 fixedPoint.X - (mirrorPoint.X - fixedPoint.X),
                 fixedPoint.Y - (mirrorPoint.Y - fixedPoint.Y));
         }
+
         //--------------------------------------------------------------------
         /// <summary>
         /// <para>Draws a quadratic Bezier curve from the current point to (x,y).</para>
@@ -325,6 +338,7 @@ namespace PixelFarm.CpuBlit
         {
             this.SmoothCurve3(_latest_x + dx1, _latest_y + dy1);
         }
+
         //-----------------------------------------------------------------------
         public void Curve4(double x1, double y1,
                            double x2, double y2,
@@ -361,7 +375,6 @@ namespace PixelFarm.CpuBlit
         {
             switch (_latestSVGPathCmd)
             {
-
                 case SvgPathCommand.QuadraticBezierCurve:
                 case SvgPathCommand.TSmoothQuadraticBezierCurveTo:
                     {
@@ -370,6 +383,7 @@ namespace PixelFarm.CpuBlit
                         Curve4(new_c1.X, new_c1.Y, x2, y2, x3, y3);
                     }
                     break;
+
                 case SvgPathCommand.CurveTo:
                 case SvgPathCommand.SmoothCurveTo:
                     {
@@ -378,6 +392,7 @@ namespace PixelFarm.CpuBlit
                         Curve4(new_c1.X, new_c1.Y, x2, y2, x3, y3);
                     }
                     break;
+
                 default:
                     {
                         Curve4(_latest_x, _latest_y, x2, y2, x3, y3);
@@ -385,16 +400,19 @@ namespace PixelFarm.CpuBlit
                     break;
             }
         }
+
         public void SmoothCurve4Rel(double dx2, double dy2,
                                     double dx3, double dy3)
         {
             //relative version
             SmoothCurve4(_latest_x + dx2, _latest_y + dy2, _latest_x + dx3, _latest_y + dy3);
         }
-        VertexCmd GetLastVertex(out double x, out double y)
+
+        private VertexCmd GetLastVertex(out double x, out double y)
         {
             return _myvxs.GetLastVertex(out x, out y);
         }
+
         public void CloseFigureCCW()
         {
             if (VertexHelper.IsVertextCommand(_myvxs.GetLastCommand()))
@@ -402,6 +420,7 @@ namespace PixelFarm.CpuBlit
                 _myvxs.AddVertex((int)EndVertexOrientation.CCW, 0, VertexCmd.Close);
             }
         }
+
         public void CloseFigure()
         {
             if (VertexHelper.IsVertextCommand(_myvxs.GetLastCommand()))
@@ -412,6 +431,7 @@ namespace PixelFarm.CpuBlit
                 _myvxs.AddVertex(0, 0, VertexCmd.Close);
             }
         }
+
         //// Concatenate path. The path is added as is.
         public void ConcatPath(VertexStore s)
         {
@@ -426,12 +446,11 @@ namespace PixelFarm.CpuBlit
         }
 
         //--------------------------------------------------------------------
-        // Join path. The path is joined with the existing one, that is, 
+        // Join path. The path is joined with the existing one, that is,
         // it behaves as if the pen of a plotter was always down (drawing)
-        //template<class VertexSource>  
+        //template<class VertexSource>
         public void JoinPath(VertexStore vxs)
         {
-
             int index = 0;
             VertexCmd cmd = vxs.GetVertex(index++, out double x, out double y);
             if (cmd == VertexCmd.NoMore)
@@ -441,7 +460,6 @@ namespace PixelFarm.CpuBlit
             //---------------------
             if (VertexHelper.IsVertextCommand(cmd))
             {
-
                 VertexCmd flags0 = GetLastVertex(out double x0, out double y0);
                 if (VertexHelper.IsVertextCommand(flags0))
                 {
@@ -476,7 +494,6 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-
     public static class PathWriterExtensions
     {
         public static void UbSpline(this PathWriter pw, double[] xyCoords)
@@ -500,6 +517,7 @@ namespace PixelFarm.CpuBlit
                 i += 2;
             }
         }
+
         public static void Hermite(this PathWriter pw, double[] xyCoords)
         {
             Curve4Points curve4_points = pw._c4_points;
@@ -520,6 +538,7 @@ namespace PixelFarm.CpuBlit
                 i += 2;
             }
         }
+
         public static void CatmulRom(this PathWriter pw, double[] xyCoords)
         {
             Curve4Points curve4_points = pw._c4_points;
@@ -564,7 +583,7 @@ namespace PixelFarm.CpuBlit
 
             // Ensure radii are valid
             //-------------------------
-            if(rx < epsilon || ry < epsilon) 
+            if(rx < epsilon || ry < epsilon)
             {
                 line_to(x, y);
                 return;
@@ -590,7 +609,7 @@ namespace PixelFarm.CpuBlit
         {
             move_to(x, y);
         }
-    } 
+    }
     public void arc_rel(double rx, double ry,
                                 double angle,
                                 bool large_arc_flag,
@@ -602,7 +621,6 @@ namespace PixelFarm.CpuBlit
     }
      */
         //=======================================================================
-
 
         /// <summary>
         /// approximate arc with curve4, cubic curve
@@ -617,7 +635,6 @@ namespace PixelFarm.CpuBlit
         /// <param name="isRelative"></param>
         public static void SvgArcToCurve4(this PathWriter _writer, float r1, float r2, float xAxisRotation, int largeArcFlag, int sweepFlags, float x, float y, bool isRelative)
         {
-
             using (VectorToolBox.Borrow(out SvgArcSegment svgArc))
             {
                 if (isRelative)
@@ -648,7 +665,6 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-
         public static bool CatmullRomSegmentToCurve4(this PathWriter _writer,
             double x0, double y0, //p0 //explicit x0 y0
             double x1, double y1, //p1
@@ -661,7 +677,6 @@ namespace PixelFarm.CpuBlit
             //https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
             //https://stackoverflow.com/questions/30748316/catmull-rom-interpolation-on-svg-paths
 
-
             double t0 = 0.0f,
                    t1 = CatmullRomGetT(t0, x0, y0, x1, y1),
                    t2 = CatmullRomGetT(t1, x1, y1, x2, y2),
@@ -669,26 +684,22 @@ namespace PixelFarm.CpuBlit
 
             if ((t0 == t1) || (t1 == t2) || (t2 == t3))
             {
-                //invalid 
+                //invalid
                 _writer.LineTo(x1, y1);
                 _writer.LineTo(x2, y2);
                 return false;
             }
-
 
             double c1 = (t2 - t1) / (t2 - t0),
                    c2 = (t1 - t0) / (t2 - t0),
                    d1 = (t3 - t2) / (t3 - t1),
                    d2 = (t2 - t1) / (t3 - t1);
 
-
-
             double m1x = (t2 - t1) * (c1 * (x1 - x0) / (t1 - t0) + c2 * (x2 - x1) / (t2 - t1));
             double m2x = (t2 - t1) * (d1 * (x2 - x1) / (t2 - t1) + d2 * (x3 - x2) / (t3 - t2));
 
             double m1y = (t2 - t1) * (c1 * (y1 - y0) / (t1 - t0) + c2 * (y2 - y1) / (t2 - t1));
             double m2y = (t2 - t1) * (d1 * (y2 - y1) / (t2 - t1) + d2 * (y3 - y2) / (t3 - t2));
-
 
             //Q0 = P1
             //Q1 = P1 + M1 / 3
@@ -702,22 +713,22 @@ namespace PixelFarm.CpuBlit
             return true;
         }
 
-
         //catmull_rom_alpha  from 0 to 1 for knot parameterization,
         //alpha=0.5, =>centripetal Catmull-Rom spline
         //alpha=0.0, =>standard uniform Catmull-Rom spline
         //alpha=1.0, =>chordal Catmull-Rom spline
 
-        static float catmull_rom_alpha = 0.5f;
-        static double CatmullRomGetT(double t, double ax, double ay, double bx, double by)
-        {
+        private static float catmull_rom_alpha = 0.5f;
 
+        private static double CatmullRomGetT(double t, double ax, double ay, double bx, double by)
+        {
             double a = ((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay));// System.Math.Pow((bx - ax), 2.0f) + System.Math.Pow((by - ay), 2.0f);
             double b = System.Math.Pow(a, 0.5f);
             double c = System.Math.Pow(b, catmull_rom_alpha);
 
             return (c + t);
         }
+
         public static void CatmullRomToCurve4Rel(this PathWriter writer, double dx0, double dy0, double dx1, double dy1, double dx2, double dy2, double dx3, double dy3)
         {
             //https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
@@ -726,7 +737,6 @@ namespace PixelFarm.CpuBlit
             double curY = writer.CurrentY;
             CatmullRomSegmentToCurve4(writer, curX + dx0, curY + dy0, curX + dx1, curY + dy1, curX + dx2, curY + dy2, curX + dx3, curY + dy3);
         }
-
 
         //-----------------
         //info, from  https://docs.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-cardinal-splines-about
@@ -739,10 +749,10 @@ namespace PixelFarm.CpuBlit
         //A physical spline is a thin piece of wood or
         //other flexible material.Before the advent of mathematical splines,
         //designers used physical splines to draw curves.
-        //A designer would place the spline on a piece of paper and anchor it to a given set of points. 
+        //A designer would place the spline on a piece of paper and anchor it to a given set of points.
         //The designer could then create a curve by drawing along the spline with a pencil.
         //A given set of points could yield a variety of curves,
-        //depending on the properties of the physical spline. 
+        //depending on the properties of the physical spline.
         //For example, a spline with a high resistance to bending would produce a different curve than an extremely flexible spline.
 
         //The formulas for mathematical splines are based on the properties of flexible rods,
@@ -750,11 +760,10 @@ namespace PixelFarm.CpuBlit
         //Just as physical splines of different tension will produce different curves through a given set of points,
         // mathematical splines with different values for the tension parameter will produce different curves through a given set of points.
 
-
         //-----------------
-        const float STEP_FACTOR = 2f;
+        private const float STEP_FACTOR = 2f;
 
-        static void SplineCurveSegment(
+        private static void SplineCurveSegment(
            PathWriter writer,
            double x1, double y1,
            double x2, double y2,
@@ -762,7 +771,6 @@ namespace PixelFarm.CpuBlit
            double x4, double y4,
            float tension)
         {
-
             //from SplineExtensions.cs
             //MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
             //
@@ -777,8 +785,6 @@ namespace PixelFarm.CpuBlit
             //
             //
             //   Copyright © 2009-2015 Rene Schulte and WriteableBitmapEx Contributors
-
-
 
             // Determine distances between controls points (bounding rect) to find the optimal stepsize
             double minX = Math.Min(x1, Math.Min(x2, Math.Min(x3, x4)));
@@ -802,7 +808,6 @@ namespace PixelFarm.CpuBlit
                 double tx1 = x2;
                 double ty1 = y2;
 
-
                 // Calculate factors
                 double sx1 = tension * (x3 - x1);
                 double sy1 = tension * (y3 - y1);
@@ -815,7 +820,6 @@ namespace PixelFarm.CpuBlit
 
                 // Interpolate
                 writer.LineTo(tx1, ty1);
-
 
                 double tx2, ty2;
                 for (double t = step; t <= 1; t += step)
@@ -837,8 +841,9 @@ namespace PixelFarm.CpuBlit
                 //DrawLine(context, w, h, tx1, ty1, x3, y3, color);
             }
         }
+
         /// <summary>
-        /// Draws a Cardinal spline (cubic) defined by a point collection. 
+        /// Draws a Cardinal spline (cubic) defined by a point collection.
         /// The cardinal spline passes through each point in the collection.
         /// </summary>
         /// <param name="bmp">The WriteableBitmap.</param>
@@ -860,9 +865,8 @@ namespace PixelFarm.CpuBlit
             SplineCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 2], points[i + 3], tension);
         }
 
-
         /// <summary>
-        /// Draws a closed Cardinal spline (cubic) defined by a point collection. 
+        /// Draws a closed Cardinal spline (cubic) defined by a point collection.
         /// The cardinal spline passes through each point in the collection.
         /// </summary>
         /// <param name="bmp">The WriteableBitmap.</param>
@@ -871,13 +875,12 @@ namespace PixelFarm.CpuBlit
         /// <param name="color">The color for the spline.</param>
         public static void DrawCurveClosed(this PathWriter writer, float[] points, float tension)
         {
-
             int pn = points.Length;
 
             // First segment
             SplineCurveSegment(writer, points[pn - 2], points[pn - 1], points[0], points[1], points[2], points[3], points[4], points[5], tension);
 
-            // Middle segments 
+            // Middle segments
             int i = 2;
             for (; i < pn - 4; i += 2)
             {
@@ -889,7 +892,6 @@ namespace PixelFarm.CpuBlit
 
             // Last-to-First segment
             SplineCurveSegment(writer, points[i], points[i + 1], points[i + 2], points[i + 3], points[0], points[1], points[2], points[3], tension);
-
         }
     }
 }

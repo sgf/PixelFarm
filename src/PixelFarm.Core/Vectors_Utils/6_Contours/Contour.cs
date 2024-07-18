@@ -1,7 +1,4 @@
 ﻿//MIT, 2016-present, WinterDev
-using System;
-using System.Collections.Generic;
-
 using PixelFarm.VectorMath;
 
 namespace PixelFarm.Contours
@@ -9,18 +6,20 @@ namespace PixelFarm.Contours
     public interface IContour
     {
         int VertexCount { get; }
+
         void GetVertex(int index, out float x, out float y, out object userData);
+
         bool IsClockwise { get; }
     }
 
     public class Contour : IContour
     {
         public List<ContourPart> parts = new List<ContourPart>();
-        public List<Vertex> flattenPoints; //original flatten points 
-        List<OutsideEdgeLine> _edges;
-        bool _analyzed;
-        bool _analyzedClockDirection;
-        bool _isClockwise;
+        public List<Vertex> flattenPoints; //original flatten points
+        private List<OutsideEdgeLine> _edges;
+        private bool _analyzed;
+        private bool _analyzedClockDirection;
+        private bool _isClockwise;
 
         public Contour()
         {
@@ -30,7 +29,6 @@ namespace PixelFarm.Contours
         {
             parts.Add(part);
         }
-
 
         public void Flatten(PartFlattener flattener)
         {
@@ -53,7 +51,7 @@ namespace PixelFarm.Contours
             int pointCount = tmpFlattenPoints.Count;
             if (Vertex.SameCoordAs(tmpFlattenPoints[pointCount - 1], tmpFlattenPoints[0]))
             {
-                //check if the last point is the same value as the first 
+                //check if the last point is the same value as the first
                 //if yes => remove the last one
                 tmpFlattenPoints.RemoveAt(pointCount - 1);
                 pointCount--;
@@ -63,12 +61,12 @@ namespace PixelFarm.Contours
             for (int i = 0; i < pointCount; ++i)
             {
                 tmpFlattenPoints[i].SeqNo = i;
-
             }
 
             flattener.Result = prevResult;
             _analyzed = true;
         }
+
         public bool IsClockwise()
         {
             //after flatten
@@ -84,29 +82,26 @@ namespace PixelFarm.Contours
             }
             _analyzedClockDirection = true;
 
-
             //TODO: review here again***
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
             //check if hole or not
             //clockwise or counter-clockwise
             {
-                //Some of the suggested methods will fail in the case of a non-convex polygon, such as a crescent. 
+                //Some of the suggested methods will fail in the case of a non-convex polygon, such as a crescent.
                 //Here's a simple one that will work with non-convex polygons (it'll even work with a self-intersecting polygon like a figure-eight, telling you whether it's mostly clockwise).
 
-                //Sum over the edges, (x2 − x1)(y2 + y1). 
+                //Sum over the edges, (x2 − x1)(y2 + y1).
                 //If the result is positive the curve is clockwise,
                 //if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
                 int j = flattenPoints.Count;
                 double total = 0;
-
 
                 for (int i = 1; i < j; ++i)
                 {
                     Vertex p0 = f_points[i - 1];
                     Vertex p1 = f_points[i];
                     total += (p1.OX - p0.OX) * (p1.OY + p0.OY);
-
                 }
                 //the last one
                 {
@@ -146,7 +141,7 @@ namespace PixelFarm.Contours
                     //?
                 }
             }
-            //close   
+            //close
             p = flattenPoints[lim];
             q = flattenPoints[0];
 
@@ -173,12 +168,13 @@ namespace PixelFarm.Contours
             {
                 _edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
-            //calculate edge cutpoint  
+            //calculate edge cutpoint
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
                 UpdateNewEdgeCut(flattenPoints[i]);
             }
         }
+
         /// <summary>
         /// find bounds of new fit glyph
         /// </summary>
@@ -200,7 +196,7 @@ namespace PixelFarm.Contours
         /// update dynamic cutpoint of 2 adjacent edges
         /// </summary>
         /// <param name="p"></param>
-        static void UpdateNewEdgeCut(Vertex p)
+        private static void UpdateNewEdgeCut(Vertex p)
         {
             OutsideEdgeLine e0 = p.E0;
             OutsideEdgeLine e1 = p.E1;
@@ -219,6 +215,7 @@ namespace PixelFarm.Contours
         }
 
         int IContour.VertexCount => flattenPoints.Count;
+
         void IContour.GetVertex(int index, out float x, out float y, out object userData)
         {
             Vertex vertex = flattenPoints[index];
@@ -226,8 +223,7 @@ namespace PixelFarm.Contours
             y = vertex.Y;
             userData = vertex;
         }
+
         bool IContour.IsClockwise => this.IsClockwise();
-
     }
-
 }

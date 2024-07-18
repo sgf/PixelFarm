@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,17 +18,17 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Liang-Barsky clipping 
+// Liang-Barsky clipping
 //
 //----------------------------------------------------------------------------
 using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.CpuBlit.PrimitiveProcessing
 {
-   
     public static class ClipLiangBarsky
     {
         //------------------------------------------------------------------------
-        static class ClippingFlags
+        private static class ClippingFlags
         {
             public const int cX1 = 4; // x1 clipped
             public const int cX2 = 1; //x2 clipped
@@ -39,7 +39,7 @@ namespace PixelFarm.CpuBlit.PrimitiveProcessing
         }
 
         //----------------------------------------------------------clipping_flags
-        // Determine the clipping code of the vertex according to the 
+        // Determine the clipping code of the vertex according to the
         // Cyrus-Beck line clipping algorithm
         //
         //        |        |
@@ -55,7 +55,7 @@ namespace PixelFarm.CpuBlit.PrimitiveProcessing
         //        |        |
         //  clip_box.x1  clip_box.x2
         //
-        // 
+        //
         //template<class T>
         public static int Flags(int x, int y, in Q1Rect clip_box)
         {
@@ -104,7 +104,7 @@ namespace PixelFarm.CpuBlit.PrimitiveProcessing
 
             if (deltay == 0.0)
             {
-                // bump off of the horizontal 
+                // bump off of the horizontal
                 deltay = (y1 > clip_box.Bottom) ? -nearzero : nearzero;
             }
 
@@ -256,7 +256,7 @@ namespace PixelFarm.CpuBlit.PrimitiveProcessing
         //          (ret & 2) != 0  - Second point has been moved
         //
         //template<class T>
-        public static int ClipLineSegment(ref int x1, ref int y1, 
+        public static int ClipLineSegment(ref int x1, ref int y1,
                                           ref int x2, ref int y2, in Q1Rect clip_box)
         {
             int f1 = Flags(x1, y1, clip_box);
@@ -314,6 +314,5 @@ namespace PixelFarm.CpuBlit.PrimitiveProcessing
         }
     }
 }
-
 
 //#endif

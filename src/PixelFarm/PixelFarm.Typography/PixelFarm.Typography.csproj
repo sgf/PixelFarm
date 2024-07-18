@@ -22,8 +22,5 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
-  </ItemGroup>
   <Import Project="..\..\..\..\Typography\PixelFarm.Typography\PixelFarm.Typography_SH.projitems" Label="Shared" />
 </Project>

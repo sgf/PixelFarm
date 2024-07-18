@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,16 +18,15 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-
 namespace PixelFarm.CpuBlit.FragmentProcessing;
 
 //================================================span_interpolator_linear
-public  struct SpanInterpolatorLinear : FragmentProcessing.ISpanInterpolator
+public struct SpanInterpolatorLinear : FragmentProcessing.ISpanInterpolator
 {
-    LineInterpolatorDDA2S _li_x; //use 'struct' version
-    LineInterpolatorDDA2S _li_y;
-    const int SUB_PIXEL_SHIFT = 8;
-    const int SUB_PIXEL_SCALE = 1 << SUB_PIXEL_SHIFT;
+    private LineInterpolatorDDA2S _li_x; //use 'struct' version
+    private LineInterpolatorDDA2S _li_y;
+    private const int SUB_PIXEL_SHIFT = 8;
+    private const int SUB_PIXEL_SCALE = 1 << SUB_PIXEL_SHIFT;
 
     public VertexProcessing.ICoordTransformer Transformer { get; set; }
 
@@ -40,7 +39,7 @@ public  struct SpanInterpolatorLinear : FragmentProcessing.ISpanInterpolator
         int x1 = AggMath.iround(tx * SUB_PIXEL_SCALE);
         int y1 = AggMath.iround(ty * SUB_PIXEL_SCALE);
         //
-        tx = x + len; //*** 
+        tx = x + len; //***
         ty = y;//**
         Transformer.Transform(ref tx, ref ty);
         int x2 = AggMath.iround(tx * SUB_PIXEL_SCALE);
@@ -49,8 +48,8 @@ public  struct SpanInterpolatorLinear : FragmentProcessing.ISpanInterpolator
 
         _li_x = new LineInterpolatorDDA2S(x1, x2, len);
         _li_y = new LineInterpolatorDDA2S(y1, y2, len);
-
     }
+
     public void Next()
     {
         _li_x.Next();

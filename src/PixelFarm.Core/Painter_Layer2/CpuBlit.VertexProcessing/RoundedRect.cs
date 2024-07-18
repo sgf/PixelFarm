@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,10 +22,9 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
+using PixelFarm.VectorMath;
+
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //------------------------------------------------------------rounded_rect
@@ -34,15 +33,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     //
     public class RoundedRect
     {
-        Q1RectD _bounds;
-        Vector2 _leftBottomRadius;
-        Vector2 _rightBottomRadius;
-        Vector2 _rightTopRadius;
-        Vector2 _leftTopRadius;
-        Arc _arc = new Arc();
+        private Q1RectD _bounds;
+        private Vector2 _leftBottomRadius;
+        private Vector2 _rightBottomRadius;
+        private Vector2 _rightTopRadius;
+        private Vector2 _leftTopRadius;
+        private Arc _arc = new Arc();
+
         public RoundedRect()
         {
         }
+
         public RoundedRect(double left, double bottom, double right, double top, double radius)
         {
             _bounds = new Q1RectD(left, bottom, right, top);
@@ -67,7 +68,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-       
         public void SetRect(double left, double bottom, double right, double top)
         {
             _bounds = new Q1RectD(left, bottom, right, top);
@@ -121,6 +121,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 _rightTopRadius.x *= k; _rightTopRadius.y *= k; _leftTopRadius.x *= k; _leftTopRadius.y *= k;
             }
         }
+
         public double ApproximationScale
         {
             get => _arc.ApproximateScale;
@@ -129,7 +130,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         //IEnumerable<VertexData> GetVertexIter()
         //{
-
         //    _arc.UseStartEndLimit = true;
         //    _arc.Init(_bounds.Left + _leftBottomRadius.x, _bounds.Bottom + _leftBottomRadius.y, _leftBottomRadius.x, _leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
         //    _arc.SetStartEndLimit(_bounds.Left, _bounds.Bottom + _leftBottomRadius.y,
@@ -143,7 +143,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //        }
         //        yield return vertexData;
         //    }
-
 
         //    _arc.Init(_bounds.Right - _rightBottomRadius.x, _bounds.Bottom + _rightBottomRadius.y, _rightBottomRadius.x, _rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
         //    _arc.SetStartEndLimit(_bounds.Right - _rightBottomRadius.x,
@@ -163,7 +162,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //        yield return vertexData;
         //    }
 
-
         //    _arc.Init(_bounds.Right - _rightTopRadius.x, _bounds.Top - _rightTopRadius.y, _rightTopRadius.x, _rightTopRadius.y, 0.0, Math.PI * 0.5);
         //    _arc.SetStartEndLimit(_bounds.Right, _bounds.Top - _rightTopRadius.y,
         //        _bounds.Right - _rightTopRadius.x, _bounds.Top);
@@ -181,7 +179,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //        }
         //        yield return vertexData;
         //    }
-
 
         //    _arc.Init(_bounds.Left + _leftTopRadius.x, _bounds.Top - _leftTopRadius.y, _leftTopRadius.x, _leftTopRadius.y, Math.PI * 0.5, Math.PI);
         //    _arc.SetStartEndLimit(_bounds.Left - _leftTopRadius.x, _bounds.Top,
@@ -207,9 +204,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //    yield return new VertexData(VertexCmd.NoMore);
         //}
 
-        IEnumerable<VertexData> GetVertexIter()
+        private IEnumerable<VertexData> GetVertexIter()
         {
-
             _arc.UseStartEndLimit = true;
 
             //left-top in view
@@ -250,7 +246,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //yield return new VertexData(VertexCmd.LineTo, _bounds.Right - (_rightBottomRadius.x), _bounds.Bottom + _leftBottomRadius.y);
             //yield return new VertexData(VertexCmd.LineTo, _bounds.Right - (_rightBottomRadius.x), _bounds.Bottom);
             //------------------------------
-
 
             //right - bottom in view
             _arc.Init(_bounds.Right - _rightTopRadius.x, _bounds.Top - _rightTopRadius.y, _rightTopRadius.x, _rightTopRadius.y, 0.0, Math.PI * 0.5);
@@ -303,6 +298,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             return VertexSourceExtensions.CreateVxs(this.GetVertexIter(), output);
         }
+
         public VertexStore CreateTrim()
         {
             using (VxsTemp.Borrow(out var v1))
@@ -312,4 +308,3 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 }
-

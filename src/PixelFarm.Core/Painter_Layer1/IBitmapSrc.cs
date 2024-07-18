@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,7 +18,6 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 
@@ -37,10 +36,10 @@ namespace PixelFarm.CpuBlit
 
         TempMemPtr GetBufferPtr();
 
-
         int BytesBetweenPixelsInclusive { get; }
+
         void WriteBuffer(int[] newBuffer);
+
         Color GetPixel(int x, int y);
     }
-
 }

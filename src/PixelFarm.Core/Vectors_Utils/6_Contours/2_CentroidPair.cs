@@ -1,5 +1,4 @@
 ﻿//MIT, 2017-present, WinterDev
-using System;
 namespace PixelFarm.Contours
 {
     /// <summary>
@@ -15,22 +14,21 @@ namespace PixelFarm.Contours
 
         internal CentroidPair(AnalyzedTriangle p, AnalyzedTriangle q)
         {
-
             //each triangle has 1 centroid point
-            //a centroid line connects between 2 adjacent triangles via centroid 
+            //a centroid line connects between 2 adjacent triangles via centroid
 
             //p triangle=> (x0,y0)  (centroid of p)
             //q triangle=> (x1,y1)  (centroid of q)
-            //a centroid line  move from p to q  
+            //a centroid line  move from p to q
             this.p = p;
             this.q = q;
         }
+
         /// <summary>
         /// add information about edges to each triangle and create BoneJoint and Tip
         /// </summary>
         public Joint AnalyzeEdgesAndCreateBoneJoint()
         {
-
 #if DEBUG
             if (p == q)
             {
@@ -39,7 +37,7 @@ namespace PixelFarm.Contours
 #endif
 
             //2 contact triangles share GlyphBoneJoint.
-            //-------------------------------------- 
+            //--------------------------------------
             //[C]
             //Find relation between edges of 2 triangle p and q
             //....
@@ -49,7 +47,7 @@ namespace PixelFarm.Contours
             InsideEdgeLine p_edge, q_edge;
             if (FindCommonInsideEdges(p, q, out p_edge, out q_edge))
             {
-                //create joint 
+                //create joint
                 boneJoint = new Joint(p_edge, q_edge);
                 double slopeAngle = CalculateCentroidPairSlopeNoDirection(this);
                 //
@@ -68,10 +66,9 @@ namespace PixelFarm.Contours
             return boneJoint;
         }
 
-        static bool FindCommonInsideEdges(AnalyzedTriangle a, AnalyzedTriangle b, out InsideEdgeLine a_edge, out InsideEdgeLine b_edge)
+        private static bool FindCommonInsideEdges(AnalyzedTriangle a, AnalyzedTriangle b, out InsideEdgeLine a_edge, out InsideEdgeLine b_edge)
         {
-            //2 contact triangles share GlyphBoneJoint.          
-
+            //2 contact triangles share GlyphBoneJoint.
 
             EdgeLine find_b_edge = b.e0;
             InsideEdgeLine matching_inside_edge_of_a = null;
@@ -102,9 +99,10 @@ namespace PixelFarm.Contours
             a_edge = b_edge = null;
             return false;
         }
-        static InsideEdgeLine FindCommonInsideEdge(AnalyzedTriangle a, EdgeLine b_edge)
+
+        private static InsideEdgeLine FindCommonInsideEdge(AnalyzedTriangle a, EdgeLine b_edge)
         {
-            //2 contact triangles share GlyphBoneJoint.            
+            //2 contact triangles share GlyphBoneJoint.
             //compare 3 side of a's edge to b_edge
             if (b_edge.IsOutside) return null;
             //
@@ -114,8 +112,7 @@ namespace PixelFarm.Contours
             return null;
         }
 
-
-        static void ClassifyTriangleEdges(
+        private static void ClassifyTriangleEdges(
             AnalyzedTriangle triangle,
             EdgeLine knownInsideEdge,
             out EdgeLine anotherInsideEdge,
@@ -183,27 +180,26 @@ namespace PixelFarm.Contours
             }
         }
 
-        static double CalculateCentroidPairSlopeNoDirection(CentroidPair centroidPair)
+        private static double CalculateCentroidPairSlopeNoDirection(CentroidPair centroidPair)
         {
-            //calculate centroid pair slope 
-            //p 
+            //calculate centroid pair slope
+            //p
             centroidPair.p.CalculateCentroid(out float x0, out float y0);
 
-            //q 
+            //q
             centroidPair.q.CalculateCentroid(out float x1, out float y1);
 
-            //return slop angle no direction,we don't care direction of vector  
+            //return slop angle no direction,we don't care direction of vector
             return Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
         }
 
-        static void SelectMostProperTipEdge(
+        private static void SelectMostProperTipEdge(
           double slopeAngle,
           EdgeLine outside0,
           EdgeLine outside1,
           out EdgeLine tipEdge,
           out EdgeLine notTipEdge)
         {
-
             //slop angle in rad
 
             double diff0 = Math.Abs(outside0.GetSlopeAngleNoDirection() - slopeAngle);
@@ -218,9 +214,7 @@ namespace PixelFarm.Contours
                 tipEdge = outside1;
                 notTipEdge = outside0;
             }
-
         }
-
 
         /// <summary>
         /// add information about each edge of a triangle, compare to the contactEdge of a ownerEdgeJoint
@@ -228,12 +222,11 @@ namespace PixelFarm.Contours
         /// <param name="triangle"></param>
         /// <param name="boneJoint"></param>
         /// <param name="knownInsideEdge"></param>
-        static EdgeLine CreateTipEdgeIfNeed(
+        private static EdgeLine CreateTipEdgeIfNeed(
           double cent_slopAngle,
           AnalyzedTriangle triangle,
           EdgeLine knownInsideEdge)
         {
-
             ClassifyTriangleEdges(
                 triangle,
                 knownInsideEdge,
@@ -248,14 +241,14 @@ namespace PixelFarm.Contours
                 default: throw new NotSupportedException();
                 case 0:
                 case 1: break;
-                case 3: throw new NotImplementedException();//TODO: implement this  
+                case 3: throw new NotImplementedException();//TODO: implement this
                 case 2:
 
-                    //tip end 
-                    //find which edge should be 'tip edge'                         
+                    //tip end
+                    //find which edge should be 'tip edge'
                     //in this version we compare each edge slope to centroid line slope.
                     //the most diff angle should be opposite edge (to the centroid) => tip edge
-                    //------------------------------------------------------------------------- 
+                    //-------------------------------------------------------------------------
                     EdgeLine tipEdge, notTipEdge;
                     SelectMostProperTipEdge(cent_slopAngle,
                         outside0,
@@ -263,11 +256,9 @@ namespace PixelFarm.Contours
                         out tipEdge,
                         out notTipEdge);
                     return tipEdge;
-
             }
             return null;
         }
-
 
         /// <summary>
         /// check if the 2 triangle is matching or not
@@ -275,7 +266,7 @@ namespace PixelFarm.Contours
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        static bool IsMatchingEdge(EdgeLine a, EdgeLine b)
+        private static bool IsMatchingEdge(EdgeLine a, EdgeLine b)
         {
             //x-axis
             if ((a.PX == b.PX && a.QX == b.QX) ||

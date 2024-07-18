@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,14 +22,13 @@
 //
 //----------------------------------------------------------------------------
 //
-// Adaptation for 32-bit screen coordinates (scanline32_p) has been sponsored by 
+// Adaptation for 32-bit screen coordinates (scanline32_p) has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//
 //----------------------------------------------------------------------------
-
 
 namespace PixelFarm.CpuBlit.Rasterization
 {
@@ -39,11 +38,10 @@ namespace PixelFarm.CpuBlit.Rasterization
         public readonly short cover_index;
 
 #if !COSMOS
-        public short len; //+ or - 
+        public short len; //+ or -
 #else
-        public int len; //+ or - 
+        public int len; //+ or -
 #endif
-
 
         public ScanlineSpan(int x, int cover_index)
         {
@@ -53,6 +51,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             this.len = 1;
             this.cover_index = (short)cover_index;
         }
+
         public ScanlineSpan(int x, int len, int cover_index)
         {
             //TODO: x should be ushort?
@@ -64,11 +63,14 @@ namespace PixelFarm.CpuBlit.Rasterization
 #endif
             this.cover_index = (short)cover_index;
         }
+
 #if DEBUG
+
         public override string ToString()
         {
             return "x:" + x + ",len:" + len + ",cover:" + cover_index;
         }
+
 #endif
     }
 }

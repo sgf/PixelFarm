@@ -29,13 +29,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System.Collections.Generic;
 namespace Poly2Tri
 {
     public class PointSet : Triangulable
     {
-
-
         public PointSet(List<TriangulationPoint> points)
         {
             Points = new List<TriangulationPoint>(points);

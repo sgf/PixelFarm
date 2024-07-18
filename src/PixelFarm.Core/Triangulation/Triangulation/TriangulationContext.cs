@@ -29,16 +29,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System.Collections.Generic;
 namespace Poly2Tri
 {
     public abstract class TriangulationContext
     {
         public readonly List<DelaunayTriangle> Triangles = new List<DelaunayTriangle>();
         public readonly List<TriangulationPoint> Points = new List<TriangulationPoint>(200);
+
         internal TriangulationContext()
         {
         }
+
         public TriangulationMode TriangulationMode { get; protected set; }
         public Triangulable Triangulatable { get; private set; }
 
@@ -53,7 +54,9 @@ namespace Poly2Tri
 
         //public abstract TriangulationConstraint NewConstraint(TriangulationPoint a, TriangulationPoint b);
         public abstract void MakeNewConstraint(TriangulationPoint a, TriangulationPoint b);
-        public void Update(string message) { }
+
+        public void Update(string message)
+        { }
 
         public virtual void Clear()
         {
@@ -71,16 +74,20 @@ namespace Poly2Tri
         {
             this.IsDebugEnabled = enable;
         }
+
 #if DEBUG
-        public dbugDTSweepContext DTDebugContext { get { return DebugContext as dbugDTSweepContext; } }
+        public dbugDTSweepContext DTDebugContext
+        { get { return DebugContext as dbugDTSweepContext; } }
 #endif
 
 #if DEBUG
-        int dbugStepCount;
+        private int dbugStepCount;
+
         public void dbugDone()
         {
             dbugStepCount++;
         }
+
 #endif
         public TriangulationDebugContext DebugContext { get; protected set; }
     }

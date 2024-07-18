@@ -6,21 +6,21 @@
 ** this file except in compliance with the License. You may obtain a copy
 ** of the License at Silicon Graphics, Inc., attn: Legal Services, 1600
 ** Amphitheatre Parkway, Mountain View, CA 94043-1351, or at:
-** 
+**
 ** http://oss.sgi.com/projects/FreeB
-** 
+**
 ** Note that, as provided in the License, the Software is distributed on an
 ** "AS IS" basis, with ALL EXPRESS AND IMPLIED WARRANTIES AND CONDITIONS
 ** DISCLAIMED, INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES AND
 ** CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY, FITNESS FOR A
 ** PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
-** 
+**
 ** Original Code. The Original Code is: OpenGL Sample Implementation,
 ** Version 1.2.1, released January 26, 2000, developed by Silicon Graphics,
 ** Inc. The Original Code is Copyright (c) 1991-2000 Silicon Graphics, Inc.
 ** Copyright in any portions created by third parties is as indicated
 ** elsewhere herein. All Rights Reserved.
-** 
+**
 ** Additional Notice Provisions: The application programming interfaces
 ** established by SGI in conjunction with the Original Code are The
 ** OpenGL(R) Graphics System: A Specification (Version 1.2.1), released
@@ -48,29 +48,26 @@
  * sweep line crosses each vertex, we update the affected regions.
  */
 
-
-
-using System;
 namespace Tesselate
 {
     public class ActiveRegion
     {
-        HalfEdge _upperHalfEdge;		/* upper edge, directed right to left */
-        Dictionary.Node _upperHalfEdgeDictNode;	/* dictionary node corresponding to eUp */
-        int _windingNumber;	/* used to determine which regions are
+        private HalfEdge _upperHalfEdge;		/* upper edge, directed right to left */
+        private Dictionary.Node _upperHalfEdgeDictNode;	/* dictionary node corresponding to eUp */
+        private int _windingNumber;	/* used to determine which regions are
                                  * inside the polygon */
-        bool _inside;		/* is this region inside the polygon? */
-        bool _sentinel;	/* marks fake edges at t = +/-infinity */
-        bool _dirty;		/* marks regions where the upper or lower
+        private bool _inside;		/* is this region inside the polygon? */
+        private bool _sentinel;	/* marks fake edges at t = +/-infinity */
+        private bool _dirty;		/* marks regions where the upper or lower
                                  * edge has changed, but we haven't checked
                                  * whether they intersect yet */
-        bool _fixUpperEdge;	/* marks temporary edges introduced when
+        private bool _fixUpperEdge;	/* marks temporary edges introduced when
                                  * we process a "right vertex" (one without
                                  * any edges leaving to the right) */
+
         public ActiveRegion()
         {
         }
-
 
         /* __gl_computeInterior( tess ) computes the planar arrangement specified
          * by the given contours, and further subdivides this arrangement
@@ -78,6 +75,7 @@ namespace Tesselate
          * to the polygon, according to the rule given by tess.windingRule.
          * Each interior region is guaranteed be monotone.
          */
+
         public static int ComputeInterior(Tesselator tess)
         /*
          * __gl_computeInterior( tess ) computes the planar arrangement specified
@@ -142,7 +140,6 @@ namespace Tesselate
                 return 0;
             }
 
-
             tess._mesh.CheckMesh();
             return 1;
         }
@@ -186,13 +183,13 @@ namespace Tesselate
          * winding of the new edge.
          */
 
-        static void AddWinding(HalfEdge eDst, HalfEdge eSrc)
+        private static void AddWinding(HalfEdge eDst, HalfEdge eSrc)
         {
             eDst._winding += eSrc._winding;
             eDst._otherHalfOfThisEdge._winding += eSrc._otherHalfOfThisEdge._winding;
         }
 
-        public static bool EdgeLeq(ContourVertex currentSweepVertex, ActiveRegion reg1, ActiveRegion reg2)        
+        public static bool EdgeLeq(ContourVertex currentSweepVertex, ActiveRegion reg1, ActiveRegion reg2)
         {
             /*
          * Both edges must be directed from right to left (this is the canonical
@@ -205,7 +202,7 @@ namespace Tesselate
          * Special case: if both edge destinations are at the sweep event,
          * we sort the edges by slope (they would otherwise compare equally).
          */
-          
+
             HalfEdge e1, e2;
             double t1, t2;
             e1 = reg1._upperHalfEdge;
@@ -236,7 +233,7 @@ namespace Tesselate
             return (t1 >= t2);
         }
 
-        static void DeleteRegion(ActiveRegion reg)
+        private static void DeleteRegion(ActiveRegion reg)
         {
             if (reg._fixUpperEdge)
             {
@@ -254,8 +251,7 @@ namespace Tesselate
             reg = null;
         }
 
-
-        static bool FixUpperEdge(ActiveRegion reg, HalfEdge newEdge)
+        private static bool FixUpperEdge(ActiveRegion reg, HalfEdge newEdge)
         /*
          * Replace an upper edge which needs fixing (see ConnectRightVertex).
          */
@@ -271,17 +267,17 @@ namespace Tesselate
             return true;
         }
 
-        ActiveRegion RegionAbove()
+        private ActiveRegion RegionAbove()
         {
             return _upperHalfEdgeDictNode.next.Key;
         }
 
-        static ActiveRegion RegionBelow(ActiveRegion r)
+        private static ActiveRegion RegionBelow(ActiveRegion r)
         {
             return r._upperHalfEdgeDictNode.prev.Key;
         }
 
-        static ActiveRegion TopLeftRegion(ActiveRegion reg)
+        private static ActiveRegion TopLeftRegion(ActiveRegion reg)
         {
             ContourVertex org = reg._upperHalfEdge._originVertex;
             HalfEdge e;
@@ -309,7 +305,7 @@ namespace Tesselate
             return reg;
         }
 
-        static ActiveRegion TopRightRegion(ActiveRegion reg)
+        private static ActiveRegion TopRightRegion(ActiveRegion reg)
         {
             ContourVertex dst = reg._upperHalfEdge.DirectionVertex;
             /* Find the region above the uppermost edge with the same destination */
@@ -320,7 +316,7 @@ namespace Tesselate
             return reg;
         }
 
-        static ActiveRegion AddRegionBelow(Tesselator tess,
+        private static ActiveRegion AddRegionBelow(Tesselator tess,
                              ActiveRegion regAbove,
                              HalfEdge eNewUp)
         /*
@@ -341,14 +337,13 @@ namespace Tesselate
             return regNew;
         }
 
-        static void ComputeWinding(Tesselator tess, ActiveRegion reg)
+        private static void ComputeWinding(Tesselator tess, ActiveRegion reg)
         {
             reg._windingNumber = reg.RegionAbove()._windingNumber + reg._upperHalfEdge._winding;
             reg._inside = tess.IsWindingInside(reg._windingNumber);
         }
 
-
-        static void FinishRegion(Tesselator tess, ActiveRegion reg)
+        private static void FinishRegion(Tesselator tess, ActiveRegion reg)
         /*
          * Delete a region from the sweep line.  This happens when the upper
          * and lower chains of a region meet (at a vertex on the sweep line).
@@ -364,8 +359,7 @@ namespace Tesselate
             DeleteRegion(reg);
         }
 
-
-        static HalfEdge FinishLeftRegions(Tesselator tess,
+        private static HalfEdge FinishLeftRegions(Tesselator tess,
                    ActiveRegion regFirst, ActiveRegion regLast)
         /*
          * We are given a vertex with one or more left-going edges.  All affected
@@ -422,8 +416,7 @@ namespace Tesselate
             return ePrev;
         }
 
-
-        static void AddRightEdges(Tesselator tess, ActiveRegion regUp,
+        private static void AddRightEdges(Tesselator tess, ActiveRegion regUp,
                HalfEdge eFirst, HalfEdge eLast, HalfEdge eTopLeft,
                bool cleanUp)
         /*
@@ -453,7 +446,7 @@ namespace Tesselate
             } while (e != eLast);
             /* Walk *all* right-going edges from e.Org, in the dictionary order,
              * updating the winding numbers of ea
-             * 
+             *
              * ch region, and re-linking the mesh
              * edges to match the dictionary ordering (if necessary).
              */
@@ -504,8 +497,7 @@ namespace Tesselate
             }
         }
 
-
-        static void CallCombine(Tesselator tess, ContourVertex intersectionVertex, ref Tesselator.CombineParameters combinePars, bool needed)
+        private static void CallCombine(Tesselator tess, ContourVertex intersectionVertex, ref Tesselator.CombineParameters combinePars, bool needed)
         {
             /* Copy coord data in case the callback changes it. */
             double c0 = intersectionVertex._C_0;
@@ -530,9 +522,9 @@ namespace Tesselate
                 }
             }
         }
-        static void SpliceMergeVertices(Tesselator tess, HalfEdge e1, HalfEdge e2)
-        {
 
+        private static void SpliceMergeVertices(Tesselator tess, HalfEdge e1, HalfEdge e2)
+        {
             /*
          * Two vertices with idential coordinates are combined into one.
          * e1.Org is kept, while e2.Org is discarded.
@@ -551,13 +543,12 @@ namespace Tesselate
             Mesh.meshSplice(e1, e2);
         }
 
-        static double VertL1dist(ContourVertex u, ContourVertex v)
+        private static double VertL1dist(ContourVertex u, ContourVertex v)
         {
             return Math.Abs(u.x - v.x) + Math.Abs(u.y - v.y);
         }
 
-
-        static void VertexWeights(ContourVertex isect, ContourVertex org, ContourVertex dst, out double weights0, out double weights1)
+        private static void VertexWeights(ContourVertex isect, ContourVertex org, ContourVertex dst, out double weights0, out double weights1)
         {
             /*
         * Find some weights which describe how the intersection vertex is
@@ -576,18 +567,15 @@ namespace Tesselate
             isect._C_2 += weights0 * org._C_2 + weights1 * dst._C_2;
         }
 
-
-        static void GetIntersectData(Tesselator tess, ContourVertex isect,
+        private static void GetIntersectData(Tesselator tess, ContourVertex isect,
                ContourVertex orgUp, ContourVertex dstUp,
                ContourVertex orgLo, ContourVertex dstLo)
         {
-
             /*
          * We've computed a new intersection point, now we need a "data" pointer
          * from the user so that we can refer to this new vertex in the
          * rendering callbacks.
          */
-
 
             //int[] data4 = new int[4];
             //double[] weights4 = new double[4];
@@ -608,7 +596,7 @@ namespace Tesselate
             CallCombine(tess, isect, ref combinePars, true);
         }
 
-        static bool CheckForRightSplice(Tesselator tess, ActiveRegion regUp)
+        private static bool CheckForRightSplice(Tesselator tess, ActiveRegion regUp)
         {
             /*
          * Check the upper and lower edge of "regUp", to make sure that the
@@ -677,7 +665,7 @@ namespace Tesselate
             return true;
         }
 
-        static bool CheckForLeftSplice(Tesselator tess, ActiveRegion regUp)
+        private static bool CheckForLeftSplice(Tesselator tess, ActiveRegion regUp)
         {
             /*
         * Check the upper and lower edge of "regUp", to make sure that the
@@ -731,7 +719,7 @@ namespace Tesselate
             return true;
         }
 
-        static void Swap(ref ContourVertex a, ref ContourVertex b)
+        private static void Swap(ref ContourVertex a, ref ContourVertex b)
         {
             var temp = a;
             a = b;
@@ -746,11 +734,12 @@ namespace Tesselate
          * MIN(x,y) <= r <= MAX(x,y), and the results are very accurate
          * even when a and b differ greatly in magnitude.
          */
-        static double Interpolate(double a, double x, double b, double y)
+
+        private static double Interpolate(double a, double x, double b, double y)
         {
-            //return (a = (a < 0) ? 0 : a, b = (b < 0) ? 0 : b,	
-            //                ((a <= b) ? ((b == 0) ? ((x+y) / 2)			
-            //                : (x + (y-x) * (a/(a+b))))	
+            //return (a = (a < 0) ? 0 : a, b = (b < 0) ? 0 : b,
+            //                ((a <= b) ? ((b == 0) ? ((x+y) / 2)
+            //                : (x + (y-x) * (a/(a+b))))
             //                : (y + (x-y) * (b/(a+b)))));
 
             if (a < 0) a = 0;
@@ -764,7 +753,7 @@ namespace Tesselate
                 return (y + (x - y) * (b / (a + b)));
         }
 
-        static double TransEval(ContourVertex u, ContourVertex v, ContourVertex w)
+        private static double TransEval(ContourVertex u, ContourVertex v, ContourVertex w)
         {
             /* Given three vertices u,v,w such that TransLeq(u,v) && TransLeq(v,w),
              * evaluates the t-coord of the edge uw at the s-coord of the vertex v.
@@ -799,7 +788,7 @@ namespace Tesselate
             return 0;
         }
 
-        static double TransSign(ContourVertex u, ContourVertex v, ContourVertex w)
+        private static double TransSign(ContourVertex u, ContourVertex v, ContourVertex w)
         {
             /* Returns a number whose sign matches TransEval(u,v,w) but which
              * is cheaper to evaluate.  Returns > 0, == 0 , or < 0
@@ -821,14 +810,14 @@ namespace Tesselate
             return 0;
         }
 
-        static void EdgeIntersect(ContourVertex o1, ContourVertex d1,
+        private static void EdgeIntersect(ContourVertex o1, ContourVertex d1,
             ContourVertex o2, ContourVertex d2,
             ref ContourVertex v)
         {
-          /* Given edges (o1,d1) and (o2,d2), compute their point of intersection.
-          * The computed point is guaranteed to lie in the intersection of the
-          * bounding rectangles defined by each edge.
-          */
+            /* Given edges (o1,d1) and (o2,d2), compute their point of intersection.
+            * The computed point is guaranteed to lie in the intersection of the
+            * bounding rectangles defined by each edge.
+            */
 
             double z1, z2;
             /* This is certainly not the most efficient way to find the intersection
@@ -894,7 +883,7 @@ namespace Tesselate
             }
         }
 
-        static bool CheckForIntersect(Tesselator tess, ActiveRegion regUp)
+        private static bool CheckForIntersect(Tesselator tess, ActiveRegion regUp)
         {
             /*
         * Check the upper and lower edges of the given region to see if
@@ -1090,7 +1079,7 @@ namespace Tesselate
             return false;
         }
 
-        static void WalkDirtyRegions(Tesselator tess, ActiveRegion regUp)
+        private static void WalkDirtyRegions(Tesselator tess, ActiveRegion regUp)
         {
             /*
        * When the upper or lower edge of any region changes, the region is
@@ -1187,8 +1176,7 @@ namespace Tesselate
             }
         }
 
-
-        static void ConnectRightVertex(Tesselator tess, ActiveRegion regUp, HalfEdge eBottomLeft)
+        private static void ConnectRightVertex(Tesselator tess, ActiveRegion regUp, HalfEdge eBottomLeft)
         {
             /*
      * Purpose: connect a "right" vertex vEvent (one where all edges go left)
@@ -1276,7 +1264,7 @@ namespace Tesselate
             WalkDirtyRegions(tess, regUp);
         }
 
-        static void ConnectLeftDegenerate(Tesselator tess, ActiveRegion regUp, ContourVertex vEvent)
+        private static void ConnectLeftDegenerate(Tesselator tess, ActiveRegion regUp, ContourVertex vEvent)
         /*
          * The currentSweepVertex vertex lies exactly on an already-processed edge or vertex.
          * Adding the new vertex involves splicing it into the already-processed
@@ -1339,7 +1327,7 @@ namespace Tesselate
             AddRightEdges(tess, regUp, eTopRight._nextEdgeCCWAroundOrigin, eLast, eTopLeft, true);
         }
 
-        static void ConnectLeftVertex(Tesselator tess, ContourVertex vEvent)
+        private static void ConnectLeftVertex(Tesselator tess, ContourVertex vEvent)
         {
             /*
        * Purpose: connect a "left" vertex (one where both edges go right)
@@ -1356,7 +1344,6 @@ namespace Tesselate
        *	- merging with the active edge of U or L
        *	- merging with an already-processed portion of U or L
        */
-
 
             ActiveRegion tmp = new ActiveRegion();
             /* assert( vEvent.anEdge.Onext.Onext == vEvent.anEdge ); */
@@ -1411,8 +1398,7 @@ namespace Tesselate
             }
         }
 
-
-        static void SweepEvent(Tesselator tess, ContourVertex vEvent)
+        private static void SweepEvent(Tesselator tess, ContourVertex vEvent)
 
         {
             /*
@@ -1467,19 +1453,17 @@ namespace Tesselate
             }
         }
 
-
         /* Make the sentinel coordinates big enough that they will never be
          * merged with real input features.  (Even with the largest possible
          * input contour and the maximum tolerance of 1.0, no merging will be
          * done with coordinates larger than 3 * GLU_TESS_MAX_COORD).
          */
-        const double SENTINEL_COORD = (4 * Tesselator.MAX_COORD);
-        static void AddSentinel(Tesselator tess, double t)
-        {
+        private const double SENTINEL_COORD = (4 * Tesselator.MAX_COORD);
 
+        private static void AddSentinel(Tesselator tess, double t)
+        {
             //We add two sentinel edges above and below all other edges,
             //to avoid special cases at the top and bottom.
-
 
             ActiveRegion activeRedion = new ActiveRegion();
             HalfEdge halfEdge = tess._mesh.MakeEdge();
@@ -1497,10 +1481,8 @@ namespace Tesselate
             activeRedion._upperHalfEdgeDictNode = tess._edgeDictionary.Insert(activeRedion); /* __gl_dictListInsertBefore */
         }
 
-
-        static void InitEdgeDict(Tesselator tess)
+        private static void InitEdgeDict(Tesselator tess)
         {
-
             //We maintain an ordering of edge intersections with the sweep line.
             //This order is maintained in a dynamic dictionary.
 
@@ -1510,8 +1492,7 @@ namespace Tesselate
             AddSentinel(tess, SENTINEL_COORD);
         }
 
-
-        static void DoneEdgeDict(Tesselator tess)
+        private static void DoneEdgeDict(Tesselator tess)
         {
             ActiveRegion reg;
             int fixedEdges = 0;
@@ -1544,8 +1525,7 @@ namespace Tesselate
             tess._edgeDictionary = null;
         }
 
-
-        static void RemoveDegenerateEdges(Tesselator tess)
+        private static void RemoveDegenerateEdges(Tesselator tess)
         {
             // Remove zero-length edges, and contours with fewer than 3 vertices.
             HalfEdge edgeHead = tess._mesh._halfEdgeHead;
@@ -1587,7 +1567,7 @@ namespace Tesselate
         ///  order in which vertices cross the sweep line.
         /// </summary>
         /// <param name="tess"></param>
-        static void InitPriorityQue(Tesselator tess)
+        private static void InitPriorityQue(Tesselator tess)
         {
             MaxFirstList<ContourVertex> priorityQue = tess._vertexPriorityQue = new MaxFirstList<ContourVertex>();
             ContourVertex vertexHead = tess._mesh._vertexHead;
@@ -1597,8 +1577,7 @@ namespace Tesselate
             }
         }
 
-
-        static void DonePriorityQ(Tesselator tess)
+        private static void DonePriorityQ(Tesselator tess)
         {
             tess._vertexPriorityQue = null; /* __gl_pqSortDeletePriorityQ */
         }
@@ -1608,9 +1587,8 @@ namespace Tesselate
         /// </summary>
         /// <param name="mesh"></param>
         /// <returns></returns>
-        static bool RemoveDegenerateFaces(Mesh mesh)
+        private static bool RemoveDegenerateFaces(Mesh mesh)
         {
-
             //WalkDirtyRegions()
             //will catch almost all of these, but it won't catch degenerate faces
             //produced by splice operations on already - processed edges.
@@ -1647,4 +1625,3 @@ namespace Tesselate
         }
     }
 }
-

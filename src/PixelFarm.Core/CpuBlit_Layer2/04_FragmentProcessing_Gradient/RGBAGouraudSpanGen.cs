@@ -3,8 +3,8 @@
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -14,33 +14,34 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by 
+// Adaptation for high precision colors has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//
 //----------------------------------------------------------------------------
 
-using System;
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //=======================================================span_gouraud_rgba
     public sealed class RGBAGouraudSpanGen : ISpanGenerator
     {
-        bool _swap;
-        int _y2;
-        RGBA_Calculator _rgba1;
-        RGBA_Calculator _rgba2;
-        RGBA_Calculator _rgba3;
+        private bool _swap;
+        private int _y2;
+        private RGBA_Calculator _rgba1;
+        private RGBA_Calculator _rgba2;
+        private RGBA_Calculator _rgba3;
 
-        GouraudVerticeBuilder.CoordAndColor _c0, _c1, _c2;
+        private GouraudVerticeBuilder.CoordAndColor _c0, _c1, _c2;
 
-        const int SUBPIXEL_SHIFT = 4;
-        const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
+        private const int SUBPIXEL_SHIFT = 4;
+        private const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
+
         //--------------------------------------------------------------------
-        struct RGBA_Calculator
+        private struct RGBA_Calculator
         {
             public void Init(GouraudVerticeBuilder.CoordAndColor c1, GouraudVerticeBuilder.CoordAndColor c2)
             {
@@ -93,15 +94,17 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         }
 
         //--------------------------------------------------------------------
-        public RGBAGouraudSpanGen() { }
+        public RGBAGouraudSpanGen()
+        { }
 
-        struct LineInterpolatorDDA255
+        private struct LineInterpolatorDDA255
         {
             //my custom extension of LineInterpolatorDDA
-            int _y;
-            int _dy;
-            readonly int _inc;
-            readonly int _fractionShift;
+            private int _y;
+
+            private int _dy;
+            private readonly int _inc;
+            private readonly int _fractionShift;
 
             public LineInterpolatorDDA255(int y1, int y2, int count, int fractionShift)
             {
@@ -121,8 +124,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
             //--------------------------------------------------------------------
             public int y() => _y + (_dy >> (_fractionShift));  // - m_YShift)); }
-                                                               //
+
+            //
             public int dy() => _dy;
+
             //--------------------------------------------------------------------
             //special
             public int y_clamp0_255()
@@ -144,7 +149,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             }
         }
 
-
         public void SetColorAndCoords(
             GouraudVerticeBuilder.CoordAndColor c0,
             GouraudVerticeBuilder.CoordAndColor c1,
@@ -154,9 +158,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _c1 = c1;
             _c2 = c2;
         }
+
         void ISpanGenerator.Prepare()
         {
-
             _y2 = (int)_c1.y;
             _swap = AggMath.Cross(_c0.x, _c0.y,
                                    _c2.x, _c2.y,
@@ -168,7 +172,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
         void ISpanGenerator.GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
         {
-
             _rgba1.Calculate(y);//(m_rgba1.m_1dy > 2) ? m_rgba1.m_y1 : y);
             RGBA_Calculator pc1 = _rgba1;
             RGBA_Calculator pc2 = _rgba2;
@@ -188,7 +191,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
             if (_swap)
             {
-                // It means that the triangle is oriented clockwise, 
+                // It means that the triangle is oriented clockwise,
                 // so that we need to swap the controlling structures
                 //-------------------------
                 RGBA_Calculator t = pc2;
@@ -210,12 +213,11 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             }
 #endif
 
-
             var line_r = new LineInterpolatorDDA255(pc1._r, pc2._r, nlen, 14);
             var line_g = new LineInterpolatorDDA255(pc1._g, pc2._g, nlen, 14);
             var line_b = new LineInterpolatorDDA255(pc1._b, pc2._b, nlen, 14);
             var line_a = new LineInterpolatorDDA255(pc1._a, pc2._a, nlen, 14);
-            // Calculate the starting point of the gradient with subpixel 
+            // Calculate the starting point of the gradient with subpixel
             // accuracy and correct (roll back) the interpolators.
             // This operation will also clip the beginning of the span
             // if necessary.
@@ -228,9 +230,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             nlen += start;
             //int vr, vg, vb, va;
 
-            // Beginning part of the span. Since we rolled back the 
+            // Beginning part of the span. Since we rolled back the
             // interpolators, the color values may have overflowed.
-            // So that, we render the beginning part with checking 
+            // So that, we render the beginning part with checking
             // for overflow. It lasts until "start" is positive;
             // typically it's 1-2 pixels, but may be more in some cases.
             //-------------------------
@@ -271,7 +273,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
             // Middle part, no checking for overflow.
             // Actual spans can be longer than the calculated length
-            // because of anti-aliasing, thus, the interpolators can 
+            // because of anti-aliasing, thus, the interpolators can
             // overflow. But while "nlen" is positive we are safe.
             //-------------------------
             while (len != 0 && nlen > 0)

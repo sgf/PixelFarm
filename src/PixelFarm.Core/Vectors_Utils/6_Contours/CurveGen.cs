@@ -2,13 +2,15 @@
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
- * 
+ *
  * Contributions by Georg W�chter.
  */
+
 using PixelFarm.VectorMath;
+
 namespace PixelFarm.Contours
 {
-    static class Vector2fExtensions
+    internal static class Vector2fExtensions
     {
         public static Vector2f GetPerpendicularRight(this Vector2f v)
         {
@@ -16,30 +18,32 @@ namespace PixelFarm.Contours
         }
     }
 
-   
     /// <summary>
     /// Represents a cubic bezier curve with two anchor and two control points.
     /// </summary>
     //[Serializable]
-    struct BezierCurveCubic
+    internal struct BezierCurveCubic
     {
-
         /// <summary>
         /// Start anchor point.
         /// </summary>
         public Vector2f StartAnchor;
+
         /// <summary>
         /// End anchor point.
         /// </summary>
         public Vector2f EndAnchor;
+
         /// <summary>
         /// First control point, controls the direction of the curve start.
         /// </summary>
         public Vector2f FirstControlPoint;
+
         /// <summary>
         /// Second control point, controls the direction of the curve end.
         /// </summary>
         public Vector2f SecondControlPoint;
+
         /// <summary>
         /// Gets or sets the parallel value.
         /// </summary>
@@ -48,7 +52,6 @@ namespace PixelFarm.Contours
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the original curve at any point.</remarks>
         public float Parallel;
-
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveCubic"/>.
@@ -82,8 +85,6 @@ namespace PixelFarm.Contours
             this.FirstControlPoint = firstControlPoint;
             this.SecondControlPoint = secondControlPoint;
         }
-
-
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -142,7 +143,6 @@ namespace PixelFarm.Contours
 
         //    return (float)length;
         //}
-
     }
 
     /// <summary>
@@ -151,19 +151,21 @@ namespace PixelFarm.Contours
     //[Serializable]
     public struct BezierCurveQuadric
     {
-
         /// <summary>
         /// Start anchor point.
         /// </summary>
         public Vector2f StartAnchor;
+
         /// <summary>
         /// End anchor point.
         /// </summary>
         public Vector2f EndAnchor;
+
         /// <summary>
         /// Control point, controls the direction of both endings of the curve.
         /// </summary>
         public Vector2f ControlPoint;
+
         /// <summary>
         /// The parallel value.
         /// </summary>
@@ -172,7 +174,6 @@ namespace PixelFarm.Contours
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the original curve at any point.</remarks>
         public float Parallel;
-
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveQuadric"/>.
@@ -202,8 +203,6 @@ namespace PixelFarm.Contours
             this.EndAnchor = endAnchor;
             this.ControlPoint = controlPoint;
         }
-
-
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -259,6 +258,5 @@ namespace PixelFarm.Contours
 
             return (float)length;
         }
-
     }
 }

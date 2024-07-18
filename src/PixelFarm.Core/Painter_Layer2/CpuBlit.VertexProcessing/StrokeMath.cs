@@ -8,8 +8,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,7 +22,6 @@
 // Stroke math
 //
 //----------------------------------------------------------------------------
-using System;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
@@ -31,15 +30,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         public readonly double x;
         public readonly double y;
+
         public Vertex2d(double x, double y)
         {
             this.x = x;
             this.y = y;
         }
+
         public double CalLen(Vertex2d another)
         {
             return AggMath.calc_distance(x, y, another.x, another.y);
         }
+
         public bool IsEqual(Vertex2d val)
         {
             return AggMath.calc_distance(x, y, val.x, val.y) <= AggMath.VERTEX_DISTANCE_EPSILON;
@@ -55,29 +57,30 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //    return true;
             //}
         }
+
 #if DEBUG
+
         public override string ToString()
         {
             return "(" + x + "," + y + ")";
         }
+
 #endif
     }
 
-
-
     public class StrokeMath
     {
+        private double _width;
+        private double _width_abs;
+        private double _width_eps;
+        private int _width_sign;
+        private double _miter_limit;
+        private double _inner_miter_limit;
+        private double _approx_scale;
+        private LineCap _line_cap;
+        private LineJoin _line_join;
+        private InnerJoin _inner_join;
 
-        double _width;
-        double _width_abs;
-        double _width_eps;
-        int _width_sign;
-        double _miter_limit;
-        double _inner_miter_limit;
-        double _approx_scale;
-        LineCap _line_cap;
-        LineJoin _line_join;
-        InnerJoin _inner_join;
         public StrokeMath()
         {
             _width = 0.5;
@@ -97,11 +100,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _line_cap;
             set => _line_cap = value;
         }
+
         public LineJoin LineJoin
         {
             get => _line_join;
             set => _line_join = value;
         }
+
         public InnerJoin InnerJoin
         {
             get => _inner_join;
@@ -128,22 +133,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-
-
         public double MiterLimit
         {
             get => _miter_limit;
             set => _miter_limit = value;
         }
+
         public void SetMiterLimitTheta(double t)
         {
             _miter_limit = 1.0 / Math.Sin(t * 0.5);
         }
+
         public double InnerMiterLimit
         {
             get => _inner_miter_limit;
             set => _inner_miter_limit = value;
         }
+
         public double ApproximateScale
         {
             get => _approx_scale;
@@ -152,7 +158,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public void CreateCap(VertexStore output, Vertex2d v0, Vertex2d v1)
         {
-
             output.Clear();
 
             double len = v0.CalLen(v1);
@@ -207,11 +212,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 AddVertex(output, v0.x + dx1, v0.y - dy1);
             }
         }
-
 
         internal void CreateHalfCap(VertexStore output, Vertex2d v0, Vertex2d v1)
         {
-
             output.Clear();
 
             double len = v0.CalLen(v1);
@@ -266,15 +269,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 AddVertex(output, v0.x + dx1, v0.y - dy1);
             }
         }
-
-
 
         public void CreateJoin(VertexStore output,
                                Vertex2d v0,
                                Vertex2d v1,
                                Vertex2d v2)
         {
-
             double len1 = v1.CalLen(v0);
             double len2 = v2.CalLen(v1);
 
@@ -300,12 +300,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         AddVertex(output, v1.x + dx1, v1.y - dy1);
                         AddVertex(output, v1.x + dx2, v1.y - dy2);
                         break;
+
                     case InnerJoin.Miter:
                         CreateMiter(output,
                                    v0, v1, v2, dx1, dy1, dx2, dy2,
                                    LineJoin.MiterRevert,
                                    limit, 0);
                         break;
+
                     case InnerJoin.Jag:
                     case InnerJoin.Round:
                         cp = (dx1 - dx2) * (dx1 - dx2) + (dy1 - dy2) * (dy1 - dy2);
@@ -341,7 +343,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 // Outer join
                 //---------------
 
-                // Calculate the distance between v1 and 
+                // Calculate the distance between v1 and
                 // the central point of the bevel line segment
                 //---------------
                 double dx = (dx1 + dx2) / 2;
@@ -349,21 +351,21 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 double dbevel = Math.Sqrt(dx * dx + dy * dy);
                 if (_line_join == LineJoin.Round || _line_join == LineJoin.Bevel)
                 {
-                    // This is an optimization that reduces the number of points 
+                    // This is an optimization that reduces the number of points
                     // in cases of almost collinear segments. If there's no
                     // visible difference between bevel and miter joins we'd rather
-                    // use miter join because it adds only one point instead of two. 
+                    // use miter join because it adds only one point instead of two.
                     //
-                    // Here we calculate the middle point between the bevel points 
-                    // and then, the distance between v1 and this middle point. 
-                    // At outer joins this distance always less than stroke width, 
+                    // Here we calculate the middle point between the bevel points
+                    // and then, the distance between v1 and this middle point.
+                    // At outer joins this distance always less than stroke width,
                     // because it's actually the height of an isosceles triangle of
                     // v1 and its two bevel points. If the difference between this
-                    // width and this value is small (no visible bevel) we can 
-                    // add just one point. 
+                    // width and this value is small (no visible bevel) we can
+                    // add just one point.
                     //
-                    // The constant in the expression makes the result approximately 
-                    // the same as in round joins and caps. You can safely comment 
+                    // The constant in the expression makes the result approximately
+                    // the same as in round joins and caps. You can safely comment
                     // out this entire "if".
                     //-------------------
                     if (_approx_scale * (_width_abs - dbevel) < _width_eps)
@@ -395,22 +397,25 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                    _miter_limit,
                                    dbevel);
                         break;
+
                     case LineJoin.Round:
                         CreateArc(output, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
                         break;
-                    default: // Bevel join 
+
+                    default: // Bevel join
                         AddVertex(output, v1.x + dx1, v1.y - dy1);
                         AddVertex(output, v1.x + dx2, v1.y - dy2);
                         break;
                 }
             }
         }
-        static void AddVertex(VertexStore output, double x, double y)
+
+        private static void AddVertex(VertexStore output, double x, double y)
         {
             output.AddVertex(x, y, VertexCmd.LineTo);
         }
 
-        void CreateArc(VertexStore output,
+        private void CreateArc(VertexStore output,
                       double x, double y,
                       double dx1, double dy1,
                       double dx2, double dy2)
@@ -448,7 +453,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             AddVertex(output, x + dx2, y + dy2);
         }
 
-        void CreateMiter(VertexStore output,
+        private void CreateMiter(VertexStore output,
                         Vertex2d v0,
                         Vertex2d v1,
                         Vertex2d v2,
@@ -485,8 +490,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             else
             {
                 // Calculation of the intersection failed, most probably
-                // the three points lie one straight line. 
-                // First check if v0 and v2 lie on the opposite sides of vector: 
+                // the three points lie one straight line.
+                // First check if v0 and v2 lie on the opposite sides of vector:
                 // (v1.x, v1.y) -> (v1.x+dx1, v1.y-dy1), that is, the perpendicular
                 // to the line determined by vertices v0 and v1.
                 // This condition determines whether the next line segments continues
@@ -497,7 +502,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 if ((AggMath.Cross(v0.x, v0.y, v1.x, v1.y, x2, y2) < 0.0) ==
                    (AggMath.Cross(v1.x, v1.y, v2.x, v2.y, x2, y2) < 0.0))
                 {
-                    // This case means that the next segment continues 
+                    // This case means that the next segment continues
                     // the previous one (straight line)
                     //-----------------
                     AddVertex(output, v1.x + dx1, v1.y - dy1);
@@ -512,16 +517,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 switch (lj)
                 {
                     case LineJoin.MiterRevert:
-                        // For the compatibility with SVG, PDF, etc, 
+                        // For the compatibility with SVG, PDF, etc,
                         // we use a simple bevel join instead of
                         // "smart" bevel
                         //-------------------
                         AddVertex(output, v1.x + dx1, v1.y - dy1);
                         AddVertex(output, v1.x + dx2, v1.y - dy2);
                         break;
+
                     case LineJoin.MiterRound:
                         CreateArc(output, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
                         break;
+
                     default:
                         // If no miter-revert, calculate new dx1, dy1, dx2, dy2
                         //----------------

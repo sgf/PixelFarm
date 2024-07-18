@@ -1,8 +1,7 @@
-﻿
-namespace PixelFarm.Drawing.Internal;
+﻿namespace PixelFarm.Drawing.Internal;
 
-[System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class 
-static class NativeMemMx
+[System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
+internal static class NativeMemMx
 {
     //check this ....
     //for cross platform code
@@ -21,10 +20,12 @@ static class NativeMemMx
         System.Runtime.CompilerServices.Unsafe.CopyBlock((void*)(System.IntPtr)dest, (void*)(System.IntPtr)src, (uint)byteCount);
     }
 #else
+
     [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
-    public static unsafe extern void memset(byte* dest, byte c, int byteCount);
+    public static extern unsafe void memset(byte* dest, byte c, int byteCount);
+
     [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
-    public static unsafe extern void memcpy(byte* dest, byte* src, int byteCount);      
+    public static extern unsafe void memcpy(byte* dest, byte* src, int byteCount);
+
 #endif
-  
 }

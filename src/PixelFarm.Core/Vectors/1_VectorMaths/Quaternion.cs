@@ -20,8 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
-using System.Runtime.InteropServices;
 namespace PixelFarm.VectorMath
 {
     /// <summary>
@@ -31,10 +29,8 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Quaternion : IEquatable<Quaternion>
     {
-
-        Vector3 xyz;
-        double w;
-
+        private Vector3 xyz;
+        private double w;
 
         /// <summary>
         /// Construct a new Quaterniond from vector and w components
@@ -70,9 +66,6 @@ namespace PixelFarm.VectorMath
             Normalize();
         }
 
-
-
-
         /// <summary>
         /// Gets or sets an OpenTK.Vector3d with the X, Y and Z components of this instance.
         /// </summary>
@@ -97,9 +90,6 @@ namespace PixelFarm.VectorMath
         /// Gets or sets the W component of this instance.
         /// </summary>
         public double W { get { return w; } set { w = value; } }
-
-
-
 
         /// <summary>
         /// Convert the current quaternion to axis angle representation
@@ -131,15 +121,13 @@ namespace PixelFarm.VectorMath
             }
             else
             {
-                // This occurs when the angle is zero. 
+                // This occurs when the angle is zero.
                 // Not a problem: just set an arbitrary normalized axis.
                 result.Xyz = Vector3.UnitX;
             }
 
             return result;
         }
-
-
 
         /// <summary>
         /// Gets the length (magnitude) of the Quaterniond.
@@ -153,8 +141,6 @@ namespace PixelFarm.VectorMath
             }
         }
 
-
-
         /// <summary>
         /// Gets the square of the Quaterniond length (magnitude).
         /// </summary>
@@ -166,8 +152,6 @@ namespace PixelFarm.VectorMath
             }
         }
 
-
-
         /// <summary>
         /// Scales the Quaterniond to unit length.
         /// </summary>
@@ -178,8 +162,6 @@ namespace PixelFarm.VectorMath
             W *= scale;
         }
 
-
-
         /// <summary>
         /// Convert this Quaterniond to its conjugate
         /// </summary>
@@ -188,15 +170,10 @@ namespace PixelFarm.VectorMath
             Xyz = -Xyz;
         }
 
-
-
-
-
         /// <summary>
         /// Defines the identity quaternion.
         /// </summary>
-        public readonly static Quaternion Identity = new Quaternion(0, 0, 0, 1);
-
+        public static readonly Quaternion Identity = new Quaternion(0, 0, 0, 1);
 
         /// <summary>
         /// Add two quaternions
@@ -224,8 +201,6 @@ namespace PixelFarm.VectorMath
                 left.W + right.W);
         }
 
-
-
         /// <summary>
         /// Subtracts two instances.
         /// </summary>
@@ -251,8 +226,6 @@ namespace PixelFarm.VectorMath
                 left.Xyz - right.Xyz,
                 left.W - right.W);
         }
-
-
 
         /// <summary>
         /// Multiplies two instances.
@@ -330,8 +303,6 @@ namespace PixelFarm.VectorMath
             return new Quaternion(quaternion.X * scale, quaternion.Y * scale, quaternion.Z * scale, quaternion.W * scale);
         }
 
-
-
         /// <summary>
         /// Get the conjugate of the given Quaterniond
         /// </summary>
@@ -351,8 +322,6 @@ namespace PixelFarm.VectorMath
         {
             result = new Quaternion(-q.Xyz, q.W);
         }
-
-
 
         /// <summary>
         /// Get the inverse of the given Quaterniond
@@ -385,8 +354,6 @@ namespace PixelFarm.VectorMath
             }
         }
 
-
-
         /// <summary>
         /// Scale the given Quaterniond to unit length
         /// </summary>
@@ -410,8 +377,6 @@ namespace PixelFarm.VectorMath
             result = new Quaternion(q.Xyz * scale, q.W * scale);
         }
 
-
-
         public static Quaternion FromEulerAngles(Vector3 rotation)
         {
             Quaternion xRotation = FromAxisAngle(Vector3.UnitX, rotation.x);
@@ -420,8 +385,6 @@ namespace PixelFarm.VectorMath
             //return xRotation * yRotation * zRotation;
             return zRotation * yRotation * xRotation;
         }
-
-
 
         /// <summary>
         /// Build a Quaterniond from the given axis and angle
@@ -444,10 +407,8 @@ namespace PixelFarm.VectorMath
             return Normalize(result);
         }
 
-
-
         /// <summary>
-        /// Do Spherical linear interpolation between two quaternions 
+        /// Do Spherical linear interpolation between two quaternions
         /// </summary>
         /// <param name="q1">The first Quaterniond</param>
         /// <param name="q2">The second Quaterniond</param>
@@ -468,7 +429,6 @@ namespace PixelFarm.VectorMath
             {
                 return q1;
             }
-
 
             double cosHalfAngle = q1.W * q2.W + Vector3.Dot(q1.Xyz, q2.Xyz);
             if (cosHalfAngle >= 1.0f || cosHalfAngle <= -1.0f)
@@ -507,9 +467,6 @@ namespace PixelFarm.VectorMath
             else
                 return Identity;
         }
-
-
-
 
         /// <summary>
         /// Adds two instances.
@@ -594,9 +551,6 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-
-
-
         /// <summary>
         /// Returns a System.String that represents the current Quaterniond.
         /// </summary>
@@ -606,10 +560,8 @@ namespace PixelFarm.VectorMath
             return String.Format("V: {0}, W: {1}", Xyz, W);
         }
 
-
-
         /// <summary>
-        /// Compares this object instance to another object for equality. 
+        /// Compares this object instance to another object for equality.
         /// </summary>
         /// <param name="other">The other object to be used in the comparison.</param>
         /// <returns>True if both objects are Quaternions of equal value. Otherwise it returns false.</returns>
@@ -619,10 +571,8 @@ namespace PixelFarm.VectorMath
             return this == (Quaternion)other;
         }
 
-
-
         /// <summary>
-        /// Provides the hash code for this object. 
+        /// Provides the hash code for this object.
         /// </summary>
         /// <returns>A hash code formed from the bitwise XOR of this objects members.</returns>
         public override int GetHashCode()
@@ -630,12 +580,8 @@ namespace PixelFarm.VectorMath
             return new { Xyz.x, Xyz.y, Xyz.z, W }.GetHashCode();
         }
 
-
-
-
-
         /// <summary>
-        /// Compares this Quaterniond instance to another Quaterniond for equality. 
+        /// Compares this Quaterniond instance to another Quaterniond for equality.
         /// </summary>
         /// <param name="other">The other Quaterniond to be used in the comparison.</param>
         /// <returns>True if both instances are equal; false otherwise.</returns>
@@ -643,6 +589,5 @@ namespace PixelFarm.VectorMath
         {
             return Xyz == other.Xyz && W == other.W;
         }
-
     }
 }

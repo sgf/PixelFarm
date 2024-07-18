@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit
         public bool IsDelay { get; internal set; }
 #if DEBUG
         public RenderVxGlyphPlan[] GlyphList { get; set; }
-//#if DEBUG
+
         public string OriginalString { get; set; }
         public override string dbugName => "Agg";
 #endif

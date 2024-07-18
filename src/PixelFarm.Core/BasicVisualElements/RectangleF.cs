@@ -14,10 +14,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -27,13 +27,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-using System;
 namespace PixelFarm.Drawing
 {
     public struct RectangleF
     {
-        float _left, _top, _width, _height;
+        private float _left, _top, _width, _height;
         /// <summary>
         ///	Empty Shared Field
         /// </summary>
@@ -62,7 +60,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         ///
         /// <remarks>
-        ///	Produces a new RectangleF by inflating an existing 
+        ///	Produces a new RectangleF by inflating an existing
         ///	RectangleF by the specified coordinate values.
         /// </remarks>
 
@@ -107,7 +105,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         ///
         /// <remarks>
-        ///	Produces a new RectangleF by intersecting 2 existing 
+        ///	Produces a new RectangleF by intersecting 2 existing
         ///	RectangleFs. Returns null if there is no intersection.
         /// </remarks>
 
@@ -143,7 +141,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         ///
         /// <remarks>
-        ///	Produces a new RectangleF from the union of 2 existing 
+        ///	Produces a new RectangleF from the union of 2 existing
         ///	RectangleFs.
         /// </remarks>
 
@@ -161,7 +159,7 @@ namespace PixelFarm.Drawing
         ///
         /// <remarks>
         ///	Compares two RectangleF objects. The return value is
-        ///	based on the equivalence of the Location and Size 
+        ///	based on the equivalence of the Location and Size
         ///	properties of the two RectangleFs.
         /// </remarks>
 
@@ -177,7 +175,7 @@ namespace PixelFarm.Drawing
         ///
         /// <remarks>
         ///	Compares two RectangleF objects. The return value is
-        ///	based on the equivalence of the Location and Size 
+        ///	based on the equivalence of the Location and Size
         ///	properties of the two RectangleFs.
         /// </remarks>
 
@@ -199,7 +197,6 @@ namespace PixelFarm.Drawing
         {
             return new RectangleF(r.X, r.Y, r.Width, r.Height);
         }
-
 
         // -----------------------
         // Public Constructors
@@ -237,6 +234,7 @@ namespace PixelFarm.Drawing
             _width = width;
             _height = height;
         }
+
         /// <summary>
         ///	Bottom Property
         /// </summary>
@@ -244,11 +242,9 @@ namespace PixelFarm.Drawing
         /// <remarks>
         ///	The Y coordinate of the bottom edge of the RectangleF.
         ///	Read only.
-        /// </remarks> 
+        /// </remarks>
 
         public float Bottom => _top + Height;
-
-
 
         /// <summary>
         ///	Height Property
@@ -263,7 +259,6 @@ namespace PixelFarm.Drawing
             get => _height;
 
             set => _height = value;
-
         }
 
         /// <summary>
@@ -273,7 +268,7 @@ namespace PixelFarm.Drawing
         /// <remarks>
         ///	Indicates if the width or height are zero. Read only.
         /// </remarks>
-        //		
+        //
 
         public bool IsEmpty => (_width <= 0 || _height <= 0);
 
@@ -286,9 +281,7 @@ namespace PixelFarm.Drawing
         ///	Read only.
         /// </remarks>
 
-
         public float Left => _left;
-        
 
         /// <summary>
         ///	Location Property
@@ -347,8 +340,6 @@ namespace PixelFarm.Drawing
         /// </remarks>
         public float Top => _top;
 
-
-
         /// <summary>
         ///	Width Property
         /// </summary>
@@ -362,7 +353,6 @@ namespace PixelFarm.Drawing
             get => _width;
 
             set => _width = value;
-
         }
 
         ///// <summary>
@@ -429,7 +419,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         ///
         /// <remarks>
-        ///	Checks if a RectangleF lies entirely within this 
+        ///	Checks if a RectangleF lies entirely within this
         ///	RectangleF.
         /// </remarks>
 
@@ -448,14 +438,13 @@ namespace PixelFarm.Drawing
 
         public override bool Equals(object obj) => (obj is RectangleF rect) && rect == this;
 
-
         /// <summary>
         ///	GetHashCode Method
         /// </summary>
         ///
         /// <remarks>
         ///	Calculates a hashing value.
-        /// </remarks> 
+        /// </remarks>
         public override int GetHashCode()
         {
             //TODO: review here !!!!
@@ -509,6 +498,7 @@ namespace PixelFarm.Drawing
         {
             Offset(pos.X, pos.Y);
         }
+
         public float X => _left;
         public float Y => _top;
 

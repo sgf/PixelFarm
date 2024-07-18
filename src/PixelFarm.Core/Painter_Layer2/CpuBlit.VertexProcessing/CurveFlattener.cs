@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,31 +22,32 @@
 //
 //----------------------------------------------------------------------------
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //---------------------------------------------------------------conv_curve
-    // Curve converter class. Any path storage can have Bezier curves defined 
-    // by their control points. There're two types of curves supported: curve3 
+    // Curve converter class. Any path storage can have Bezier curves defined
+    // by their control points. There're two types of curves supported: curve3
     // and curve4. Curve3 is a conic Bezier curve with 2 endpoints and 1 control
     // point. Curve4 has 2 control points (4 points in total) and can be used
-    // to interpolate more complicated curves. Curve4, unlike curve3 can be used 
-    // to approximate arcs, both circular and elliptical. Curves are approximated 
-    // with straight lines and one of the approaches is just to store the whole 
-    // sequence of vertices that approximate our curve. It takes additional 
-    // memory, and at the same time the consecutive vertices can be calculated 
-    // on demand. 
+    // to interpolate more complicated curves. Curve4, unlike curve3 can be used
+    // to approximate arcs, both circular and elliptical. Curves are approximated
+    // with straight lines and one of the approaches is just to store the whole
+    // sequence of vertices that approximate our curve. It takes additional
+    // memory, and at the same time the consecutive vertices can be calculated
+    // on demand.
     //
     // Initially, path storages are not suppose to keep all the vertices of the
     // curves (although, nothing prevents us from doing so). Instead, path_storage
     // keeps only vertices, needed to calculate a curve on demand. Those vertices
-    // are marked with special commands. So, if the path_storage contains curves 
-    // (which are not real curves yet), and we render this storage directly, 
-    // all we will see is only 2 or 3 straight line segments (for curve3 and 
-    // curve4 respectively). If we need to see real curves drawn we need to 
-    // include this class into the conversion pipeline. 
+    // are marked with special commands. So, if the path_storage contains curves
+    // (which are not real curves yet), and we render this storage directly,
+    // all we will see is only 2 or 3 straight line segments (for curve3 and
+    // curve4 respectively). If we need to see real curves drawn we need to
+    // include this class into the conversion pipeline.
     //
-    // Class conv_curve recognizes commands path_cmd_curve3 and path_cmd_curve4 
-    // and converts these vertices into a move_to/line_to sequence. 
+    // Class conv_curve recognizes commands path_cmd_curve3 and path_cmd_curve4
+    // and converts these vertices into a move_to/line_to sequence.
     //-----------------------------------------------------------------------
 
     public enum CurveApproximationMethod
@@ -58,33 +59,39 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public class CurveFlattener
     {
-        CurveApproximationMethod _selectedApproximationMethod = CurveApproximationMethod.Div;
+        private CurveApproximationMethod _selectedApproximationMethod = CurveApproximationMethod.Div;
 
-        //tools , curve producer 
-        readonly CurveSubdivisionFlattener _div_curveFlattener = new CurveSubdivisionFlattener();
-        readonly CurveIncFlattener _inc_curveFlattener = new CurveIncFlattener();
-        readonly CurveFlattenerOutput _curveFlattenerOutput = new CurveFlattenerOutput();
+        //tools , curve producer
+        private readonly CurveSubdivisionFlattener _div_curveFlattener = new CurveSubdivisionFlattener();
 
-        class CurveFlattenerOutput : ICurveFlattenerOutput
+        private readonly CurveIncFlattener _inc_curveFlattener = new CurveIncFlattener();
+        private readonly CurveFlattenerOutput _curveFlattenerOutput = new CurveFlattenerOutput();
+
+        private class CurveFlattenerOutput : ICurveFlattenerOutput
         {
-            VertexStore _vxs;
+            private VertexStore _vxs;
+
             public CurveFlattenerOutput()
             {
             }
+
             public void Append(double x, double y)
             {
                 _vxs.AddLineTo(x, y);
             }
+
             public void SetVxs(VertexStore vxs)
             {
                 _vxs = vxs;
             }
         }
 
-        double _approximateScale = 1;//default
+        private double _approximateScale = 1;//default
+
         public CurveFlattener()
         {
         }
+
         public double ApproximationScale
         {
             //default 1
@@ -102,6 +109,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _selectedApproximationMethod;
             set => _selectedApproximationMethod = value;
         }
+
         /// <summary>
         ///  curve incremental flattener, use specific step count
         /// </summary>
@@ -110,6 +118,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _inc_curveFlattener.UseFixedStepCount;
             set => _inc_curveFlattener.UseFixedStepCount = value;
         }
+
         /// <summary>
         /// curve incremental flattener, incremental step count
         /// </summary>
@@ -118,6 +127,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _inc_curveFlattener.FixedStepCount;
             set => _inc_curveFlattener.FixedStepCount = value;
         }
+
         /// <summary>
         /// curve subdivision flattener , angle tolerance
         /// </summary>
@@ -127,6 +137,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _div_curveFlattener.AngleTolerance;
             set => _div_curveFlattener.AngleTolerance = value;
         }
+
         /// <summary>
         /// curve subdivision flattener, recursive limit
         /// </summary>
@@ -135,6 +146,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _div_curveFlattener.RecursiveLimit;
             set => _div_curveFlattener.RecursiveLimit = value;
         }
+
         /// <summary>
         /// curve subdivision flattener, cusp limit
         /// </summary>
@@ -152,7 +164,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             AngleTolerance = 0;
             CuspLimit = 0;
 
-
             _inc_curveFlattener.Reset();
             _div_curveFlattener.Reset();
         }
@@ -161,6 +172,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             return MakeVxs(vxs, null, output);
         }
+
         public VertexStore MakeVxs(VertexStore vxs, ICoordTransformer tx, VertexStore output)
         {
             double x, y;
@@ -180,7 +192,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 #if DEBUG
                 if (VertexStore.dbugCheckNANs(x, y))
                 {
-
                 }
 #endif
 
@@ -209,7 +220,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                    x, y,
                                    lastX = x2, lastY = y2,
                                    _curveFlattenerOutput, true);
-
                             }
                             else
                             {
@@ -223,9 +233,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             }
                         }
                         break;
+
                     case VertexCmd.C4:
                         {
-                            //for curve4, it contains (x0,y0), (x1,y1), (x2,y2), (x3,y3)                            
+                            //for curve4, it contains (x0,y0), (x1,y1), (x2,y2), (x3,y3)
                             //this is (x1,y1) so next point must be (x2,y2) and (x3,y3)
 
                             cmd = vxs.GetVertex(index++, out double x2, out double y2);
@@ -261,19 +272,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             }
                         }
                         break;
+
                     case VertexCmd.LineTo:
                         output.AddLineTo(lastX = x, lastY = y);
 
                         break;
+
                     case VertexCmd.MoveTo:
                         //move to, and end command
                         output.AddVertex(lastMoveX = lastX = x, lastMoveY = lastY = y, cmd);
                         break;
+
                     case VertexCmd.Close:
                         //we need only command
-                        //move to begin 
+                        //move to begin
                         output.AddVertex(lastX = lastMoveX, lastY = lastMoveY, cmd);
                         break;
+
                     default:
                         //move to, and end command
                         output.AddVertex(lastX = x, lastY = y, cmd);
@@ -301,12 +316,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 #if DEBUG
                 if (VertexStore.dbugCheckNANs(x, y))
                 {
-
                 }
 #endif
 
-
-                tx.Transform(ref x, ref y); 
+                tx.Transform(ref x, ref y);
                 //-----------------
                 switch (cmd)
                 {
@@ -326,7 +339,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                    x, y,
                                    lastX = x2, lastY = y2,
                                    _curveFlattenerOutput, true);
-
                             }
                             else
                             {
@@ -340,9 +352,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             }
                         }
                         break;
+
                     case VertexCmd.C4:
                         {
-                            //for curve4, it contains (x0,y0), (x1,y1), (x2,y2), (x3,y3)                            
+                            //for curve4, it contains (x0,y0), (x1,y1), (x2,y2), (x3,y3)
                             //this is (x1,y1) so next point must be (x2,y2) and (x3,y3)
 
                             cmd = vxs.GetVertex(index++, out double x2, out double y2);
@@ -378,19 +391,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             }
                         }
                         break;
+
                     case VertexCmd.LineTo:
                         output.AddLineTo(lastX = x, lastY = y);
 
                         break;
+
                     case VertexCmd.MoveTo:
                         //move to, and end command
                         output.AddVertex(lastMoveX = lastX = x, lastMoveY = lastY = y, cmd);
                         break;
+
                     case VertexCmd.Close:
                         //we need only command
-                        //move to begin 
+                        //move to begin
                         output.AddVertex(lastX = lastMoveX, lastY = lastMoveY, cmd);
                         break;
+
                     default:
                         //move to, and end command
                         output.AddVertex(lastX = x, lastY = y, cmd);

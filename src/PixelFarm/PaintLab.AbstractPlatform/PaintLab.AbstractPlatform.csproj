@@ -175,7 +175,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj" />
     <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj" />
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
     <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj" />
   </ItemGroup>
   <Import Project="..\LayoutFarm.TextFlow_SH\LayoutFarm.TextFlow_SH.projitems" Label="Shared" />

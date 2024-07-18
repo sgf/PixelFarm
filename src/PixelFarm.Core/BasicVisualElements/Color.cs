@@ -1,6 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev
 
-
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -9,26 +8,24 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by 
+// Adaptation for high precision colors has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//
 //----------------------------------------------------------------------------
 // Contact: mcseem@antigrain.com
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-
-
 
 //
 // System.Drawing.KnownColors
@@ -60,25 +57,26 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Runtime.InteropServices;
 namespace PixelFarm.Drawing
 {
-
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Explicit)]
     public readonly struct Color
     {
         [FieldOffset(0)]
         public readonly byte _r;
+
         [FieldOffset(1)]
         public readonly byte _g;
+
         [FieldOffset(2)]
         public readonly byte _b;
+
         [FieldOffset(3)]
         public readonly byte _a;
 
         [FieldOffset(0)]
         public readonly uint _color;
+
         public Color(byte a, byte r, byte g, byte b)
         {
             _r = r;
@@ -139,8 +137,8 @@ namespace PixelFarm.Drawing
             }
             return false;
         }
-        public override int GetHashCode() => base.GetHashCode();
 
+        public override int GetHashCode() => base.GetHashCode();
 
         public static implicit operator Color(uint color) => new(color);
 
@@ -155,16 +153,16 @@ namespace PixelFarm.Drawing
             return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) !=
                    (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
         }
+
         public int ToARGB() => ((_a << 24) | (_r << 16) | (_g << 8) | _b);
+
         public int ToArgb() => ((_a << 24) | (_r << 16) | (_g << 8) | _b); //temp
-        
+
         public uint ToABGR() => (uint)((_a << 24) | (_b << 16) | (_g << 8) | _r);
-
-
 
         public Color CreateGradient(Color another, float colorDistanceRatio)
         {
-            //int ik = AggBasics.uround(colorDistanceRatio * BASE_SCALE); 
+            //int ik = AggBasics.uround(colorDistanceRatio * BASE_SCALE);
             //byte r = (byte)((int)(Red0To255) + ((((int)(another.Red0To255) - Red0To255) * ik) >> BASE_SHIFT));
             //byte g = (byte)((int)(Green0To255) + ((((int)(another.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
             //byte b = (byte)((int)(Blue0To255) + ((((int)(another.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));
@@ -228,7 +226,6 @@ namespace PixelFarm.Drawing
         /// <returns></returns>
         public Color NewFromChangeAlpha(byte alpha) => new Color(alpha, _r, _g, _b);
 
-
         //public void AddColor(ColorRGBA c, int cover)
         //{
         //    int cr, cg, cb, ca;
@@ -268,8 +265,7 @@ namespace PixelFarm.Drawing
 
         //-------------------------------------------------------------rgb8_packed
         //argb
-        static public Color CreatRGB8Packed(int v) => new Color(255, (byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
-
+        public static Color CreatRGB8Packed(int v) => new Color(255, (byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
 
         public static readonly Color Empty = new Color(0, 0, 0, 0);
         public static readonly Color Transparent = new Color(0, 255, 255, 255);
@@ -284,12 +280,13 @@ namespace PixelFarm.Drawing
         public static readonly Color Yellow = new Color(255, 255, 255, 0);
         public static readonly Color Magenta = new Color(255, 255, 0, 255);
 
-
 #if DEBUG
+
         public override string ToString()
         {
             return "r:" + _r + ",g:" + _g + ",b:" + _b + ",a:" + _a;
         }
+
 #endif
     }
 }

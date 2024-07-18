@@ -29,14 +29,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-using System;
-using System.Collections.Generic;
 namespace Poly2Tri
 {
     public class PointGenerator
     {
-        static readonly Random RNG = new Random();
+        private static readonly Random RNG = new Random();
+
         public static List<TriangulationPoint> UniformDistribution(int n, double scale)
         {
             List<TriangulationPoint> points = new List<TriangulationPoint>();

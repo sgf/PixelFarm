@@ -1,8 +1,8 @@
 ﻿//MIT, 2016-present, WinterDev
 
-using System.Collections.Generic;
 using ClipperLib;
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public enum VxsClipperType : byte
@@ -15,13 +15,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public class VxsClipper
     {
-
-        List<IntPolygon> _aPolys = new List<IntPolygon>();
-        List<IntPolygon> _bPolys = new List<IntPolygon>();
-        List<IntPolygon> _intersectedPolys = new List<IntPolygon>();
-        Clipper _clipper = new Clipper();
-
-
+        private List<IntPolygon> _aPolys = new List<IntPolygon>();
+        private List<IntPolygon> _bPolys = new List<IntPolygon>();
+        private List<IntPolygon> _intersectedPolys = new List<IntPolygon>();
+        private Clipper _clipper = new Clipper();
 
         public static VertexStore CombinePaths(
             VertexStore a,
@@ -30,31 +27,31 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             bool separateIntoSmallSubPaths,
             List<VertexStore> results)
         {
-
             using (VectorToolBox.Borrow(out VxsClipper clipper))
             {
                 return clipper.CombinePathsInternal(a, b, vxsClipType, separateIntoSmallSubPaths, results);
             }
         }
 
-        internal VxsClipper() { }
+        internal VxsClipper()
+        { }
+
         internal void Reset()
         {
             _aPolys.Clear();
             _bPolys.Clear();
             _intersectedPolys.Clear();
             _clipper.Clear();
-
         }
+
         //
-        VertexStore CombinePathsInternal(
+        private VertexStore CombinePathsInternal(
            VertexStore a,
            VertexStore b,
            VxsClipperType vxsClipType,
            bool separateIntoSmallSubPaths,
            List<VertexStore> resultList)
         {
-
             //prepare instance
             //reset all used fields
 
@@ -68,9 +65,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             if (separateIntoSmallSubPaths)
             {
-
                 VertexStore firstOutput = null;
-                //in this case we expect that resultList must not be null*** 
+                //in this case we expect that resultList must not be null***
 
                 foreach (List<IntPoint> polygon in _intersectedPolys)
                 {
@@ -101,7 +97,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             {
                                 firstOutput = result;
                             }
-                            resultList.Add(result); //copy 
+                            resultList.Add(result); //copy
                             pw.Clear();
                         }
                     }
@@ -140,15 +136,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         resultList.Add(output);//also add to here
                     }
                     return output;
-
                 }
             }
         }
 
-
-        static void CreatePolygons(VertexStore a, List<IntPolygon> allPolys)
+        private static void CreatePolygons(VertexStore a, List<IntPolygon> allPolys)
         {
-
             IntPolygon currentPoly = null;
             VertexData last = new VertexData();
             VertexData first = new VertexData();
@@ -191,10 +184,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     }
                 }
             }
-
-
         }
     }
-
-
 }

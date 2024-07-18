@@ -24,13 +24,13 @@ Copyright (c) 2014, Lars Brubaker
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -44,16 +44,14 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The views and conclusions contained in the software and documentation are those
-of the authors and should not be interpreted as representing official policies, 
+of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 
-
-using System;
-using System.Runtime.InteropServices;
 namespace PixelFarm.VectorMath
 {
 #if true
+
     /// <summary>
     /// Represents a 4x4 Matrix with double-precision components.
     /// </summary>
@@ -61,28 +59,30 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Matrix4X4 : IEquatable<Matrix4X4>
     {
-
         /// <summary>
         /// Top row of the matrix
         /// </summary>
         public Vector4 Row0;
+
         /// <summary>
         /// 2nd row of the matrix
         /// </summary>
         public Vector4 Row1;
+
         /// <summary>
         /// 3rd row of the matrix
         /// </summary>
         public Vector4 Row2;
+
         /// <summary>
         /// Bottom row of the matrix
         /// </summary>
         public Vector4 Row3;
+
         /// <summary>
         /// The identity matrix
         /// </summary>
         public static Matrix4X4 Identity = new Matrix4X4(Vector4.UnitX, Vector4.UnitY, Vector4.UnitZ, Vector4.UnitW);
-
 
         /// <summary>
         /// Constructs a new instance.
@@ -137,9 +137,6 @@ namespace PixelFarm.VectorMath
             Row2 = new Vector4(double16[8], double16[9], double16[10], double16[11]);
             Row3 = new Vector4(double16[12], double16[13], double16[14], double16[15]);
         }
-
-
-
 
         /// <summary>
         /// The determinant of this matrix
@@ -278,8 +275,6 @@ namespace PixelFarm.VectorMath
         /// </summary>
         public double M44 { get { return Row3.w; } set { Row3.w = value; } }
 
-
-
         public double this[int row, int column]
         {
             get
@@ -288,12 +283,16 @@ namespace PixelFarm.VectorMath
                 {
                     case 0:
                         return Row0[column];
+
                     case 1:
                         return Row1[column];
+
                     case 2:
                         return Row2[column];
+
                     case 3:
                         return Row3[column];
+
                     default:
                         throw new IndexOutOfRangeException();
                 }
@@ -306,15 +305,19 @@ namespace PixelFarm.VectorMath
                     case 0:
                         Row0[column] = value;
                         break;
+
                     case 1:
                         Row1[column] = value;
                         break;
+
                     case 2:
                         Row2[column] = value;
                         break;
+
                     case 3:
                         Row3[column] = value;
                         break;
+
                     default:
                         throw new IndexOutOfRangeException();
                 }
@@ -327,7 +330,7 @@ namespace PixelFarm.VectorMath
             double tr = M11 + M22 + M33;
             if (tr > 0)
             {
-                double S = Math.Sqrt(tr + 1.0) * 2; // S=4*qw 
+                double S = Math.Sqrt(tr + 1.0) * 2; // S=4*qw
                 rotation.W = 0.25 * S;
                 rotation.X = (M32 - M23) / S;
                 rotation.Y = (M13 - M31) / S;
@@ -335,7 +338,7 @@ namespace PixelFarm.VectorMath
             }
             else if ((M11 > M22) & (M11 > M33))
             {
-                double S = Math.Sqrt(1.0 + M11 - M22 - M33) * 2; // S=4*qx 
+                double S = Math.Sqrt(1.0 + M11 - M22 - M33) * 2; // S=4*qx
                 rotation.W = (M32 - M23) / S;
                 rotation.X = 0.25 * S;
                 rotation.Y = (M12 + M21) / S;
@@ -361,7 +364,6 @@ namespace PixelFarm.VectorMath
             return rotation;
         }
 
-
         /// <summary>
         /// Converts this instance into its inverse.
         /// </summary>
@@ -370,8 +372,6 @@ namespace PixelFarm.VectorMath
             this = Matrix4X4.Invert(this);
         }
 
-
-
         /// <summary>
         /// Converts this instance into its transpose.
         /// </summary>
@@ -379,10 +379,6 @@ namespace PixelFarm.VectorMath
         {
             this = Matrix4X4.Transpose(this);
         }
-
-
-
-
 
         /// <summary>
         /// Build a rotation matrix from the specified axis/angle rotation.
@@ -414,8 +410,6 @@ namespace PixelFarm.VectorMath
             CreateFromAxisAngle(axis, angle, out result);
             return result;
         }
-
-
 
         public static Matrix4X4 CreateRotation(Vector3 radians)
         {
@@ -548,8 +542,6 @@ namespace PixelFarm.VectorMath
             return CreateRotation(q);
         }
 
-
-
         /// <summary>
         /// Creates a translation matrix.
         /// </summary>
@@ -600,8 +592,6 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-
-
         /// <summary>
         /// Creates an orthographic projection matrix.
         /// </summary>
@@ -629,8 +619,6 @@ namespace PixelFarm.VectorMath
             CreateOrthographicOffCenter(-width / 2, width / 2, -height / 2, height / 2, zNear, zFar, out result);
             return result;
         }
-
-
 
         /// <summary>
         /// Creates an orthographic projection matrix.
@@ -673,8 +661,6 @@ namespace PixelFarm.VectorMath
             CreateOrthographicOffCenter(left, right, bottom, top, zNear, zFar, out result);
             return result;
         }
-
-
 
         /// <summary>
         /// Creates a perspective projection matrix.
@@ -737,8 +723,6 @@ namespace PixelFarm.VectorMath
             CreatePerspectiveFieldOfView(fovYRadians, aspectWidthOverHeight, zNear, zFar, out result);
             return result;
         }
-
-
 
         /// <summary>
         /// Creates an perspective projection matrix.
@@ -810,8 +794,6 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-
-
         /// <summary>
         /// Build a scaling matrix
         /// </summary>
@@ -848,8 +830,6 @@ namespace PixelFarm.VectorMath
             result.Row3 = Vector4.UnitW;
             return result;
         }
-
-
 
         /// <summary>
         /// Build a world space to camera space matrix
@@ -929,8 +909,6 @@ namespace PixelFarm.VectorMath
             return Frustum(xMin, xMax, yMin, yMax, near, far);
         }
 
-
-
         /// <summary>
         /// Multiplies two instances.
         /// </summary>
@@ -970,8 +948,6 @@ namespace PixelFarm.VectorMath
             result.M43 = left.M41 * right.M13 + left.M42 * right.M23 + left.M43 * right.M33 + left.M44 * right.M43;
             result.M44 = left.M41 * right.M14 + left.M42 * right.M24 + left.M43 * right.M34 + left.M44 * right.M44;
         }
-
-
 
         /// <summary>
         /// Calculate the inverse of the given matrix
@@ -1079,8 +1055,6 @@ namespace PixelFarm.VectorMath
             return mat;
         }
 
-
-
         /// <summary>
         /// Calculate the transpose of the given matrix
         /// </summary>
@@ -1090,7 +1064,6 @@ namespace PixelFarm.VectorMath
         {
             return new Matrix4X4(mat.Column0, mat.Column1, mat.Column2, mat.Column3);
         }
-
 
         /// <summary>
         /// Calculate the transpose of the given matrix
@@ -1104,9 +1077,6 @@ namespace PixelFarm.VectorMath
             result.Row2 = mat.Column2;
             result.Row3 = mat.Column3;
         }
-
-
-
 
         /// <summary>
         /// Matrix multiplication
@@ -1141,9 +1111,6 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-
-
-
         /// <summary>
         /// Returns a System.String that represents the current Matrix44.
         /// </summary>
@@ -1153,8 +1120,6 @@ namespace PixelFarm.VectorMath
             return String.Format("{0}\n{1}\n{2}\n{3}", Row0, Row1, Row2, Row3);
         }
 
-
-
         /// <summary>
         /// Returns the hashcode for this instance.
         /// </summary>
@@ -1163,8 +1128,6 @@ namespace PixelFarm.VectorMath
         {
             return new { Row0, Row1, Row2, Row3 }.GetHashCode();
         }
-
-
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -1178,10 +1141,6 @@ namespace PixelFarm.VectorMath
             return this.Equals((Matrix4X4)obj);
         }
 
-
-
-
-
         /// <summary>Indicates whether the current matrix is equal to another matrix.</summary>
         /// <param name="other">An matrix to compare with this matrix.</param>
         /// <returns>true if the current matrix is equal to the matrix parameter; otherwise, false.</returns>
@@ -1193,7 +1152,6 @@ namespace PixelFarm.VectorMath
                 Row2 == other.Row2 &&
                 Row3 == other.Row3;
         }
-
 
         public float[] GetAsFloatArray()
         {
@@ -1215,5 +1173,6 @@ namespace PixelFarm.VectorMath
             return contents;
         }
     }
+
 #endif
 }

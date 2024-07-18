@@ -3,8 +3,8 @@
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,11 +18,10 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //============================================================matrix_pivot
-    //template<uint Rows, uint Cols> 
+    //template<uint Rows, uint Cols>
     //===============================================================simul_eq
     //template<uint Size, uint RightCols>
     public static class SimulEqGeneral
@@ -88,7 +87,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return true;
         }
-        static void SwapRow(double[,] arr, int a1Index0, int a2Index0)
+
+        private static void SwapRow(double[,] arr, int a1Index0, int a2Index0)
         {
             int cols = arr.GetLength(1);
             for (int i = 0; i < cols; i++)
@@ -99,7 +99,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        static int DoMatrixPivot(double[,] m, int rowCount, int row)
+        private static int DoMatrixPivot(double[,] m, int rowCount, int row)
         {
             int maxAtRow = row;
             double max_val = -1;

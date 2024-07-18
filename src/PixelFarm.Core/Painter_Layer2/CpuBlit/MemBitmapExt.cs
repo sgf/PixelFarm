@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,17 +18,17 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Internal;
+
 namespace PixelFarm.CpuBlit
 {
-
     public class MemBitmapProxy
     {
         public MemBitmapProxy()
         {
         }
+
         public void Set(MemBitmap memBmp, int left, int top, int width, int height)
         {
             Left = left;
@@ -37,6 +37,7 @@ namespace PixelFarm.CpuBlit
             Height = height;
             OriginalBmp = memBmp;
         }
+
         public MemBitmap OriginalBmp { get; private set; }
         public int Left { get; private set; }
         public int Top { get; private set; }
@@ -52,19 +53,20 @@ namespace PixelFarm.CpuBlit
         {
             return MemBitmap.GetBufferPtr(memBmp);
         }
-        public unsafe static TempMemPtr FromBmp(MemBitmap memBmp, out int* headPtr)
+
+        public static unsafe TempMemPtr FromBmp(MemBitmap memBmp, out int* headPtr)
         {
             TempMemPtr ptr = MemBitmap.GetBufferPtr(memBmp);
             headPtr = (int*)ptr.Ptr;
             return ptr;
         }
-        public unsafe static TempMemPtr FromBmp(MemBitmap bmp, out byte* headPtr)
+
+        public static unsafe TempMemPtr FromBmp(MemBitmap bmp, out byte* headPtr)
         {
             TempMemPtr ptr = MemBitmap.GetBufferPtr(bmp);
             headPtr = (byte*)ptr.Ptr;
             return ptr;
         }
-
 
         public static int[] CopyImgBuffer(this MemBitmap memBmp, int width, int height, bool flipY = false)
         {
@@ -75,7 +77,6 @@ namespace PixelFarm.CpuBlit
             int[] buff2 = new int[newBmpW * height];
             unsafe
             {
-
                 using (TempMemPtr srcBufferPtr = MemBitmap.GetBufferPtr(memBmp))
                 {
                     byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
@@ -112,12 +113,10 @@ namespace PixelFarm.CpuBlit
                             }
                         }
                     }
-
                 }
             }
             return buff2;
         }
-
 
         public static MemBitmap CopyImgBuffer(this MemBitmap src, int srcX, int srcY, int srcW, int srcH)
         {
@@ -143,7 +142,6 @@ namespace PixelFarm.CpuBlit
                 using (TempMemPtr srcBufferPtr = MemBitmap.GetBufferPtr(src))
                 using (TempMemPtr dstBufferPtr = MemBitmap.GetBufferPtr(copyBmp))
                 {
-
                     int* srcPtr = (int*)srcBufferPtr.Ptr;
                     int* dstPtr = (int*)dstBufferPtr.Ptr;
                     int lineEnd = srcY + srcH;
@@ -161,9 +159,9 @@ namespace PixelFarm.CpuBlit
 
         public static void BlendColorWithMask(Color c, MemBitmapProxy mask, MemBitmap dst, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
         {
-            //select color from mask bitmap and blend to dst bitmap with specific color     
-
+            //select color from mask bitmap and blend to dst bitmap with specific color
         }
+
         public static void BitBlt(MemBitmap src, MemBitmap dst, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
         {
             IntPtr src_h = src.GetRawBufferHead();
@@ -236,7 +234,7 @@ namespace PixelFarm.CpuBlit
         //                    head_i32++;
         //                }
         //            }
-        //        } 
+        //        }
         //    }
         //}
 
@@ -249,11 +247,11 @@ namespace PixelFarm.CpuBlit
                 //fast clear buffer
                 //skip clipping ****
                 //TODO: reimplement clipping***
-                //------------------------------  
+                //------------------------------
 
                 unsafe
                 {
-                    //clear only 1st row 
+                    //clear only 1st row
                     uint* head_i32 = (uint*)buffer;
                     //first line
                     //other color
@@ -270,9 +268,7 @@ namespace PixelFarm.CpuBlit
                         colorARGB = (uint)((color.A << CO.A_SHIFT) | ((color.R << CO.R_SHIFT) | (color.G << CO.G_SHIFT) | color.B << CO.B_SHIFT));
                     }
 
-
-
-                    head_i32 += top * width;//move to first line 
+                    head_i32 += top * width;//move to first line
                     //and first line only
                     uint* head_i32_1 = head_i32 + left;
                     for (int i = width - 1; i >= 0; --i)
@@ -300,17 +296,15 @@ namespace PixelFarm.CpuBlit
             {
                 int* buffer = (int*)tmp.Ptr;
 
-
                 //------------------------------
                 //fast clear buffer
                 //skip clipping ****
                 //TODO: reimplement clipping***
-                //------------------------------ 
-
+                //------------------------------
 
                 unsafe
                 {
-                    //clear only 1st row 
+                    //clear only 1st row
                     uint* head_i32 = (uint*)buffer;
                     //first line
 
@@ -345,10 +339,12 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
+
         public static void Clear(this MemBitmap bmp, Color color)
         {
             Clear(MemBitmap.GetBufferPtr(bmp), color, bmp.Width, bmp.Height);
         }
+
         /// <summary>
         /// create thumbnail img with super-sampling technique,(Expensive, High quality thumb)
         /// </summary>
@@ -356,7 +352,6 @@ namespace PixelFarm.CpuBlit
         /// <param name="dst"></param>
         public static MemBitmap CreateThumbnailWithSuperSamplingTechnique(this MemBitmap source, float scaleRatio)
         {
-
             // Paint.NET (MIT,from version 3.36.7, see=> https://github.com/rivy/OpenPDN
             //in this version new image MUST smaller than the original one ***
             if (scaleRatio >= 1 || scaleRatio < 0) return null;
@@ -370,7 +365,6 @@ namespace PixelFarm.CpuBlit
 
             unsafe
             {
-
                 Rectangle dstRoi2 = new Rectangle(0, 0, newBmpW, newBmpH);
 
                 int dstWidth = dstRoi2.Width;
@@ -397,7 +391,6 @@ namespace PixelFarm.CpuBlit
                     double srcBottomFloor = Math.Floor(srcBottom - 0.00001);
                     double srcBottomWeight = srcBottom - srcBottomFloor;
                     int srcBottomInt = (int)srcBottomFloor;
-
 
                     int* srcBuffer = (int*)(MemBitmap.GetBufferPtr(source)).Ptr;
                     int srcStrideInt32 = source.Width;//***
@@ -462,13 +455,13 @@ namespace PixelFarm.CpuBlit
                                 redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
                                 alphaSum += a_w;
 
-                                //srcRightPtr = (ColorBgra*)((byte*)srcRightPtr + source._stride); 
+                                //srcRightPtr = (ColorBgra*)((byte*)srcRightPtr + source._stride);
                                 srcRightColorAddr += srcStrideInt32; //move to next row
                             }
                         }
-                        // 
+                        //
                         {
-                            //(3) top fractional edge   
+                            //(3) top fractional edge
                             //ColorBgra* srcTopPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcTopInt);
                             int* srcTopColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcTopInt);
 
@@ -490,7 +483,7 @@ namespace PixelFarm.CpuBlit
                         //
                         {
                             //(4) bottom fractional edge
-                            //ColorBgra* srcBottomPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcBottomInt); 
+                            //ColorBgra* srcBottomPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcBottomInt);
                             int* srcBottomColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcBottomInt);
 
                             for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
@@ -513,7 +506,7 @@ namespace PixelFarm.CpuBlit
                             //(5) center area
                             for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
                             {
-                                //ColorBgra* srcPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcY); 
+                                //ColorBgra* srcPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcY);
                                 int* srcColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcY);
 
                                 for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
@@ -531,11 +524,10 @@ namespace PixelFarm.CpuBlit
                             }
                         }
 
-
                         //(6) four corner pixels
                         {
-                            //6.1 
-                            //ColorBgra srcTL = source.GetPoint(srcLeftInt, srcTopInt); 
+                            //6.1
+                            //ColorBgra srcTL = source.GetPoint(srcLeftInt, srcTopInt);
                             int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcTopInt));
 
                             double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcTopWeight * srcLeftWeight);
@@ -553,7 +545,7 @@ namespace PixelFarm.CpuBlit
                             //blueSum += srcTR.B * (srcTopWeight * srcRightWeight) * srcTRA;
                             //greenSum += srcTR.G * (srcTopWeight * srcRightWeight) * srcTRA;
                             //redSum += srcTR.R * (srcTopWeight * srcRightWeight) * srcTRA;
-                            //alphaSum += srcTR.A * (srcTopWeight * srcRightWeight); 
+                            //alphaSum += srcTR.A * (srcTopWeight * srcRightWeight);
 
                             int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcTopInt));
                             double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcTopWeight * srcRightWeight);
@@ -564,7 +556,6 @@ namespace PixelFarm.CpuBlit
                             alphaSum += a_w;
                         }
 
-
                         {
                             //(6.3)
                             int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcBottomInt));
@@ -574,7 +565,6 @@ namespace PixelFarm.CpuBlit
                             greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
                             redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
                             alphaSum += a_w; //without a
-
 
                             //ColorBgra srcBL = source.GetPoint(srcLeftInt, srcBottomInt);
                             //double srcBLA = srcBL.A;
@@ -601,9 +591,7 @@ namespace PixelFarm.CpuBlit
                             greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
                             redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
                             alphaSum += a_w;
-
                         }
-
 
                         double area = (srcRight - srcLeft) * (srcBottom - srcTop);
 
@@ -631,7 +619,6 @@ namespace PixelFarm.CpuBlit
                         red += 0.5;
                         alpha += 0.5;
 
-
                         //***
                         //dstPtr->Bgra = (uint)blue + ((uint)green << 8) + ((uint)red << 16) + ((uint)alpha << 24);
                         //++dstPtr;
@@ -648,18 +635,19 @@ namespace PixelFarm.CpuBlit
             return thumbBitmap;
         }
 
-
         public static MemBitmapIO DefaultMemBitmapIO { get; set; }
 
         public static MemBitmap LoadBitmap(string filename)
         {
             return DefaultMemBitmapIO.LoadImage(filename);
         }
+
         public static MemBitmap LoadBitmap(System.IO.Stream stream)
         {
             //user need to provider load img func handler
             return DefaultMemBitmapIO.LoadImage(stream);
         }
+
         public static MemBitmap ScaleImage(this PixelFarm.CpuBlit.MemBitmap bmp, float x_scale, float y_scale)
         {
             return DefaultMemBitmapIO.ScaleImage(bmp, x_scale, y_scale);
@@ -667,7 +655,7 @@ namespace PixelFarm.CpuBlit
 
         public static void SaveImage(this MemBitmap source, string filename, MemBitmapIO.OutputImageFormat outputFormat = MemBitmapIO.OutputImageFormat.Default, object saveParameters = null)
         {
-            //save image with default parameter 
+            //save image with default parameter
             if (outputFormat == MemBitmapIO.OutputImageFormat.Default)
             {
                 string ext = System.IO.Path.GetExtension(filename).ToLower();
@@ -676,6 +664,7 @@ namespace PixelFarm.CpuBlit
                     case ".png":
                         outputFormat = MemBitmapIO.OutputImageFormat.Png;
                         break;
+
                     case ".jpg":
                     case ".jpeg":
                         outputFormat = MemBitmapIO.OutputImageFormat.Jpeg;
@@ -685,6 +674,7 @@ namespace PixelFarm.CpuBlit
 
             DefaultMemBitmapIO.SaveImage(source, filename, outputFormat, saveParameters);
         }
+
         public static void SaveImage(this MemBitmap source,
             System.IO.Stream output,
             MemBitmapIO.OutputImageFormat outputFormat = MemBitmapIO.OutputImageFormat.Default, object saveParameters = null)
@@ -695,23 +685,25 @@ namespace PixelFarm.CpuBlit
 #if DEBUG
         public static bool s_dbugEnableDebugImage;
 #endif
-
     }
 
     public abstract class MemBitmapIO
     {
         public enum OutputImageFormat
         {
-
             Default,
             Png,
             Jpeg,
         }
 
         public abstract MemBitmap LoadImage(string filename);
+
         public abstract MemBitmap LoadImage(System.IO.Stream input);
+
         public abstract void SaveImage(MemBitmap bitmap, System.IO.Stream output, OutputImageFormat outputFormat, object saveParameters);
+
         public abstract void SaveImage(MemBitmap bitmap, string filename, OutputImageFormat outputFormat, object saveParameters);
+
         public abstract PixelFarm.CpuBlit.MemBitmap ScaleImage(PixelFarm.CpuBlit.MemBitmap bmp, float x_scale, float y_scale);
     }
 }

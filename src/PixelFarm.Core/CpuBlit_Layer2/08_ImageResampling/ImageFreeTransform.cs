@@ -1,15 +1,14 @@
 ﻿//MIT, 2014-present, WinterDev
 //---------------------------------------------
 //some code from CodeProject: 'Free Image Transformation'
-//YLS CS 
+//YLS CS
 //license : CPOL
 
-using System;
-using PixelFarm.VectorMath;
 using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.VectorMath;
+
 namespace PixelFarm.CpuBlit.Imaging
 {
-
     public class FreeTransform
     {
         public enum InterpolationMode
@@ -19,28 +18,29 @@ namespace PixelFarm.CpuBlit.Imaging
             Bicubic
         }
 
-        class MyBitmapBlender : BitmapBlenderBase
+        private class MyBitmapBlender : BitmapBlenderBase
         {
-            MemBitmap _memBmp;
+            private MemBitmap _memBmp;
+
             public MyBitmapBlender(MemBitmap bmp)
             {
                 _memBmp = bmp;
                 Attach(bmp);
             }
+
             public override void WriteBuffer(int[] newbuffer)
             {
                 MemBitmap.ReplaceBuffer(_memBmp, newbuffer);
             }
         }
 
+        private PointF _p0, _p1, _p2, _p3;
+        private Vector _AB, _BC, _CD, _DA;
+        private PixelFarm.Drawing.Rectangle _destBounds;
+        private int _srcW = 0;
+        private int _srcH = 0;
 
-        PointF _p0, _p1, _p2, _p3;
-        Vector _AB, _BC, _CD, _DA;
-        PixelFarm.Drawing.Rectangle _destBounds;
-        int _srcW = 0;
-        int _srcH = 0;
-
-        IBitmapSrc _srcBmp;
+        private IBitmapSrc _srcBmp;
 
         public FreeTransform()
         {
@@ -51,11 +51,15 @@ namespace PixelFarm.CpuBlit.Imaging
         public Point ImageLocation => new Point(_destBounds.Left, _destBounds.Bottom);
 
         public InterpolationMode Interpolation { get; set; }
+
         //
-        public int ImageWidth => _destBounds.Width; 
+        public int ImageWidth => _destBounds.Width;
+
         public int ImageHeight => _destBounds.Height;
+
         //
         public PointF VertexLeftTop => _p0;
+
         public PointF VertexRightTop => _p1;
         public PointF VertexRightBottom => _p2;
         public PointF VertexBottomLeft => _p3;
@@ -69,7 +73,7 @@ namespace PixelFarm.CpuBlit.Imaging
             UpdateVertices();
         }
 
-        void UpdateVertices()
+        private void UpdateVertices()
         {
             float xmin = float.MaxValue;
             float ymin = float.MaxValue;
@@ -100,7 +104,6 @@ namespace PixelFarm.CpuBlit.Imaging
                 ymax = Math.Max(ymax, _p3.Y);
             }
 
-
             _destBounds = new Drawing.Rectangle((int)xmin, (int)ymin, (int)(xmax - xmin), (int)(ymax - ymin));
             _AB = MyVectorHelper.NewFromTwoPoints(_p0, _p1);
             _BC = MyVectorHelper.NewFromTwoPoints(_p1, _p2);
@@ -113,10 +116,9 @@ namespace PixelFarm.CpuBlit.Imaging
             _CD /= _CD.Magnitude;
             _DA /= _DA.Magnitude;
             //-----------------------------------------------------------------------
-
         }
 
-        bool IsOnPlaneABCD(PointF pt) //  including point on border
+        private bool IsOnPlaneABCD(PointF pt) //  including point on border
         {
             return !MyVectorHelper.IsCCW(pt, _p0, _p1) &&
                    !MyVectorHelper.IsCCW(pt, _p1, _p2) &&
@@ -137,7 +139,6 @@ namespace PixelFarm.CpuBlit.Imaging
             _srcH = bitmap.Height;
             _srcW = bitmap.Width;
 
-
             //-------------------
             if (_srcH == 0 || _srcW == 0) return null;
             switch (this.Interpolation)
@@ -145,16 +146,16 @@ namespace PixelFarm.CpuBlit.Imaging
                 default: throw new NotSupportedException();
                 case InterpolationMode.None:
                     return GetTransformedBitmapNoInterpolation();
+
                 case InterpolationMode.Bilinear:
                     return GetTransformedBilinearInterpolation();
+
                 case InterpolationMode.Bicubic:
                     return GetTransformedBicubicInterpolation();
             }
-
-
         }
 
-        MemBitmap GetTransformedBitmapNoInterpolation()
+        private MemBitmap GetTransformedBitmapNoInterpolation()
         {
             var destCB = new MemBitmap(_destBounds.Width, _destBounds.Height);
 #if DEBUG
@@ -174,8 +175,6 @@ namespace PixelFarm.CpuBlit.Imaging
             Vector da_vec = _DA;
             int rectLeft = _destBounds.Left;
             int rectTop = _destBounds.Top;
-
-
 
             unsafe
             {
@@ -212,7 +211,7 @@ namespace PixelFarm.CpuBlit.Imaging
             }
         }
 
-        unsafe MemBitmap GetTransformedBilinearInterpolation()
+        private unsafe MemBitmap GetTransformedBilinearInterpolation()
         {
             //4 points sampling
             //weight between four point
@@ -264,7 +263,6 @@ namespace PixelFarm.CpuBlit.Imaging
                         if (x1 >= 0 && x1 < srcW_lim &&
                             y1 >= 0 && y1 < srcH_lim)
                         {
-
                             //x2 = (x1 == srcW - 1) ? x1 : x1 + 1;
                             //y2 = (y1 == srcH - 1) ? y1 : y1 + 1;
 
@@ -291,7 +289,6 @@ namespace PixelFarm.CpuBlit.Imaging
 
                             reader.SetStartPixel(x1, y1);
 
-
                             Drawing.Color x1y1Color;
                             Drawing.Color x2y1Color;
                             Drawing.Color x1y2Color;
@@ -308,15 +305,13 @@ namespace PixelFarm.CpuBlit.Imaging
                             float g = (x1y1Color.G * dx1y1) + (x2y1Color.G * dx2y1) + (x1y2Color.G * dx1y2) + (x2y2Color.G * dx2y2);
                             float r = (x1y1Color.R * dx1y1) + (x2y1Color.R * dx2y1) + (x1y2Color.R * dx1y2) + (x2y2Color.R * dx2y2);
                             destWriter.SetPixel(x, y, new Drawing.Color((byte)a, (byte)r, (byte)g, (byte)b));
-
                         }
                     }
                 }
                 return destCB;
             }
-
-
         }
+
         //ActualBitmap GetTransformedBilinearInterpolation()
         //{
         //    //4 points sampling
@@ -335,9 +330,6 @@ namespace PixelFarm.CpuBlit.Imaging
         //    Vector da_vec = this.DA;
         //    int rectLeft = this.rect.Left;
         //    int rectTop = this.rect.Top;
-
-
-
 
         //    for (int y = 0; y < rectHeight; ++y)
         //    {
@@ -362,7 +354,7 @@ namespace PixelFarm.CpuBlit.Imaging
 
         //            if (x1 >= 0 && x1 < srcW && y1 >= 0 && y1 < srcH)
         //            {
-        //                //bilinear interpolation *** 
+        //                //bilinear interpolation ***
         //                x2 = (x1 == srcW - 1) ? x1 : x1 + 1;
         //                y2 = (y1 == srcH - 1) ? y1 : y1 + 1;
         //                dx1 = ptInPlane.X - x1;
@@ -379,7 +371,6 @@ namespace PixelFarm.CpuBlit.Imaging
         //                dx2y2 = dx2 * dy2;
         //                //use 4 points
 
-
         //                Drawing.Color x1y1Color = srcCB.GetPixel(x1, y1);
         //                Drawing.Color x2y1Color = srcCB.GetPixel(x2, y1);
         //                Drawing.Color x1y2Color = srcCB.GetPixel(x1, y2);
@@ -394,10 +385,10 @@ namespace PixelFarm.CpuBlit.Imaging
         //    }
         //    return destCB;
         //}
-        unsafe MemBitmap GetTransformedBicubicInterpolation()
+        private unsafe MemBitmap GetTransformedBicubicInterpolation()
         {
             //4 points sampling
-            //weight between four point 
+            //weight between four point
             PointF ptInPlane = new PointF();
             int x1, x2, y1, y2;
             double dab, dbc, dcd, dda;
@@ -451,8 +442,8 @@ namespace PixelFarm.CpuBlit.Imaging
                         {
                             reader.SetStartPixel(x1, y1);
                             //reader.Read16(pixelBuffer);
-                            //do interpolate 
-                            //find src pixel and approximate   
+                            //do interpolate
+                            //find src pixel and approximate
                             destWriter.SetPixel(x, y,
 
                                   GetApproximateColor_Bicubic(reader,
@@ -466,7 +457,6 @@ namespace PixelFarm.CpuBlit.Imaging
                     //targetPixelIndex = startLine;
                 }
 
-
                 //------------------------
                 //System.Runtime.InteropServices.Marshal.Copy(
                 //outputBuffer, 0,
@@ -476,14 +466,13 @@ namespace PixelFarm.CpuBlit.Imaging
                 //return outputbmp;
                 return destCB;
             }
-
         }
 
-        static PixelFarm.Drawing.Color GetApproximateColor_Bicubic(BufferReader4 reader, PixelFarm.Drawing.Color[] colors, double cx, double cy)
+        private static PixelFarm.Drawing.Color GetApproximateColor_Bicubic(BufferReader4 reader, PixelFarm.Drawing.Color[] colors, double cx, double cy)
         {
             if (reader.CanReadAsBlock())
             {
-                //read 4 point sample  
+                //read 4 point sample
                 reader.Read16(colors);
                 //
                 BicubicInterpolator2.GetInterpolatedColor(colors, cx - ((int)cx) /*xdiff*/, cy - ((int)cy)/*ydiff*/, out PixelFarm.Drawing.Color result);

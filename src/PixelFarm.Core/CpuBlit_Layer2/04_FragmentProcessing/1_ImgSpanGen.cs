@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,27 +22,25 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
+
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     /// <summary>
-    ///a image-span generator  generate 'color'-span from input image, send this spans to output     
+    ///a image-span generator  generate 'color'-span from input image, send this spans to output
     /// </summary>
     public abstract class ImgSpanGen : ISpanGenerator
     {
-        ISpanInterpolator _interpolator;
-        double _dx_dbl;
-        double _dy_dbl;
-        int _dx_int;
-        int _dy_int;
+        private ISpanInterpolator _interpolator;
+        private double _dx_dbl;
+        private double _dy_dbl;
+        private int _dx_int;
+        private int _dy_int;
 
         protected const int BASE_SHITF = 8;
         protected const int BASE_SCALE = (int)(1 << BASE_SHITF);
         protected const int BASE_MASK = BASE_SCALE - 1;
         protected IBitmapSrc _bmpSrc;
-
-
 
         public ImgSpanGen()
         {
@@ -51,20 +49,22 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _dx_int = (img_subpix_const.SCALE / 2);
             _dy_int = (img_subpix_const.SCALE / 2);
         }
+
         public void SetInterpolator(ISpanInterpolator interpolator)
         {
             _interpolator = interpolator;
         }
 
-
         protected ISpanInterpolator Interpolator => _interpolator;
+
         //
         public double dx => _dx_dbl;
+
         public double dy => _dy_dbl;
         public int dxInt => _dx_int;
         public int dyInt => _dy_int;
         //
-        
+
         public void SetFilterOffset(double dx, double dy)
         {
             _dx_dbl = dx;
@@ -72,9 +72,14 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _dx_int = AggMath.iround(dx * img_subpix_const.SCALE);
             _dy_int = AggMath.iround(dy * img_subpix_const.SCALE);
         }
+
         public void SetFilterOffset(double d) => SetFilterOffset(d, d);
-        public virtual void Prepare() { }
+
+        public virtual void Prepare()
+        { }
+
         public Drawing.Color BackgroundColor { get; set; }
+
         public abstract void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len);
 
         internal void SetSrcBitmap(IBitmapSrc src)
@@ -85,6 +90,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             }
             _bmpSrc = src;
         }
+
         internal void ReleaseSrcBitmap()
         {
             _bmpSrc = null;

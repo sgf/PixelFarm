@@ -4,8 +4,8 @@
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -32,24 +32,24 @@
 // no way to improve the perfection - hats off to David and his group!
 //
 // All other code is very different from the original.
-// 
+//
 //----------------------------------------------------------------------------
 
-using System;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     //-----------------------------------------------------------line_aa_vertex
-    // Vertex (x, y) with the distance to the next one. The last vertex has 
+    // Vertex (x, y) with the distance to the next one. The last vertex has
     // the distance between the last and the first points
-    struct LineAAVertex
+    internal struct LineAAVertex
     {
         public readonly int x;
         public readonly int y;
         public int len;
+
         //
-        const int SIGDIFF = LineAA.SUBPIXEL_SCALE + (LineAA.SUBPIXEL_SCALE / 2);
+        private const int SIGDIFF = LineAA.SUBPIXEL_SCALE + (LineAA.SUBPIXEL_SCALE / 2);
 
         public LineAAVertex(int x, int y)
         {
@@ -57,6 +57,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             this.y = y;
             len = 0;
         }
+
         public bool IsDiff(LineAAVertex val)
         {
             //*** NEED 64 bits long
@@ -70,9 +71,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
     }
 
-    class LineAAVertexSequence
+    internal class LineAAVertexSequence
     {
-        ArrayList<LineAAVertex> _list = new ArrayList<LineAAVertex>();
+        private ArrayList<LineAAVertex> _list = new ArrayList<LineAAVertex>();
+
         public void AddVertex(LineAAVertex val)
         {
             int count = _list.Count;
@@ -86,11 +88,15 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
             _list.Append(val);
         }
+
         //
         public LineAAVertex this[int index] => _list[index];
+
         public int Count => _list.Count;
+
         //
         public void Clear() => _list.Clear();
+
         //
         public void ModifyLast(LineAAVertex val)
         {
@@ -119,7 +125,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 }
             }
 
-
             if (closed)
             {
                 //if close figure
@@ -141,11 +146,12 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     //=======================================================rasterizer_outline_aa
     public class OutlineAARasterizer
     {
-        LineRenderer _ren;
-        LineAAVertexSequence _src_vertices = new LineAAVertexSequence();
-        OutlineJoin _line_join;
-        int _start_x;
-        int _start_y;
+        private LineRenderer _ren;
+        private LineAAVertexSequence _src_vertices = new LineAAVertexSequence();
+        private OutlineJoin _line_join;
+        private int _start_x;
+        private int _start_y;
+
         public enum OutlineJoin
         {
             NoJoin,             //-----outline_no_join
@@ -155,26 +161,28 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
 
         public bool CompareDistStart(int d) => d > 0;
+
         public bool CompareDistEnd(int d) => d <= 0;
 
-        struct DrawVarsPart0
+        private struct DrawVarsPart0
         {
             public int idx;
             public int lcurr, lnext;
             public int flags;
         }
 
-        struct DrawVarsPart1
+        private struct DrawVarsPart1
         {
             public int x1, y1, x2, y2;
         }
-        struct DrawVarsPart2
+
+        private struct DrawVarsPart2
         {
             public int xb1, yb1, xb2, yb2;
         }
 
 #if DEBUG
-        static int dbuglatest_i = 0;
+        private static int dbuglatest_i = 0;
 #endif
 
         public OutlineAARasterizer(LineRenderer ren)
@@ -188,7 +196,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _start_y = (0);
         }
 
-        void Draw(ref DrawVarsPart0 dv,
+        private void Draw(ref DrawVarsPart0 dv,
             ref DrawVarsPart1 dv1,
             ref DrawVarsPart2 dv2,
             ref LineParameters curr,
@@ -196,17 +204,14 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             int start,
             int end)
         {
-
             try
             {
                 for (int i = start; i < end; i++)
                 {
-
 #if DEBUG
                     dbuglatest_i = i;
                     if (i == 6)
                     {
-
                     }
 #endif
                     if (_line_join == OutlineJoin.Round)
@@ -251,6 +256,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                         case OutlineJoin.NoJoin:
                             dv.flags = 3;
                             break;
+
                         case OutlineJoin.Mitter:
                             dv.flags >>= 1;
                             dv.flags |= (curr.DiagonalQuadrant ==
@@ -260,11 +266,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                                 LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                             }
                             break;
+
                         case OutlineJoin.Round:
                             dv.flags >>= 1;
                             dv.flags |= (((curr.DiagonalQuadrant ==
                                 next.DiagonalQuadrant) ? 1 : 0) << 1);
                             break;
+
                         case OutlineJoin.AccurateJoin:
                             dv.flags = 0;
                             LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
@@ -274,12 +282,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
             catch (Exception ex)
             {
-
             }
-
         }
 
         public void Attach(LineRenderer ren) => _ren = ren;
+
         public OutlineJoin LineJoin
         {
             get => _line_join;
@@ -291,6 +298,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
 
         public bool RoundCap { get; set; }
+
         public void MoveTo(int x, int y)
         {
             _src_vertices.ModifyLast(new LineAAVertex(_start_x = x, _start_y = y));
@@ -357,12 +365,14 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                         case OutlineJoin.NoJoin:
                             dv.flags = 3;
                             break;
+
                         case OutlineJoin.Mitter:
                         case OutlineJoin.Round:
                             dv.flags =
                                 (prev.DiagonalQuadrant == curr.DiagonalQuadrant ? 1 : 0) |
                                     ((curr.DiagonalQuadrant == next.DiagonalQuadrant ? 1 : 0) << 1);
                             break;
+
                         case OutlineJoin.AccurateJoin:
                             dv.flags = 0;
                             break;
@@ -391,6 +401,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                     case 0:
                     case 1:
                         break;
+
                     case 2:
                         {
                             v = _src_vertices[0];
@@ -416,6 +427,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                             }
                         }
                         break;
+
                     case 3:
                         {
                             int x3, y3;
@@ -462,6 +474,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                             }
                         }
                         break;
+
                     default:
                         {
                             dv.idx = 3;
@@ -492,12 +505,14 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                                 case OutlineJoin.NoJoin:
                                     dv.flags = 3;
                                     break;
+
                                 case OutlineJoin.Mitter:
                                 case OutlineJoin.Round:
                                     dv.flags =
                                         (prev.DiagonalQuadrant == curr.DiagonalQuadrant ? 1 : 0) |
                                             ((curr.DiagonalQuadrant == next.DiagonalQuadrant ? 1 : 0) << 1);
                                     break;
+
                                 case OutlineJoin.AccurateJoin:
                                     dv.flags = 0;
                                     break;
@@ -582,14 +597,17 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 case VertexCmd.NoMore:
                     //do nothing
                     return;
+
                 case VertexCmd.MoveTo:
                     Render(false);
                     MoveTo(x, y);
                     break;
+
                 case VertexCmd.Close:
                     Render(true);
                     MoveTo(_start_x, _start_y);
                     break;
+
                 default:
                     LineTo(x, y);
                     break;
@@ -597,11 +615,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
 
 #if DEBUG
-        static int dbugAddPathCount = 0;
+        private static int dbugAddPathCount = 0;
 #endif
-        void AddPath(VertexStore vxs)
-        {
 
+        private void AddPath(VertexStore vxs)
+        {
             VertexCmd cmd;
             int index = 0;
             while ((cmd = vxs.GetVertex(index++, out double x, out double y)) != VertexCmd.NoMore)
@@ -610,6 +628,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
             Render(false);
         }
+
         public void RenderVertexSnap(VertexStore s, Drawing.Color c)
         {
             _ren.Color = c;

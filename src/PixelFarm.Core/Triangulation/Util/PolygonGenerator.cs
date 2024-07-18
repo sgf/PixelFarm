@@ -29,13 +29,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System;
 namespace Poly2Tri
 {
     public class PolygonGenerator
     {
-        static readonly Random RNG = new Random();
-        const double PI_2 = 2.0 * Math.PI;
+        private static readonly Random RNG = new Random();
+        private const double PI_2 = 2.0 * Math.PI;
+
         public static Polygon RandomCircleSweep(double scale, int vertexCount)
         {
             TriangulationPoint point;

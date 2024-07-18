@@ -20,8 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
-using System.Runtime.InteropServices;
 namespace PixelFarm.VectorMath
 {
     /// <summary>Represents a 2D vector using two double-precision floating-point numbers.</summary>
@@ -29,32 +27,36 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector2 : IEquatable<Vector2>
     {
-
         /// <summary>The X coordinate of this instance.</summary>
         public double x;
+
         /// <summary>The Y coordinate of this instance.</summary>
         public double y;
+
         /// <summary>
         /// Defines a unit-length Vector2d that points towards the X-axis.
         /// </summary>
         public static readonly Vector2 UnitX = new Vector2(1, 0);
+
         /// <summary>
         /// Defines a unit-length Vector2d that points towards the Y-axis.
         /// </summary>
         public static readonly Vector2 UnitY = new Vector2(0, 1);
+
         /// <summary>
         /// Defines a zero-length Vector2d.
         /// </summary>
         public static readonly Vector2 Zero = new Vector2(0, 0);
+
         /// <summary>
         /// Defines an instance with all components set to 1.
         /// </summary>
         public static readonly Vector2 One = new Vector2(1, 1);
+
         /// <summary>
         /// Defines the size of the Vector2d struct in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(new Vector2());
-
 
         /// <summary>Constructs left vector with the given coordinates.</summary>
         /// <param name="x">The X coordinate.</param>
@@ -70,6 +72,7 @@ namespace PixelFarm.VectorMath
             this.x = vector.x;
             this.y = vector.y;
         }
+
         public Vector2 NewLength(double newLength)
         {
             //radian
@@ -77,7 +80,6 @@ namespace PixelFarm.VectorMath
             return new Vector2(Math.Cos(atan) * newLength,
                         Math.Sin(atan) * newLength);
         }
-
 
         public double this[int index]
         {
@@ -87,8 +89,10 @@ namespace PixelFarm.VectorMath
                 {
                     case 0:
                         return x;
+
                     case 1:
                         return y;
+
                     default:
                         return 0;
                 }
@@ -101,17 +105,16 @@ namespace PixelFarm.VectorMath
                     case 0:
                         x = value;
                         break;
+
                     case 1:
                         y = value;
                         break;
+
                     default:
                         throw new Exception();
                 }
             }
         }
-
-
-
 
         /// <summary>
         /// Gets the length (magnitude) of the vector.
@@ -124,8 +127,6 @@ namespace PixelFarm.VectorMath
                 return System.Math.Sqrt(x * x + y * y);
             }
         }
-
-
 
         /// <summary>
         /// Gets the square of the vector length (magnitude).
@@ -143,11 +144,9 @@ namespace PixelFarm.VectorMath
             }
         }
 
-
         public Vector2 RotateInDegree(double deg)
         {
-
-            double rad = deg * (System.Math.PI / 180.0f); //convert from degree to rad 
+            double rad = deg * (System.Math.PI / 180.0f); //convert from degree to rad
             double sin = System.Math.Sin(rad);
             double cos = System.Math.Cos(rad);
 
@@ -166,7 +165,6 @@ namespace PixelFarm.VectorMath
             return MathHelper.Range0ToTau(GetAngle());
         }
 
-
         /// <summary>
         /// Gets the perpendicular vector on the right side of this vector.
         /// </summary>
@@ -174,6 +172,7 @@ namespace PixelFarm.VectorMath
         {
             return new Vector2(y, -x);
         }
+
         /// <summary>
         /// Gets the perpendicular vector on the right side of this vector.
         /// </summary>
@@ -185,7 +184,6 @@ namespace PixelFarm.VectorMath
             }
         }
 
-
         /// <summary>
         /// Gets the perpendicular vector on the left side of this vector.
         /// </summary>
@@ -193,8 +191,6 @@ namespace PixelFarm.VectorMath
         {
             return new Vector2(-y, x);
         }
-
-
 
         /// <summary>
         /// Returns a normalized Vector of this.
@@ -216,10 +212,6 @@ namespace PixelFarm.VectorMath
             x *= scale;
             y *= scale;
         }
-
-
-
-
 
         /// <summary>
         /// Adds two vectors.
@@ -244,8 +236,6 @@ namespace PixelFarm.VectorMath
             result = new Vector2(a.x + b.x, a.y + b.y);
         }
 
-
-
         /// <summary>
         /// Subtract one Vector from another
         /// </summary>
@@ -268,8 +258,6 @@ namespace PixelFarm.VectorMath
         {
             result = new Vector2(a.x - b.x, a.y - b.y);
         }
-
-
 
         /// <summary>
         /// Multiplies a vector by a scalar.
@@ -317,8 +305,6 @@ namespace PixelFarm.VectorMath
             result = new Vector2(vector.x * scale.x, vector.y * scale.y);
         }
 
-
-
         /// <summary>
         /// Divides a vector by a scalar.
         /// </summary>
@@ -365,8 +351,6 @@ namespace PixelFarm.VectorMath
             result = new Vector2(vector.x / scale.x, vector.y / scale.y);
         }
 
-
-
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
         /// </summary>
@@ -392,8 +376,6 @@ namespace PixelFarm.VectorMath
             result.y = a.y < b.y ? a.y : b.y;
         }
 
-
-
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
         /// </summary>
@@ -418,8 +400,6 @@ namespace PixelFarm.VectorMath
             result.x = a.x > b.x ? a.x : b.x;
             result.y = a.y > b.y ? a.y : b.y;
         }
-
-
 
         /// <summary>
         /// Clamp a vector to the given minimum and maximum vectors
@@ -448,8 +428,6 @@ namespace PixelFarm.VectorMath
             result.y = vec.y < min.y ? min.y : vec.y > max.y ? max.y : vec.y;
         }
 
-
-
         /// <summary>
         /// Scale a vector to unit length
         /// </summary>
@@ -475,8 +453,6 @@ namespace PixelFarm.VectorMath
             result.y = vec.y * scale;
         }
 
-
-
         /// <summary>
         /// Calculate the dot (scalar) product of two vectors
         /// </summary>
@@ -499,8 +475,6 @@ namespace PixelFarm.VectorMath
             result = left.x * right.x + left.y * right.y;
         }
 
-
-
         /// <summary>
         /// Calculate the cross product of two vectors
         /// </summary>
@@ -511,7 +485,6 @@ namespace PixelFarm.VectorMath
         {
             return left.x * right.y - left.y * right.x;
         }
-
 
         //public static Vector2 Rotate(Vector2 toRotate, double radians)
         //{
@@ -528,7 +501,6 @@ namespace PixelFarm.VectorMath
         //    output.x = input.x * Cos - input.y * Sin;
         //    output.y = input.y * Cos + input.x * Sin;
         //}
-
 
         /// <summary>
         /// Returns a new Vector that is the linear blend of the 2 given Vectors
@@ -556,8 +528,6 @@ namespace PixelFarm.VectorMath
             result.x = blend * (b.x - a.x) + a.x;
             result.y = blend * (b.y - a.y) + a.y;
         }
-
-
 
         /// <summary>
         /// Interpolate 3 Vectors using Barycentric coordinates
@@ -593,8 +563,6 @@ namespace PixelFarm.VectorMath
             Add(ref result, ref temp, out result);
         }
 
-
-
         /// <summary>
         /// Transforms a vector by a quaternion rotation.
         /// </summary>
@@ -623,8 +591,6 @@ namespace PixelFarm.VectorMath
             result = new Vector2(v.X, v.Y);
         }
 
-
-
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
         /// </summary>
@@ -650,8 +616,6 @@ namespace PixelFarm.VectorMath
             result.y = a.y < b.y ? a.y : b.y;
         }
 
-
-
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
         /// </summary>
@@ -676,9 +640,6 @@ namespace PixelFarm.VectorMath
             result.x = a.x > b.x ? a.x : b.x;
             result.y = a.y > b.y ? a.y : b.y;
         }
-
-
-
 
         /// <summary>
         /// Adds two instances.
@@ -793,9 +754,6 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-
-
-
         /// <summary>
         /// Returns a System.String that represents the current instance.
         /// </summary>
@@ -805,8 +763,6 @@ namespace PixelFarm.VectorMath
             return String.Format("({0}, {1})", x, y);
         }
 
-
-
         /// <summary>
         /// Returns the hashcode for this instance.
         /// </summary>
@@ -815,8 +771,6 @@ namespace PixelFarm.VectorMath
         {
             return new { x, y }.GetHashCode();
         }
-
-
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -829,10 +783,6 @@ namespace PixelFarm.VectorMath
                 return false;
             return this.Equals((Vector2)obj);
         }
-
-
-
-
 
         /// <summary>Indicates whether the current vector is equal to another vector.</summary>
         /// <param name="other">A vector to compare with this vector.</param>
@@ -857,19 +807,19 @@ namespace PixelFarm.VectorMath
 
             return false;
         }
+
         public double X
         {
             get { return this.x; }
             set { this.x = value; }
         }
+
         public double Y
         {
             get { return this.y; }
             set { this.y = value; }
         }
-
     }
-
 
     public static class Vector2Ext
     {
@@ -883,6 +833,7 @@ namespace PixelFarm.VectorMath
 
             return new Vector2((float)nx, (float)ny);
         }
+
         public static Vector2 NewLength(this Vector2 v, double newLength)
         {
             //radian
@@ -902,6 +853,7 @@ namespace PixelFarm.VectorMath
 
             return new Vector2f((float)nx, (float)ny);
         }
+
         public static Vector2f NewLength(this Vector2f v, double newLength)
         {
             //radian
@@ -915,22 +867,25 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector2f
     {
-        static Vector2f zeroVector = new Vector2f(0f, 0f);
-        static Vector2f unitVector = new Vector2f(1f, 1f);
-        static Vector2f unitXVector = new Vector2f(1f, 0f);
-        static Vector2f unitYVector = new Vector2f(0f, 1f);
+        private static Vector2f zeroVector = new Vector2f(0f, 0f);
+        private static Vector2f unitVector = new Vector2f(1f, 1f);
+        private static Vector2f unitXVector = new Vector2f(1f, 0f);
+        private static Vector2f unitYVector = new Vector2f(0f, 1f);
         public float X;
         public float Y;
         public static readonly Vector2f Zero = new Vector2f(0, 0);
+
         public Vector2f(float x, float y)
         {
             this.X = x;
             this.Y = y;
         }
+
         public static Vector2f operator +(Vector2f v1, Vector2f v2)
         {
             return new Vector2f(v1.X + v2.X, v1.Y + v2.Y);
         }
+
         public static Vector2f operator +(Vector2f v1, float n)
         {
             return new Vector2f(v1.X + n, v1.Y + n);
@@ -940,30 +895,37 @@ namespace PixelFarm.VectorMath
         {
             return new Vector2f(v1.X - v2.X, v1.Y - v2.Y);
         }
+
         public static Vector2f operator /(Vector2f v1, float n)
         {
             return new Vector2f(v1.X / n, v1.Y / n);
         }
+
         public static Vector2f operator *(Vector2f v1, float n)
         {
             return new Vector2f(v1.X * n, v1.Y * n);
         }
+
         public static Vector2f operator *(float n, Vector2f v1)
         {
             return new Vector2f(v1.X * n, v1.Y * n);
         }
+
         public static bool operator ==(Vector2f v1, Vector2f v2)
         {
             return (v1.X == v2.X) && (v1.Y == v2.Y);
         }
+
         public static bool operator !=(Vector2f v1, Vector2f v2)
         {
             return (v1.X != v2.X) || (v1.Y != v2.Y);
         }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
+
         public static Vector2f Min(Vector2f value1, Vector2f value2)
         {
             return new Vector2f(
@@ -971,6 +933,7 @@ namespace PixelFarm.VectorMath
                 (value1.Y < value2.Y) ? value1.Y : value2.Y
                 );
         }
+
         public static Vector2f Max(Vector2f value1, Vector2f value2)
         {
             return new Vector2f(
@@ -978,6 +941,7 @@ namespace PixelFarm.VectorMath
                 (value1.Y > value2.Y) ? value1.Y : value2.Y
                 );
         }
+
         public override bool Equals(object obj)
         {
             if (obj is Vector2f)
@@ -990,6 +954,7 @@ namespace PixelFarm.VectorMath
                 return false;
             }
         }
+
         public static Vector2f Normalize(Vector2f value)
         {
             double factor = 1.0f / (double)Math.Sqrt((value.X * value.X) + (value.Y * value.Y));
@@ -998,7 +963,6 @@ namespace PixelFarm.VectorMath
             //value.Y *= val;
             //return value;
         }
-
 
         public static Vector2f One
         {
@@ -1014,10 +978,12 @@ namespace PixelFarm.VectorMath
         {
             get { return unitYVector; }
         }
+
         public static double Dot(Vector2f value1, Vector2f value2)
         {
             return (value1.X * value2.X) + (value1.Y * value2.Y);
         }
+
         public double Length()
         {
             return Math.Sqrt((X * X) + (Y * Y));
@@ -1027,14 +993,15 @@ namespace PixelFarm.VectorMath
         {
             return (X * X) + (Y * Y);
         }
+
 #if DEBUG
+
         public override string ToString()
         {
             return "(" + X + "," + Y + ")";
         }
+
 #endif
-
-
     }
 
     public struct Matrix3x2f
@@ -1043,7 +1010,8 @@ namespace PixelFarm.VectorMath
         /// Gets the identity matrix.
         /// </summary>
         /// <value>The identity matrix.</value>
-        public readonly static Matrix3x2f Identity = new Matrix3x2f(1, 0, 0, 1, 0, 0);
+        public static readonly Matrix3x2f Identity = new Matrix3x2f(1, 0, 0, 1, 0, 0);
+
         /// <summary>
         /// Element (1,1)
         /// </summary>
@@ -1101,5 +1069,4 @@ namespace PixelFarm.VectorMath
             this.M31 = M31; this.M32 = M32;
         }
     }
-
 }

@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -26,23 +26,24 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //----------------------------------------------------------------bspline
     // A very simple class of Bi-cubic Spline interpolation.
-    // First call init(num, x[], y[]) where num - number of source points, 
-    // x, y - arrays of X and Y values respectively. Here Y must be a function 
+    // First call init(num, x[], y[]) where num - number of source points,
+    // x, y - arrays of X and Y values respectively. Here Y must be a function
     // of X. It means that all the X-coordinates must be arranged in the ascending
-    // order. 
-    // Then call get(x) that calculates a value Y for the respective X. 
+    // order.
+    // Then call get(x) that calculates a value Y for the respective X.
     // The class supports extrapolation, i.e. you can call get(x) where x is
-    // outside the given with init() X-range. Extrapolation is a simple linear 
+    // outside the given with init() X-range. Extrapolation is a simple linear
     // function.
     //------------------------------------------------------------------------
     public sealed class BSpline
     {
-        int _max;
-        int _num;
-        int _xOffset;
-        int _yOffset;
-        double[] _am = new double[16];
-        int _last_idx;
+        private int _max;
+        private int _num;
+        private int _xOffset;
+        private int _yOffset;
+        private double[] _am = new double[16];
+        private int _last_idx;
+
         //------------------------------------------------------------------------
         public BSpline()
         {
@@ -75,9 +76,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             Init(num, x, y);
         }
 
-
         //------------------------------------------------------------------------
-        void Init(int max)
+        private void Init(int max)
         {
             if (max > 2 && max > _max)
             {
@@ -89,6 +89,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _num = 0;
             _last_idx = -1;
         }
+
         //------------------------------------------------------------------------
         public void AddPoint(double x, double y)
         {
@@ -99,7 +100,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 ++_num;
             }
         }
-
 
         //------------------------------------------------------------------------
         public void Prepare()
@@ -157,10 +157,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _last_idx = -1;
         }
 
-
-
         //------------------------------------------------------------------------
-        void Init(int num, double[] x, double[] y)
+        private void Init(int num, double[] x, double[] y)
         {
             if (num > 2)
             {
@@ -174,8 +172,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             _last_idx = -1;
         }
+
         //------------------------------------------------------------------------
-        void BSearch(int n, int xOffset, double x0, out int i)
+        private void BSearch(int n, int xOffset, double x0, out int i)
         {
             int j = n - 1;
             int k;
@@ -187,10 +186,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-
-
         //------------------------------------------------------------------------
-        double Interpolate(double x, int i)
+        private double Interpolate(double x, int i)
         {
             int j = i + 1;
             double d = _am[_xOffset + i] - _am[_xOffset + j];
@@ -201,9 +198,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                    ((_am[_yOffset + j] - _am[j] * p) * r + (_am[_yOffset + i] - _am[i] * p) * h) / d;
         }
 
-
         //------------------------------------------------------------------------
-        double ExtrapolateLeft(double x)
+        private double ExtrapolateLeft(double x)
         {
             double d = _am[_xOffset + 1] - _am[_xOffset + 0];
             return (-d * _am[1] / 6 + (_am[_yOffset + 1] - _am[_yOffset + 0]) / d) *
@@ -212,7 +208,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         //------------------------------------------------------------------------
-        double ExtrapolateRight(double x)
+        private double ExtrapolateRight(double x)
         {
             double d = _am[_xOffset + _num - 1] - _am[_xOffset + _num - 2];
             return (d * _am[_num - 2] / 6 + (_am[_yOffset + _num - 1] - _am[_yOffset + _num - 2]) / d) *
@@ -236,7 +232,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return 0.0;
         }
-
 
         //------------------------------------------------------------------------
         public double GetStateful(double x)

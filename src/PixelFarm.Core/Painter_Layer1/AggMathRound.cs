@@ -8,8 +8,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,16 +18,16 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-// Bessel function (besj) was adapted for use in AGG library by Andy Wilk 
+// Bessel function (besj) was adapted for use in AGG library by Andy Wilk
 // Contact: castor.vulgaris@gmail.com
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit
 {
     public static class AggMathRound
     {
         public static int uround(double v) => (int)(uint)(v + 0.5);
+
         public static int uround_f(float v) => (int)(uint)(v + 0.5);
 
         public static int iround(double v)
@@ -37,6 +37,7 @@ namespace PixelFarm.CpuBlit
                 return (int)((v < 0.0) ? v - 0.5 : v + 0.5);
             }
         }
+
         public static int iround_f(float v)
         {
             unchecked

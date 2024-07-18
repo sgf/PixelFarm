@@ -8,8 +8,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -19,11 +19,13 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using PixelFarm.CpuBlit.PixelProcessing;
+
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     public interface IPatternFilter
     {
         int Dilation { get; }
+
         void SetPixelHighRes(BitmapBlenderBase sourceImage,
             Drawing.Color[] destBuffer,
             int destBufferOffset,

@@ -59,9 +59,10 @@ namespace Poly2Tri
         {
             Triangulate(_defaultAlgorithm, ps);
         }
- 
-        static System.Collections.Generic.Stack<DTSweepContext> contextStacks = new System.Collections.Generic.Stack<DTSweepContext>();
-        static TriangulationContext GetFreeTcxContext(TriangulationAlgorithm algorithm)
+
+        private static System.Collections.Generic.Stack<DTSweepContext> contextStacks = new System.Collections.Generic.Stack<DTSweepContext>();
+
+        private static TriangulationContext GetFreeTcxContext(TriangulationAlgorithm algorithm)
         {
             switch (algorithm)
             {
@@ -78,7 +79,8 @@ namespace Poly2Tri
                     }
             }
         }
-        static void ReleaseCtxContext(TriangulationContext sweepContext)
+
+        private static void ReleaseCtxContext(TriangulationContext sweepContext)
         {
             var dtSweepContext = sweepContext as DTSweepContext;
             if (dtSweepContext != null)
@@ -86,6 +88,7 @@ namespace Poly2Tri
                 contextStacks.Push(dtSweepContext);
             }
         }
+
         public static void Triangulate(TriangulationAlgorithm algorithm, Triangulable t)
         {
             //long time = System.nanoTime();
@@ -98,6 +101,7 @@ namespace Poly2Tri
             ReleaseCtxContext(tcx);
             //logger.info( "Triangulation of {} points [{}ms]", tcx.getPoints().size(), ( System.nanoTime() - time ) / 1e6 );
         }
+
         public static void Triangulate(TriangulationContext tcx)
         {
             switch (tcx.Algorithm)
@@ -109,23 +113,22 @@ namespace Poly2Tri
             }
         }
 
-
-//        /// <summary>
-//        /// Will do a warmup run to let the JVM optimize the triangulation code -- or would if this were Java --MM
-//        /// </summary>
-//        public static void Warmup()
-//        {
-//#if false
-//			/*
-//			 * After a method is run 10000 times, the Hotspot compiler will compile
-//			 * it into native code. Periodically, the Hotspot compiler may recompile
-//			 * the method. After an unspecified amount of time, then the compilation
-//			 * system should become quiet.
-//			 */
-//			Polygon poly = PolygonGenerator.RandomCircleSweep2(50, 50000);
-//			TriangulationProcess process = new TriangulationProcess();
-//			process.triangulate(poly);
-//#endif
-//        }
+        //        /// <summary>
+        //        /// Will do a warmup run to let the JVM optimize the triangulation code -- or would if this were Java --MM
+        //        /// </summary>
+        //        public static void Warmup()
+        //        {
+        //#if false
+        //			/*
+        //			 * After a method is run 10000 times, the Hotspot compiler will compile
+        //			 * it into native code. Periodically, the Hotspot compiler may recompile
+        //			 * the method. After an unspecified amount of time, then the compilation
+        //			 * system should become quiet.
+        //			 */
+        //			Polygon poly = PolygonGenerator.RandomCircleSweep2(50, 50000);
+        //			TriangulationProcess process = new TriangulationProcess();
+        //			process.triangulate(poly);
+        //#endif
+        //        }
     }
 }

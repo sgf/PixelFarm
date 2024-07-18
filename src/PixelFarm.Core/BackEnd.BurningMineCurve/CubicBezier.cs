@@ -1,15 +1,14 @@
-
-using System;
 using System.Globalization;
 using System.Text;
-using System.Runtime.CompilerServices;
 
 #if SYSTEM_WINDOWS_VECTOR
 using VECTOR = System.Windows.Vector;
 using FLOAT = System.Double;
 #elif SYSTEM_NUMERICS_VECTOR
+
 using VECTOR = System.Numerics.Vector2;
 using FLOAT = System.Single;
+
 #elif UNITY
 using VECTOR = UnityEngine.Vector2;
 using FLOAT = System.Single;
@@ -29,9 +28,11 @@ public readonly struct CubicBezier : IEquatable<CubicBezier>
 {
     // Control points
     public readonly VECTOR p0;
+
     public readonly VECTOR p1;
     public readonly VECTOR p2;
     public readonly VECTOR p3;
+
     /// <summary>
     /// Creates a new cubic bezier using the given control points.
     /// </summary>
@@ -53,12 +54,12 @@ public readonly struct CubicBezier : IEquatable<CubicBezier>
               HasSomeNanComponentXY(p3.X, p3.Y));
         }
     }
-    static bool HasSomeNanComponentXY(double x, double y)
+
+    private static bool HasSomeNanComponentXY(double x, double y)
     {
         //TODO: aggressive inline
         return double.IsNaN(x) || double.IsNaN(y);
     }
-
 
     /// <summary>
     /// Samples the bezier curve at the given t value.
@@ -66,6 +67,7 @@ public readonly struct CubicBezier : IEquatable<CubicBezier>
     /// <param name="t">Time value at which to sample (should be between 0 and 1, though it won't fail if outside that range).</param>
     /// <returns>Sampled point.</returns>
 #if !UNITY && !PIXEL_FARM
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
     public VECTOR Sample(FLOAT t)
@@ -84,6 +86,7 @@ public readonly struct CubicBezier : IEquatable<CubicBezier>
     /// <param name="t">Time value at which to sample (should be between 0 and 1, though it won't fail if outside that range).</param>
     /// <returns>First derivative of curve at sampled point.</returns>
 #if !UNITY && !PIXEL_FARM
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
     public VECTOR Derivative(FLOAT t)
@@ -101,13 +104,16 @@ public readonly struct CubicBezier : IEquatable<CubicBezier>
     /// <param name="t">Time value at which to sample (should be between 0 and 1, though it won't fail if outside that range).</param>
     /// <returns>Direction the curve is going at that point.</returns>
 #if !UNITY && !PIXEL_FARM
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
     public VECTOR Tangent(FLOAT t)
     {
         return VectorHelper.Normalize(Derivative(t));
     }
+
 #if DEBUG
+
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -130,12 +136,22 @@ public readonly struct CubicBezier : IEquatable<CubicBezier>
         sb.Append(">)");
         return sb.ToString();
     }
+
 #endif
+
     // Equality members -- pretty straightforward
-    public static bool operator ==(CubicBezier left, CubicBezier right) { return left.Equals(right); }
-    public static bool operator !=(CubicBezier left, CubicBezier right) { return !left.Equals(right); }
-    public bool Equals(CubicBezier other) { return p0.Equals(other.p0) && p1.Equals(other.p1) && p2.Equals(other.p2) && p3.Equals(other.p3); }
-    public override bool Equals(object obj) { return obj is CubicBezier && Equals((CubicBezier)obj); }
+    public static bool operator ==(CubicBezier left, CubicBezier right)
+    { return left.Equals(right); }
+
+    public static bool operator !=(CubicBezier left, CubicBezier right)
+    { return !left.Equals(right); }
+
+    public bool Equals(CubicBezier other)
+    { return p0.Equals(other.p0) && p1.Equals(other.p1) && p2.Equals(other.p2) && p3.Equals(other.p3); }
+
+    public override bool Equals(object obj)
+    { return obj is CubicBezier && Equals((CubicBezier)obj); }
+
     public override int GetHashCode()
     {
         JenkinsHash hash = new JenkinsHash();
@@ -155,10 +171,11 @@ public readonly struct CubicBezier : IEquatable<CubicBezier>
     /// http://en.wikipedia.org/wiki/Jenkins_hash_function
     /// I forget where I got these magic numbers from; supposedly they're good.
     /// </summary>
-    ref struct JenkinsHash
+    private struct JenkinsHash
     {
         private int _current;
 #if !UNITY && !PIXEL_FARM
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public void Mixin(int hash)
@@ -191,5 +208,7 @@ public readonly struct CubicBezier : IEquatable<CubicBezier>
                 return num;
             }
         }
+
     }
 }
+

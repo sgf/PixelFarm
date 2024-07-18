@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,12 +18,12 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by 
+// Adaptation for high precision colors has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//
 //----------------------------------------------------------------------------
 #define USE_UNSAFE_CODE
 
@@ -36,24 +36,24 @@ namespace PixelFarm.CpuBlit.Imaging
     /// </summary>
     public class ImageFilterLookUpTable
     {
-        double _radius;
-        int _diameter;
-        int _start;
-        int[] _weight_array;
+        private double _radius;
+        private int _diameter;
+        private int _start;
+        private int[] _weight_array;
+
         public static class ImgFilterConst
         {
             public const int SHIFT = 14;          //----image_filter_shift
-            public const int SCALE = 1 << SHIFT; //----image_filter_scale 
-            public const int MASK = SCALE - 1;  //----image_filter_mask 
+            public const int SCALE = 1 << SHIFT; //----image_filter_scale
+            public const int MASK = SCALE - 1;  //----image_filter_mask
         }
 
         public static class ImgSubPixConst
         {
             public const int SHIFT = 8;                        //----image_subpixel_shift
-            public const int SCALE = 1 << SHIFT; //----image_subpixel_scale 
-            public const int MASK = SCALE - 1;   //----image_subpixel_mask 
+            public const int SCALE = 1 << SHIFT; //----image_subpixel_scale
+            public const int MASK = SCALE - 1;   //----image_subpixel_mask
         }
-
 
         public ImageFilterLookUpTable()
         {
@@ -66,6 +66,7 @@ namespace PixelFarm.CpuBlit.Imaging
             _weight_array = new int[256];
             Rebuild(filterFunc, normalization);
         }
+
         public double Radius => _radius;
         public int Diameter => _diameter;
         public int Start => _start;
@@ -108,15 +109,14 @@ namespace PixelFarm.CpuBlit.Imaging
             }
         }
 
-
         //--------------------------------------------------------------------
-        // This function normalizes integer values and corrects the rounding 
+        // This function normalizes integer values and corrects the rounding
         // errors. It doesn't do anything with the source floating point values
-        // (m_weight_array_dbl), it corrects only integers according to the rule 
+        // (m_weight_array_dbl), it corrects only integers according to the rule
         // of 1.0 which means that any sum of pixel weights must be equal to 1.0.
         // So, the filter function must produce a graph of the proper shape.
         //--------------------------------------------------------------------
-        void Normalize()
+        private void Normalize()
         {
             int i;
             int flip = 1;
@@ -164,6 +164,5 @@ namespace PixelFarm.CpuBlit.Imaging
             int end = (Diameter << ImgSubPixConst.SHIFT) - 1;
             _weight_array[0] = _weight_array[end];
         }
-
     }
 }

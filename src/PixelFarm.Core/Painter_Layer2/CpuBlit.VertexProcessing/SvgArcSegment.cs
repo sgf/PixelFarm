@@ -1,5 +1,4 @@
 ﻿//MIT, 2014-present, WinterDev
-using System;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
@@ -15,6 +14,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         Small = 0,
         Large = 1
     }
+
     public sealed class SvgArcSegment
     {
         //from SVG.NET (https://github.com/vvvv/SVG)
@@ -33,7 +33,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public float EndX { get; set; }
         public float EndY { get; set; }
 
-        internal SvgArcSegment() { }
+        internal SvgArcSegment()
+        { }
+
         public void Set(float startX, float startY,
             float radiusX, float radiusY,
             float angle, SvgArcSize size,
@@ -51,7 +53,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             this.Size = size;
         }
 
-        static double CalculateVectorAngle(double ux, double uy, double vx, double vy)
+        private static double CalculateVectorAngle(double ux, double uy, double vx, double vy)
         {
             double ta = Math.Atan2(uy, ux);
             double tb = Math.Atan2(vy, vx);
@@ -155,42 +157,38 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 startY = (float)endpointY;
             }
         }
-
     }
-
-
 
 #if DEBUG
 
     //we will visit this again
 
-
-
-    class AggBezierArc
+    internal class AggBezierArc
     {
         //------------------------------------------------------------------------
         public double[] m_vertices = new double[26];
-        VertexCmd m_cmd;
+
+        private VertexCmd m_cmd;
         public int m_num_vertices;
-        int m_verticx;
-        const double bezier_arc_angle_epsilon = 0.01;
+        private int m_verticx;
+        private const double bezier_arc_angle_epsilon = 0.01;
 
-
-        static double fabs(double a)
+        private static double fabs(double a)
         {
             return (a < 0) ? -a : a;
         }
-        static double fmod(double x, double y)
+
+        private static double fmod(double x, double y)
         {
             double result1 = x / y;
             return result1 - Math.Floor(result1);
         }
+
         public void init(double x, double y,
                                  double rx, double ry,
                                  double start_angle,
                                  double sweep_angle)
         {
-
             start_angle = fmod(start_angle, 2.0 * Math.PI);
             if (sweep_angle >= 2.0 * Math.PI) sweep_angle = 2.0 * Math.PI;
             if (sweep_angle <= -2.0 * Math.PI) sweep_angle = -2.0 * Math.PI;
@@ -247,17 +245,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             local_sweep,
                             m_head + m_num_vertices - 2);
                     }
-
                 }
-
 
                 m_num_vertices += 6;
                 start_angle += local_sweep;
             }
             while (!done && m_num_vertices < 26);
         }
+
         ////------------------------------------------------------------arc_to_bezier
-        unsafe void arc_to_bezier(double cx, double cy, double rx, double ry,
+        private unsafe void arc_to_bezier(double cx, double cy, double rx, double ry,
                             double start_angle, double sweep_angle,
                             double* curve)
         {
@@ -287,33 +284,31 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-    class AggBezierArcSvg
+    internal class AggBezierArcSvg
     {
-
         //==========================================================bezier_arc_svg
-        // Compute an SVG-style bezier arc. 
+        // Compute an SVG-style bezier arc.
         //
-        // Computes an elliptical arc from (x1, y1) to (x2, y2). The size and 
-        // orientation of the ellipse are defined by two radii (rx, ry) 
-        // and an x-axis-rotation, which indicates how the ellipse as a whole 
-        // is rotated relative to the current coordinate system. The center 
-        // (cx, cy) of the ellipse is calculated automatically to satisfy the 
-        // constraints imposed by the other parameters. 
-        // large-arc-flag and sweep-flag contribute to the automatic calculations 
+        // Computes an elliptical arc from (x1, y1) to (x2, y2). The size and
+        // orientation of the ellipse are defined by two radii (rx, ry)
+        // and an x-axis-rotation, which indicates how the ellipse as a whole
+        // is rotated relative to the current coordinate system. The center
+        // (cx, cy) of the ellipse is calculated automatically to satisfy the
+        // constraints imposed by the other parameters.
+        // large-arc-flag and sweep-flag contribute to the automatic calculations
         // and help determine how the arc is drawn.
 
         //from agg_bezier_arc.cpp
-        // This epsilon is used to prevent us from adding degenerate curves 
+        // This epsilon is used to prevent us from adding degenerate curves
         // (converging to a single point).
-        // The value isn't very critical. Function arc_to_bezier() has a limit 
-        // of the sweep_angle. If fabs(sweep_angle) exceeds pi/2 the curve 
+        // The value isn't very critical. Function arc_to_bezier() has a limit
+        // of the sweep_angle. If fabs(sweep_angle) exceeds pi/2 the curve
         // becomes inaccurate. But slight exceeding is quite appropriate.
         //-------------------------------------------------bezier_arc_angle_epsilon
 
+        private AggBezierArc m_arc = new AggBezierArc();
+        private bool m_radii_ok;
 
-
-        AggBezierArc m_arc = new AggBezierArc();
-        bool m_radii_ok;
         //--------------------------------------------------------------------
         public void init(double x0, double y0,
                                   double rx, double ry,
@@ -327,7 +322,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             if (rx < 0.0) rx = -rx;
             if (ry < 0.0) ry = -rx;
 
-            // Calculate the middle point between 
+            // Calculate the middle point between
             // the current and the final points
             //------------------------
             double dx2 = (x0 - x2) / 2.0;
@@ -442,8 +437,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-
-        struct CenterFormArc
+        private struct CenterFormArc
         {
             public double cx;
             public double cy;
@@ -451,7 +445,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             public double radSweepDiff;
             public bool scaleUp;
         }
-
 
         //---------------------------------------------------------------------
         public void DrawArc(
@@ -486,6 +479,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         case VertexCmd.NoMore:
                             stopLoop = true;
                             break;
+
                         default:
                             v1.AddVertex(vertexData.x, vertexData.y, vertexData.command);
                             //yield return vertexData;
@@ -514,10 +508,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                 if (xaxisRotationAngleDec != 0)
                 {
-                    //also  rotate 
+                    //also  rotate
                     if (centerFormArc.scaleUp)
                     {
-
                         //var mat = Affine.NewMatix(
                         //        new AffinePlan(AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
                         //        new AffinePlan(AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
@@ -540,7 +533,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         //var mat = Affine.NewMatix(
                         //        AffinePlan.Translate(-centerFormArc.cx, -centerFormArc.cy),
                         //        AffinePlan.RotateDeg(xaxisRotationAngleDec),
-                        //        AffinePlan.Translate(centerFormArc.cx, centerFormArc.cy)); 
+                        //        AffinePlan.Translate(centerFormArc.cx, centerFormArc.cy));
                         //mat.TransformToVxs(v1, v2);
                         //v1 = v2;
 
@@ -563,7 +556,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         //        new AffinePlan(AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
 
                         //mat.TransformToVxs(v1, v2);
-                        //v1 = v2; 
+                        //v1 = v2;
                         AffineMat mat = AffineMat.Iden();
                         mat.Translate(-centerFormArc.cx, -centerFormArc.cy);
                         mat.RotateDeg(scaleRatio);
@@ -571,20 +564,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         //
                         VertexStoreTransformExtensions.TransformToVxs(mat, v1, v2);
                         v1 = v2;
-
                     }
                 }
 
                 //_stroke.Width = this.StrokeWidth;
                 //_stroke.MakeVxs(v1, v3);
                 //_pcx.DrawGfxPath(_pcx.StrokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v3));
-
             }
         }
 
-
-
-        static void ComputeArc2(double x0, double y0,
+        private static void ComputeArc2(double x0, double y0,
                              double rx, double ry,
                              double xAngleRad,
                              bool largeArcFlag,
@@ -610,7 +599,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double px1 = x1 * x1;
             double py1 = y1 * y1;
             // check that radii are large enough
-
 
             double radiiCheck = px1 / prx + py1 / pry;
             if (radiiCheck > 1)
@@ -669,20 +657,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             result.radStartAngle = angleStart;
             result.radSweepDiff = angleExtent;
         }
-        static Arc ComputeArc(double x0, double y0,
+
+        private static Arc ComputeArc(double x0, double y0,
                               double rx, double ry,
                               double angle,
                               bool largeArcFlag,
                               bool sweepFlag,
                                double x, double y)
         {
-
             //from Apache2, https://xmlgraphics.apache.org/
-            /** 
-         * This constructs an unrotated Arc2D from the SVG specification of an 
+            /**
+         * This constructs an unrotated Arc2D from the SVG specification of an
          * Elliptical arc.  To get the final arc you need to apply a rotation
          * transform such as:
-         * 
+         *
          * AffineTransform.getRotateInstance
          *     (angle, arc.getX()+arc.getWidth()/2, arc.getY()+arc.getHeight()/2);
          */
@@ -778,9 +766,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             arc.Init(x, y, rx, ry, -(angleStart), -(angleExtent));
             return arc;
         }
+
         //================
     }
 
 #endif
-
 }

@@ -4,8 +4,8 @@
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 // Copyright (C) 2005 Tony Juricic (tonygeek@yahoo.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -15,17 +15,16 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public static class Curves
     {
-
-
         //static readonly double CURVE_DISTANCE_EPSILON = 1e-30;
         internal const double CURVE_COLLINEARITY_EPSILON = 1e-30;
+
         internal const double CURVE_ANGLE_TOLERANCE_EPSILON = 0.01;
         internal const int CURVE_RECURSION_LIMIT = 32;
+
         //-------------------------------------------------------catrom_to_bezier
         public static void CatromToBezier(double x1, double y1,
                                               double x2, double y2,
@@ -75,6 +74,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 (x2 + 4 * x3 + x4) / 6,
                 (y2 + 4 * y3 + y4) / 6);
         }
+
         //------------------------------------------------------hermite_to_bezier
         public static void HermiteToBezier(double x1, double y1,
                                                double x2, double y2,
@@ -100,10 +100,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 y2);
         }
     }
+
     //-------------------------------------------------------------curve4_points
     public sealed class Curve4Points
     {
         public double x0, y0, x1, y1, x2, y2, x3, y3;
+
         public void Set(double x0, double y0,
                       double x1, double y1,
                       double x2, double y2,
@@ -115,7 +117,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             this.x3 = x3; this.y3 = y3;
         }
     }
- 
 
     public interface ICurveFlattenerOutput
     {
@@ -127,7 +128,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     /// </summary>
     public sealed class CurveIncFlattener
     {
-        double _scale;
+        private double _scale;
+
         public CurveIncFlattener()
         {
             Reset();
@@ -155,7 +157,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                   double x2, double y2,
                   ICurveFlattenerOutput output, bool skipFirstPoint)
         {
-
             int _num_steps;
 
             if (UseFixedStepCount)
@@ -164,7 +165,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             else
             {
-                //calculate 
+                //calculate
                 double dx1 = x1 - x0;
                 double dy1 = y1 - y0;
                 double dx2 = x2 - x1;
@@ -178,7 +179,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
 
-
             double eachIncStep = 1.0 / _num_steps;
             double eachIncStep2 = eachIncStep * eachIncStep;
             double tmpx = (x0 - x1 * 2.0 + x2) * eachIncStep2;
@@ -189,7 +189,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double _dfy = tmpy + (y1 - y0) * (2.0 * eachIncStep);
             double _ddfx = tmpx * 2.0;
             double _ddfy = tmpy * 2.0;
-
 
             //---------------
             //skip first step?
@@ -247,7 +246,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
 
-
             double eachIncStep = 1.0 / _num_steps;
             double eachIncStep2 = eachIncStep * eachIncStep;
             double eachIncStep3 = eachIncStep * eachIncStep * eachIncStep;
@@ -290,20 +288,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-
     public sealed class CurveSubdivisionFlattener
     {
-        double _approximation_scale;
-        double _distance_tolerance_square;
-        double _angle_tolerance;
-        double _cusp_limit;
+        private double _approximation_scale;
+        private double _distance_tolerance_square;
+        private double _angle_tolerance;
+        private double _cusp_limit;
 
-        byte _recursiveLimit;
+        private byte _recursiveLimit;
 
         public CurveSubdivisionFlattener()
         {
             Reset();
         }
+
         public void Reset()
         {
             _approximation_scale = 1;
@@ -311,6 +309,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _cusp_limit = 0;
             _recursiveLimit = 10;
         }
+
         public byte RecursiveLimit
         {
             get => _recursiveLimit;
@@ -323,6 +322,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 _recursiveLimit = value;
             }
         }
+
         //-------------------------------------------------------------curve4_div
         /// <summary>
         /// Flatten Curve4
@@ -360,6 +360,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _approximation_scale;
             set => _approximation_scale = value;
         }
+
         public double AngleTolerance
         {
             get => _angle_tolerance;
@@ -372,7 +373,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             set => _cusp_limit = (value == 0.0) ? 0.0 : Math.PI - value;
         }
 
-        void AddRecursiveBezier(double x0, double y0,
+        private void AddRecursiveBezier(double x0, double y0,
                               double x1, double y1,
                               double x2, double y2,
                               double x3, double y3,
@@ -466,6 +467,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         }
                     }
                     break;
+
                 case 1:
                     // p1,p2,p4 are collinear, p3 is significant
                     //----------------------
@@ -498,6 +500,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         }
                     }
                     break;
+
                 case 2:
                     // p1,p3,p4 are collinear, p2 is significant
                     //----------------------
@@ -530,6 +533,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         }
                     }
                     break;
+
                 case 3:
                     // Regular case
                     //-----------------
@@ -582,6 +586,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             AddRecursiveBezier(x0, y0, x01, y01, x012, y012, x0123, y0123, level + 1, output);
             AddRecursiveBezier(x0123, y0123, x123, y123, x23, y23, x3, y3, level + 1, output);
         }
+
         //-------------------------------------------------------------------
         //curve3_div
         /// <summary>
@@ -613,7 +618,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             output.Append(x2, y2);
         }
 
-        void AddRecursiveBezier(double x0, double y0,
+        private void AddRecursiveBezier(double x0, double y0,
                                double x1, double y1,
                                double x2, double y2,
                                int level,
@@ -637,7 +642,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double dy = y2 - y0;
 
             double d = Math.Abs(((x1 - x2) * dy - (y1 - y2) * dx));
-           
+
             if (d > Curves.CURVE_COLLINEARITY_EPSILON)
             {
                 // Regular case
@@ -700,9 +705,5 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             AddRecursiveBezier(x0, y0, x01, y01, x012, y012, level + 1, output);
             AddRecursiveBezier(x012, y012, x12, y12, x2, y2, level + 1, output);
         }
-
-
     }
-
-
 }

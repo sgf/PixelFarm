@@ -1,32 +1,29 @@
 ﻿//MIT, 2016-present, WinterDev
-using System;
-using System.Collections.Generic;
 using PixelFarm.VectorMath;
 
 namespace PixelFarm.Contours
 {
-
-
     public class PartFlattener
     {
         /// <summary>
         /// result flatten points
         /// </summary>
-        List<Vertex> _points;
+        private List<Vertex> _points;
 
         public PartFlattener()
         {
             this.NSteps = 2;//default
         }
+
         public List<Vertex> Result
         {
             get => _points;
             set => _points = value;
         }
+
         public int NSteps { get; set; }
 
-
-        void AddPoint(float x, float y, VertexKind kind)
+        private void AddPoint(float x, float y, VertexKind kind)
         {
             var p = new Vertex(x, y, kind);
 #if DEBUG
@@ -68,6 +65,7 @@ namespace PixelFarm.Contours
 
             AddPoint(end.X, end.Y, VertexKind.C4End);
         }
+
         public void GeneratePointsFromCurve3(
             int nsteps,
             Vector2f start, Vector2f end,
@@ -93,12 +91,13 @@ namespace PixelFarm.Contours
         }
 
 #if DEBUG
-        ContourPart dbug_ownerPart;
+        private ContourPart dbug_ownerPart;
+
         public void dbugSetCurrentOwnerPart(ContourPart dbug_ownerPart)
         {
             this.dbug_ownerPart = dbug_ownerPart;
         }
+
 #endif
     }
-
 }

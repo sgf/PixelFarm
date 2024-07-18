@@ -1,35 +1,34 @@
 ﻿//BSD, 2014-present, WinterDev
 //MIT, 2018-present, WinterDev
-using System;
 namespace PixelFarm.Drawing
 {
-    public delegate void LoadImageFunc(ImageBinder binder); 
+    public delegate void LoadImageFunc(ImageBinder binder);
 
     public class ImageBinder : Image
     {
-
         /// <summary>
         /// local img cached
         /// </summary>
-        PixelFarm.Drawing.Image _localImg;
-        bool _isLocalImgOwner;
-        LoadImageFunc _lazyLoadImgFunc;
-        int _previewImgWidth = 16; //default ?
-        int _previewImgHeight = 16;
-        bool _isAtlasImg;
+        private PixelFarm.Drawing.Image _localImg;
+
+        private bool _isLocalImgOwner;
+        private LoadImageFunc _lazyLoadImgFunc;
+        private int _previewImgWidth = 16; //default ?
+        private int _previewImgHeight = 16;
+        private bool _isAtlasImg;
 #if DEBUG
-        static int dbugTotalId;
+        private static int dbugTotalId;
         public int dbugId = dbugTotalId++;
 #endif
 
-        protected ImageBinder() { }
+        protected ImageBinder()
+        { }
 
         public ImageBinder(string imgSource, bool isMemBmpOwner = false)
         {
             ImageSource = imgSource;
             _isLocalImgOwner = isMemBmpOwner; //if true=> this binder will release a local cahed img
         }
-
 
         public ImageBinder(PixelFarm.Drawing.Image img, bool isMemBmpOwner = false)
         {
@@ -55,18 +54,19 @@ namespace PixelFarm.Drawing
             }
             catch (Exception ex)
             {
-
             }
         }
+
         public virtual void ReleaseLocalBitmapIfRequired()
         {
-
         }
+
         public BitmapBufferFormat BitmapFormat { get; set; }
 
         public virtual bool IsYFlipped { get; set; }
+
         /// <summary>
-        /// preview img size is an expected(assume) img of original img, 
+        /// preview img size is an expected(assume) img of original img,
         /// but it may not equal to the actual size after img is loaded.
         /// </summary>
         /// <param name="w"></param>
@@ -78,7 +78,7 @@ namespace PixelFarm.Drawing
         }
 
         /// <summary>
-        /// reference to original 
+        /// reference to original
         /// </summary>
         public string ImageSource { get; set; }
 
@@ -91,6 +91,7 @@ namespace PixelFarm.Drawing
         /// read already loaded img
         /// </summary>
         public PixelFarm.Drawing.Image LocalImage => _localImg;
+
         public override void ReleaseRawBufferHead(IntPtr ptr)
         {
             if (_localImg != null)
@@ -98,6 +99,7 @@ namespace PixelFarm.Drawing
                 _localImg.ReleaseRawBufferHead(ptr);
             }
         }
+
         public override IntPtr GetRawBufferHead()
         {
             if (_localImg != null)
@@ -106,6 +108,7 @@ namespace PixelFarm.Drawing
             }
             return IntPtr.Zero;
         }
+
         public void ClearLocalImage()
         {
             this.State = BinderState.Unloading;//reset this to unload?
@@ -131,7 +134,6 @@ namespace PixelFarm.Drawing
             }
         }
 
-
         public override int Width => (_localImg != null) ? _localImg.Width : _previewImgWidth; //default?
 
         public override int Height => (_localImg != null) ? _localImg.Height : _previewImgHeight;
@@ -148,22 +150,21 @@ namespace PixelFarm.Drawing
                 _localImg = image;
                 this.State = BinderState.Loaded;
 
-
                 if (raiseEvent)
                 {
                     RaiseImageChanged();
                 }
                 else
                 {
-                    //eg. when we setLocalImage 
-                    //from other thread  
+                    //eg. when we setLocalImage
+                    //from other thread
                     //don't call raise image changed directly here
                     //please use 'main thread queue' to invoke this
                 }
             }
             else
             {
-                //if set to null 
+                //if set to null
             }
         }
 
@@ -177,18 +178,22 @@ namespace PixelFarm.Drawing
         {
             _lazyLoadImgFunc = lazyLoadFunc;
         }
+
         public void LazyLoadImage()
         {
             _lazyLoadImgFunc?.Invoke(this);
         }
 
-
 #if DEBUG
-        public void dbugNotifyUsage() { }
+
+        public void dbugNotifyUsage()
+        { }
+
 #endif
 
         //
         public static readonly ImageBinder NoImage = new NoImageImageBinder();
+
         public virtual bool IsAtlasImage => false;
 
         public override bool IsReferenceImage => true;
@@ -197,7 +202,7 @@ namespace PixelFarm.Drawing
 
         public override int ReferenceY => 0;
 
-        class NoImageImageBinder : ImageBinder
+        private class NoImageImageBinder : ImageBinder
         {
             public NoImageImageBinder()
             {
@@ -215,6 +220,4 @@ namespace PixelFarm.Drawing
         Error,
         Blank
     }
-
-     
 }

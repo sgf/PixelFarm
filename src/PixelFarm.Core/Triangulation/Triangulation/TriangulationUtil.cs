@@ -34,9 +34,11 @@ namespace Poly2Tri
     /**
      * @author Thomas Åhlén, thahlen@gmail.com
      */
+
     public class TriangulationUtil
     {
         public const double EPSILON = 1e-12;
+
         /// <summary>
         ///   Requirements:
         /// 1. a,b and c form a triangle.
@@ -47,9 +49,9 @@ namespace Poly2Tri
         ///               / \
         ///              /   \
         ///            b/     \c
-        ///            +-------+ 
-        ///           /    B    \  
-        ///          /           \ 
+        ///            +-------+
+        ///           /    B    \
+        ///          /           \
         /// </code>
         ///    Facts:
         ///  d has to be in area B to have a chance to be inside the circle formed by a,b and c

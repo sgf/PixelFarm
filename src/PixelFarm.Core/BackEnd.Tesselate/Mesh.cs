@@ -6,21 +6,21 @@
 ** this file except in compliance with the License. You may obtain a copy
 ** of the License at Silicon Graphics, Inc., attn: Legal Services, 1600
 ** Amphitheatre Parkway, Mountain View, CA 94043-1351, or at:
-** 
+**
 ** http://oss.sgi.com/projects/FreeB
-** 
+**
 ** Note that, as provided in the License, the Software is distributed on an
 ** "AS IS" basis, with ALL EXPRESS AND IMPLIED WARRANTIES AND CONDITIONS
 ** DISCLAIMED, INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES AND
 ** CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY, FITNESS FOR A
 ** PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
-** 
+**
 ** Original Code. The Original Code is: OpenGL Sample Implementation,
 ** Version 1.2.1, released January 26, 2000, developed by Silicon Graphics,
 ** Inc. The Original Code is Copyright (c) 1991-2000 Silicon Graphics, Inc.
 ** Copyright in any portions created by third parties is as indicated
 ** elsewhere herein. All Rights Reserved.
-** 
+**
 ** Additional Notice Provisions: The application programming interfaces
 ** established by SGI in conjunction with the Original Code are The
 ** OpenGL(R) Graphics System: A Specification (Version 1.2.1), released
@@ -106,10 +106,9 @@
  * a region which is not part of the output polygon.
  */
 
-using System;
 namespace Tesselate
 {
-    // the mesh class 
+    // the mesh class
     /* The mesh operations below have three motivations: completeness,
      * convenience, and efficiency.  The basic mesh operations are MakeEdge,
      * Splice, and Delete.  All the other edge operations can be implemented
@@ -192,10 +191,11 @@ namespace Tesselate
         internal ContourVertex _vertexHead = new ContourVertex();		/* dummy header for vertex list */
         internal Face _faceHead = new Face();		/* dummy header for face list */
         internal HalfEdge _halfEdgeHead = new HalfEdge();		/* dummy header for edge list */
-        HalfEdge _otherHalfOfThisEdgeHead = new HalfEdge();	/* and its symmetric counterpart */
+        private HalfEdge _otherHalfOfThisEdgeHead = new HalfEdge();	/* and its symmetric counterpart */
         /* Creates a new mesh with no edges, no vertices,
         * and no loops (what we usually call a "face").
         */
+
         public Mesh()
         {
             HalfEdge otherHalfOfThisEdge = _otherHalfOfThisEdgeHead;
@@ -233,9 +233,10 @@ namespace Tesselate
         */
 
 #if DEBUG
-        static int s_dbugFaceIndexTotal = 0;
+        private static int s_dbugFaceIndexTotal = 0;
 #endif
-        static void MakeFace(Face newFace, HalfEdge eOrig, Face fNext)
+
+        private static void MakeFace(Face newFace, HalfEdge eOrig, Face fNext)
         {
             HalfEdge e;
             Face fPrev;
@@ -286,7 +287,8 @@ namespace Tesselate
         * the new vertex *before* vNext so that algorithms which walk the vertex
         * list will not see the newly created vertices.
         */
-        static void MakeVertex(ContourVertex newVertex, HalfEdge eOrig, ContourVertex vNext)
+
+        private static void MakeVertex(ContourVertex newVertex, HalfEdge eOrig, ContourVertex vNext)
         {
             HalfEdge e;
             ContourVertex vPrev;
@@ -313,7 +315,8 @@ namespace Tesselate
         /* KillVertex( vDel ) destroys a vertex and removes it from the global
         * vertex list.  It updates the vertex loop to point to a given new vertex.
         */
-        static void KillVertex(ContourVertex vDel, ContourVertex newOrg)
+
+        private static void KillVertex(ContourVertex vDel, ContourVertex newOrg)
         {
             HalfEdge e, eStart = vDel._edgeThisIsOriginOf;
             ContourVertex vPrev, vNext;
@@ -334,7 +337,8 @@ namespace Tesselate
         /* KillFace( fDel ) destroys a face and removes it from the global face
         * list.  It updates the face loop to point to a given new face.
         */
-        static void KillFace(Face fDel, Face newLface)
+
+        private static void KillFace(Face fDel, Face newLface)
         {
             HalfEdge e, eStart = fDel._halfEdgeThisIsLeftFaceOf;
             Face fPrev, fNext;
@@ -358,7 +362,8 @@ namespace Tesselate
         * depending on whether a and b belong to different face or vertex rings.
         * For more explanation see __gl_meshSplice() below.
         */
-        static void Splice(HalfEdge a, HalfEdge b)
+
+        private static void Splice(HalfEdge a, HalfEdge b)
         {
             HalfEdge aOnext = a._nextEdgeCCWAroundOrigin;
             HalfEdge bOnext = b._nextEdgeCCWAroundOrigin;
@@ -391,6 +396,7 @@ namespace Tesselate
         * If eDst == eOrg.Onext, the new vertex will have a single edge.
         * If eDst == eOrg.Oprev, the old vertex will have a single edge.
         */
+
         public static void meshSplice(HalfEdge eOrg, HalfEdge eDst)
         {
             bool joiningLoops = false;
@@ -434,7 +440,8 @@ namespace Tesselate
         /* KillEdge( eDel ) destroys an edge (the half-edges eDel and eDel.Sym),
         * and removes from the global edge list.
         */
-        static void KillEdge(HalfEdge eDel)
+
+        private static void KillEdge(HalfEdge eDel)
         {
             HalfEdge ePrev, eNext;
             /* Half-edges are allocated in pairs, see EdgePair above */
@@ -460,6 +467,7 @@ namespace Tesselate
         * plus a few calls to free, but this would allocate and delete
         * unnecessary vertices and faces.
         */
+
         public static void DeleteHalfEdge(HalfEdge edgeToDelete)
         {
             HalfEdge otherHalfOfEdgeToDelete = edgeToDelete._otherHalfOfThisEdge;
@@ -514,7 +522,8 @@ namespace Tesselate
         * eNew == eOrg.Lnext, and eNew.Dst is a newly created vertex.
         * eOrg and eNew will have the same left face.
         */
-        static HalfEdge meshAddEdgeVertex(HalfEdge eOrg)
+
+        private static HalfEdge meshAddEdgeVertex(HalfEdge eOrg)
         {
             HalfEdge eNewSym;
             HalfEdge eNew = MakeEdge(eOrg);
@@ -535,6 +544,7 @@ namespace Tesselate
         * such that eNew == eOrg.Lnext.  The new vertex is eOrg.Dst == eNew.Org.
         * eOrg and eNew will have the same left face.
         */
+
         public static HalfEdge meshSplitEdge(HalfEdge eOrg)
         {
             HalfEdge eNew;
@@ -555,13 +565,15 @@ namespace Tesselate
         /* Allocate and free half-edges in pairs for efficiency.
         * The *only* place that should use this fact is allocation/free.
         */
-        class EdgePair
+
+        private class EdgePair
         {
             public readonly HalfEdge e = new HalfEdge();
             public readonly HalfEdge eSym = new HalfEdge();
 #if DEBUG
-            static int debugIndex;
+            private static int debugIndex;
 #endif
+
             public EdgePair()
             {
 #if DEBUG
@@ -570,11 +582,13 @@ namespace Tesselate
 #endif
             }
         };
+
         /* MakeEdge creates a new pair of half-edges which form their own loop.
         * No vertex or face structures are allocated, but these must be assigned
         * before the current edge operation is completed.
         */
-        static HalfEdge MakeEdge(HalfEdge eNext)
+
+        private static HalfEdge MakeEdge(HalfEdge eNext)
         {
             HalfEdge ePrev;
             EdgePair pair = new EdgePair();
@@ -621,6 +635,7 @@ namespace Tesselate
         * If (eOrg.Lnext == eDst), the old face is reduced to a single edge.
         * If (eOrg.Lnext.Lnext == eDst), the old face is reduced to two edges.
         */
+
         public static HalfEdge meshConnect(HalfEdge eOrg, HalfEdge eDst)
         {
             HalfEdge eNewSym;
@@ -655,7 +670,8 @@ namespace Tesselate
         /* __gl_meshUnion( mesh1, mesh2 ) forms the union of all structures in
         * both meshes, and returns the new mesh (the old meshes are destroyed).
         */
-        Mesh meshUnion(Mesh mesh1, Mesh mesh2)
+
+        private Mesh meshUnion(Mesh mesh1, Mesh mesh2)
         {
             Face f1 = mesh1._faceHead;
             ContourVertex v1 = mesh1._vertexHead;
@@ -699,6 +715,7 @@ namespace Tesselate
         * An entire mesh can be deleted by zapping its faces, one at a time,
         * in any order.  Zapped faces cannot be used in further mesh operations!
         */
+
         public static void meshZapFace(Face fZap)
         {
             HalfEdge eStart = fZap._halfEdgeThisIsLeftFaceOf;
@@ -749,6 +766,7 @@ namespace Tesselate
 
         /* __gl_meshCheckMesh( mesh ) checks a mesh for self-consistency.
         */
+
         public void CheckMesh()
         {
             Face fHead = _faceHead;
@@ -883,6 +901,7 @@ namespace Tesselate
         * If keepOnlyBoundary is TRUE, it also deletes all edges which do not
         * separate an interior region from an exterior one.
         */
+
         public bool SetWindingNumber(int value, bool keepOnlyBoundary)
         {
             HalfEdge e, eNext;
@@ -916,6 +935,7 @@ namespace Tesselate
         * on NULL faces are not allowed, the main purpose is to clean up the
         * mesh so that exterior loops are not represented in the data structure.
         */
+
         public void DiscardExterior()
         {
             Face f, next;
@@ -934,6 +954,7 @@ namespace Tesselate
         * the mesh which is marked "inside" the polygon.  Each such region
         * must be monotone.
         */
+
         public bool TessellateInterior()
         {
             Face f, next;

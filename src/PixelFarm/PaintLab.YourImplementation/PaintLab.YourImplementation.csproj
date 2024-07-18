@@ -18,7 +18,6 @@
     <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj" />
     <ProjectReference Include="..\PaintLab.Svg\PaintLab.Svg.csproj" />
     <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj" />
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
     <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj" />
   </ItemGroup>
 </Project>

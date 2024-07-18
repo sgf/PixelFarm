@@ -3,8 +3,8 @@
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,7 +18,6 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //==========================================================trans_bilinear
@@ -31,16 +30,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
              rc30, rc31;
     }
 
-
-
     public sealed class Bilinear : ICoordTransformer
     {
-        struct Quad4
+        private struct Quad4
         {
             public readonly double m0, m1,
                           m2, m3,
                           m4, m5,
                           m6, m7;
+
             public Quad4(double m0, double m1,
                          double m2, double m3,
                          double m4, double m5,
@@ -55,6 +53,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 this.m6 = m6;
                 this.m7 = m7;
             }
+
             public void FillIntoArray(double[] outputArr)
             {
 #if DEBUG
@@ -68,29 +67,29 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        Quad4 _srcQuad; //backup of srcQuad
-        Quad4 _dstQuad; //backup of dstQuad
-
+        private Quad4 _srcQuad; //backup of srcQuad
+        private Quad4 _dstQuad; //backup of dstQuad
 
         //readonly double[,] m_mtx = new double[4, 2];//row x column
         //4 row, 2 columns
 
-        double rc00, rc01,
+        private double rc00, rc01,
                rc10, rc11,
                rc20, rc21,
                rc30, rc31;
-        //----------
 
+        //----------
 
         //----------
         //
-        bool _valid;
+        private bool _valid;
+
         private Bilinear()
         {
         }
+
         private Bilinear(double[,] result, Quad4 srcQuad, Quad4 dstQuad)
         {
-
             rc00 = result[0, 0];
             rc10 = result[1, 0];
             rc20 = result[2, 0];
@@ -103,7 +102,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             _srcQuad = srcQuad;
             _dstQuad = dstQuad;
-
         }
 
         public Bilinear(double rc00, double rc01,
@@ -115,10 +113,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             this.rc10 = rc10; this.rc11 = rc11;
             this.rc20 = rc20; this.rc21 = rc21;
             this.rc30 = rc30; this.rc31 = rc31;
-
         }
+
         //--------------------------------------------------------------------
-        // Set the transformations using two arbitrary quadrangles. 
+        // Set the transformations using two arbitrary quadrangles.
         public static Bilinear RectToQuad(
             double srcX1, double srcY1, double srcX2, double srcY2,
             double[] quad)
@@ -128,7 +126,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             src[0] = srcX1; src[1] = srcY1;//(x1,y1)
             src[2] = srcX2; src[3] = srcY1;//(x2,y1)
             src[4] = srcX2; src[5] = srcY2;//(x2,y2)
-            src[6] = srcX1; src[7] = srcY2;//(x2,y2) 
+            src[6] = srcX1; src[7] = srcY2;//(x2,y2)
             double[,] result = new double[4, 2];
             if (GenerateMatrixQuadToQuad(src, quad, result))
             {
@@ -159,7 +157,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         double destX2, double destY2)
         {
             //--------------------------------------------------------------------
-            // Set the reverse transformations, i.e., quadrangle -> rectangle 
+            // Set the reverse transformations, i.e., quadrangle -> rectangle
             double[] dst = new double[8];
             //cartesian coord
             dst[0] = destX1; dst[1] = destY1;//(x1,y1)
@@ -169,7 +167,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double[,] result = new double[4, 2];
             if (GenerateMatrixQuadToQuad(srcQuad, dst, result))
             {
-
                 return new Bilinear(result,
                     new Quad4(
                         srcQuad[0], srcQuad[1],
@@ -193,7 +190,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public static Bilinear QuadToQuad(double[] srcQuad, double[] dst)
         {
             //--------------------------------------------------------------------
-            // Set the reverse transformations, i.e., quadrangle -> rectangle  
+            // Set the reverse transformations, i.e., quadrangle -> rectangle
             double[,] result = new double[4, 2];
             if (GenerateMatrixQuadToQuad(srcQuad, dst, result))
             {
@@ -217,7 +214,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        static bool GenerateMatrixQuadToQuad(double[] src, double[] dst, double[,] result)
+        private static bool GenerateMatrixQuadToQuad(double[] src, double[] dst, double[,] result)
         {
             double[,] left = new double[4, 4];
             double[,] right = new double[4, 2];
@@ -233,7 +230,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 right[i, 0] = dst[ix];
                 right[i, 1] = dst[iy];
             }
-            //create result  
+            //create result
             return SimulEqGeneral.Solve(left, right, result);
         }
 
@@ -254,13 +251,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             x = rc00 + rc10 * xy + rc20 * tx + rc30 * ty;
             y = rc01 + rc11 * xy + rc21 * tx + rc31 * ty;
         }
+
         ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
         {
             return new CoordTransformationChain(this, another);
         }
+
         ICoordTransformer ICoordTransformer.CreateInvert()
         {
-
             double[] srcQuad = new double[8];
             double[] dstQuad = new double[8];
 
@@ -270,6 +268,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //invert dst=> src *** (invert)
             return QuadToQuad(dstQuad, srcQuad);
         }
+
         //-------------------------------------------------------------------------
 
         public BilinearMat GetInternalElements()

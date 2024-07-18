@@ -1,13 +1,13 @@
-﻿
-#define PIXEL_FARM
-
+﻿#define PIXEL_FARM
 
 #if SYSTEM_WINDOWS_VECTOR
 using VECTOR = System.Windows.Vector;
 using FLOAT = System.Double;
 #elif SYSTEM_NUMERICS_VECTOR
-using VECTOR = System.Numerics.Vector2;
+
 using FLOAT = System.Single;
+using VECTOR = System.Numerics.Vector2;
+
 #elif UNITY
 using VECTOR = UnityEngine.Vector2;
 using FLOAT = System.Single;
@@ -18,14 +18,12 @@ using FLOAT = System.Double;
 #error Unknown vector type -- must define one of SYSTEM_WINDOWS_VECTOR, SYSTEM_NUMERICS_VECTOR or UNITY
 #endif
 
-
 namespace burningmime.curves;
-
 
 /// <summary>
 /// Maps a set of 2D Bezier curves so that samples are equally spaced across the spline. Basically, it does a lot of preprocessing and
 /// such on a set of curves so that when you call sample(0.5) you get a point that's halfway along the spline. This means that if you
-/// "move" something along the spline, it will move at a constant velocity. This is also useful for rendering the spline since the points 
+/// "move" something along the spline, it will move at a constant velocity. This is also useful for rendering the spline since the points
 /// will be evenly spaced.
 /// </summary>
 public sealed class Spline
@@ -37,6 +35,7 @@ public sealed class Spline
     private readonly ReadOnlyCollection<CubicBezier> _curvesView;
     private readonly List<FLOAT> _arclen;
     private readonly int _samplesPerCurve;
+
     /// <summary>
     /// Creates an empty spline.
     /// </summary>
@@ -242,10 +241,12 @@ public sealed class Spline
         /// Index of sampled curve in the spline curves array.
         /// </summary>
         public readonly int Index;
+
         /// <summary>
         /// The "t" value from which to sample the curve.
         /// </summary>
         public readonly FLOAT Time;
+
         public SamplePos(int curveIndex, FLOAT t)
         {
             Index = curveIndex;

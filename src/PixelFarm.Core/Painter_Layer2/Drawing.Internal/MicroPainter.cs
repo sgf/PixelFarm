@@ -1,14 +1,16 @@
-﻿//MIT, 2018-present, WinterDev 
+﻿//MIT, 2018-present, WinterDev
 
 namespace PixelFarm.Drawing.Internal
 {
-    public ref struct MicroPainter
+    public struct MicroPainter
     {
         public readonly DrawBoard _drawBoard;
+
         public MicroPainter(DrawBoard drawBoard)
         {
             _drawBoard = drawBoard;
         }
+
         public float ViewportWidth => _drawBoard.Width;
         public float ViewportHeight => _drawBoard.Height;
 
@@ -16,9 +18,10 @@ namespace PixelFarm.Drawing.Internal
 
         public void AttachTo(DrawboardBuffer attachToBackbuffer)
         {
-            //save  
+            //save
             _drawBoard.EnterNewDrawboardBuffer(attachToBackbuffer);
         }
+
         public void SetViewportSize(float width, float height)
         {
             //_viewportWidth = width;
@@ -31,10 +34,12 @@ namespace PixelFarm.Drawing.Internal
         }
 
         internal Rectangle CurrentClipRect => _drawBoard.CurrentClipRect;
+
         public void DrawImage(Image img, float x, float y)
         {
             _drawBoard.DrawImage(img, (int)x, (int)y);
         }
+
         public void DrawImage(Image img, float x, float y, float w, float h)
         {
             _drawBoard.DrawImage(img, new RectangleF(x, y, w, h));

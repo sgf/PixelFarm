@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,8 +18,8 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-
 using PixelFarm.VectorMath;
+
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public struct VertexData
@@ -27,17 +27,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public PixelFarm.Drawing.VertexCmd command;
         public double x;
         public double y;
+
         public VertexData(PixelFarm.Drawing.VertexCmd command)
         {
             this.command = command;
             x = y = 0;
         }
+
         public VertexData(PixelFarm.Drawing.VertexCmd command, Vector2 position)
         {
             this.command = command;
             this.x = position.x;
             this.y = position.y;
         }
+
         public VertexData(PixelFarm.Drawing.VertexCmd command, double x, double y)
         {
             this.command = command;
@@ -51,12 +54,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             set { this.x = value.x; this.y = value.y; }
         }
 
-
 #if DEBUG
+
         public override string ToString()
         {
             return command + " " + this.x + "," + this.y;
         }
+
 #endif
     }
 }

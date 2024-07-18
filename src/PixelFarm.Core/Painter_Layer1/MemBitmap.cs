@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,14 +18,12 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Internal;
-using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.CpuBlit
 {
-     
-
     /// <summary>
     /// agg buffer's pixel format
     /// </summary>
@@ -36,19 +34,23 @@ namespace PixelFarm.CpuBlit
         GrayScale8,
     }
 
-
 #if DEBUG
 
-    static class dbugMemBitmapMonitor
+    internal static class dbugMemBitmapMonitor
     {
-        class TempMemBitmapMonitor
+        private class TempMemBitmapMonitor
         {
             //public WeakReference _memBmp;
             public MemBitmap _memBmp;
+
             public string _detail;
+
             public TempMemBitmapMonitor(string detail) => _detail = detail;
+
             public bool CanBeReleased() => InternalNativePtrIsReleased();
+
             public override string ToString() => (CanBeReleased() ? "!" : "") + _detail;
+
             public bool InternalNativePtrIsReleased()
             {
                 if (_memBmp != null)
@@ -62,12 +64,14 @@ namespace PixelFarm.CpuBlit
                 return true;
             }
         }
-        static System.Text.StringBuilder s_stbuilder = new System.Text.StringBuilder();
-        static object s_regLock = new object();
-        static System.Timers.Timer s_tim1;
-        static int s_count;
-        static System.Collections.Generic.List<TempMemBitmapMonitor> _registerMemBmpList = new System.Collections.Generic.List<TempMemBitmapMonitor>();
-        static System.Collections.Generic.List<int> _tempToBeRemovedList = new System.Collections.Generic.List<int>();
+
+        private static System.Text.StringBuilder s_stbuilder = new System.Text.StringBuilder();
+        private static object s_regLock = new object();
+        private static System.Timers.Timer s_tim1;
+        private static int s_count;
+        private static System.Collections.Generic.List<TempMemBitmapMonitor> _registerMemBmpList = new System.Collections.Generic.List<TempMemBitmapMonitor>();
+        private static System.Collections.Generic.List<int> _tempToBeRemovedList = new System.Collections.Generic.List<int>();
+
         public static int dbugRegisterMemBitmapCount()
         {
             lock (s_regLock)
@@ -144,39 +148,40 @@ namespace PixelFarm.CpuBlit
             }
         }
     }
+
 #endif
-   
-    
+
     /// <summary>
     /// 32 bpp native memory bitmap
     /// </summary>
     public sealed class MemBitmap : Image, IBitmapSrc
     {
+        private readonly int _width;
+        private readonly int _height;
 
-        readonly int _width;
-        readonly int _height;
+        private readonly int _strideBytes;
+        private readonly int _bitDepth;
+        private readonly PixelFormat _pixelFormat;
+        private readonly bool _pixelBufferFromExternalSrc;
 
-        readonly int _strideBytes;
-        readonly int _bitDepth;
-        readonly PixelFormat _pixelFormat;
-        readonly bool _pixelBufferFromExternalSrc;
-
-        IntPtr _pixelBuffer;
-        int _pixelBufferInBytes;
-        bool _isDisposed;
+        private IntPtr _pixelBuffer;
+        private int _pixelBufferInBytes;
+        private bool _isDisposed;
 
 #if DEBUG
         public string _dbugNote;
 #endif
+
         public MemBitmap(int width, int height)
             : this(width, height, System.Runtime.InteropServices.Marshal.AllocHGlobal(width * height * 4))
         {
             _pixelBufferFromExternalSrc = false;//** if we alloc then we are the owner of this MemBmp
-            MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes); //set 
+            MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes); //set
         }
+
         public MemBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
         {
-            //width and height must >0 
+            //width and height must >0
             _width = width;
             _height = height;
             _strideBytes = CalculateStride(width,
@@ -192,10 +197,13 @@ namespace PixelFarm.CpuBlit
             dbugMemBitmapMonitor.dbugRegisterMemBitmap(this, width + "x" + height + ": " + DateTime.Now.ToString("u"));
 #endif
         }
+
         public override IntPtr GetRawBufferHead() => _pixelBuffer;
+
         public override void ReleaseRawBufferHead(IntPtr ptr)
         {
         }
+
         public BitmapBufferFormat BufferPixelFormat
         {
             get
@@ -210,6 +218,7 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
+
         public override void Dispose()
         {
             if (_pixelBuffer != IntPtr.Zero && !_pixelBufferFromExternalSrc)
@@ -220,22 +229,31 @@ namespace PixelFarm.CpuBlit
                 _isDisposed = true;
             }
         }
+
         public bool IsDisposed() => _isDisposed;
+
         //
         public override int Width => _width;
+
         public override int Height => _height;
+
         //
         public override int ReferenceX => 0;
+
         public override int ReferenceY => 0;
         //
 
         public override bool IsReferenceImage => false;
         public CpuBlit.PixelFormat PixelFormat => _pixelFormat;
+
         //
         public int Stride => _strideBytes;
+
         public int BitDepth => _bitDepth;
+
         //
         public bool IsBigEndian { get; set; }
+
         public static TempMemPtr GetBufferPtr(MemBitmap bmp)
         {
             return new TempMemPtr(bmp._pixelBuffer, bmp._pixelBufferInBytes);
@@ -245,6 +263,7 @@ namespace PixelFarm.CpuBlit
         {
             System.Runtime.InteropServices.Marshal.Copy(pixelBuffer, 0, bmp._pixelBuffer, pixelBuffer.Length);
         }
+
         /// <summary>
         /// create mem bitmap by copy data from managed int32 array pixel data to unmanged side
         /// </summary>
@@ -255,14 +274,13 @@ namespace PixelFarm.CpuBlit
         /// <returns></returns>
         public static MemBitmap CreateFromCopy(int width, int height, int[] totalBuffer, bool doFlipY = false)
         {
-
             var bmp = new MemBitmap(width, height);
 #if DEBUG
             bmp._dbugNote = "MemBitmap.CreateFromCopy";
 #endif
             if (doFlipY)
             {
-                //flip vertical Y  
+                //flip vertical Y
                 int[] totalBufferFlipY = new int[totalBuffer.Length];
                 int srcRowIndex = height - 1;
                 int strideInBytes = width * 4;//32 bpp
@@ -280,9 +298,9 @@ namespace PixelFarm.CpuBlit
             }
             return bmp;
         }
+
         public static unsafe MemBitmap CreateFromCopy(int width, int height, IntPtr totalBuffer, int totalLen, bool doFlipY = false)
         {
-
             var bmp = new MemBitmap(width, height);
 #if DEBUG
             bmp._dbugNote = "MemBitmap.CreateFromCopy";
@@ -291,7 +309,7 @@ namespace PixelFarm.CpuBlit
             MemMx.memcpy((byte*)(bmp._pixelBuffer), (byte*)totalBuffer, totalLen);
             //if (doFlipY)
             //{
-            //    //flip vertical Y  
+            //    //flip vertical Y
             //    int[] totalBufferFlipY = new int[totalBuffer.Length];
             //    int srcRowIndex = height - 1;
             //    int strideInBytes = width * 4;//32 bpp
@@ -305,10 +323,10 @@ namespace PixelFarm.CpuBlit
             //}
             //unsafe
             //{
-
             //}
             return bmp;
         }
+
         public static MemBitmap CreateFromCopy(int width, int height, int len, IntPtr anotherNativePixelBuffer)
         {
             var memBmp = new MemBitmap(width, height);
@@ -324,7 +342,6 @@ namespace PixelFarm.CpuBlit
 
         public static MemBitmap CreateFromCopy(MemBitmap another)
         {
-
             var memBmp = new MemBitmap(another.Width, another.Height);
 #if DEBUG
             memBmp._dbugNote = "MemBitmap.CreateFromCopy";
@@ -336,12 +353,12 @@ namespace PixelFarm.CpuBlit
             return memBmp;
         }
 
-
         public static int CalculateStride(int width, CpuBlit.PixelFormat format)
         {
             int bitDepth, bytesPerPixel;
             return CalculateStride(width, format, out bitDepth, out bytesPerPixel);
         }
+
         public static int CalculateStride(int width, CpuBlit.PixelFormat format, out int bitDepth, out int bytesPerPixel)
         {
             //stride calcuation helper
@@ -370,13 +387,12 @@ namespace PixelFarm.CpuBlit
                     throw new NotSupportedException();
             }
         }
+
         public static int[] CopyImgBuffer(MemBitmap memBmp)
         {
-
             int[] buff2 = new int[memBmp.Width * memBmp.Height];
             unsafe
             {
-
                 using (TempMemPtr pixBuffer = MemBitmap.GetBufferPtr(memBmp))
                 {
                     //fixed (byte* header = &pixelBuffer[0])
@@ -389,20 +405,27 @@ namespace PixelFarm.CpuBlit
 
             return buff2;
         }
+
         //
         Q1Rect IBitmapSrc.GetBounds() => new Q1Rect(0, 0, _width, _height);
+
         int IBitmapSrc.Width => _width;
         int IBitmapSrc.Height => _height;
         int IBitmapSrc.Stride => _strideBytes;
+
         //
         int IBitmapSrc.BytesBetweenPixelsInclusive => 4;
+
         int IBitmapSrc.BitDepth => _bitDepth;
+
         //
         int IBitmapSrc.GetBufferOffsetXY32(int x, int y) => (y * _width) + x;
+
         TempMemPtr IBitmapSrc.GetBufferPtr()
         {
             return new TempMemPtr(_pixelBuffer, _pixelBufferInBytes);
         }
+
         //
         void IBitmapSrc.WriteBuffer(int[] newBuffer)
         {
@@ -425,9 +448,5 @@ namespace PixelFarm.CpuBlit
                   (byte)(pixelValue));
             }
         }
-        
     }
-
-     
-
 }

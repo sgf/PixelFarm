@@ -23,18 +23,16 @@
 //from https://github.com/rohaanhamid/simplify-csharp
 //--------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //for .net 2.0
     public delegate R Func<R>();
+
     public delegate R Func<T, R>(T t);
+
     public delegate R Func<T1, T2, R>(T1 t, T2 t2);
-    // 
+
+    //
 
     public class SimplificationHelpers
     {
@@ -68,9 +66,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public class Simplifier3D<T> : BaseSimplifier<T>
     {
-        readonly Func<T, double> _xExtractor;
-        readonly Func<T, double> _yExtractor;
-        readonly Func<T, double> _zExtractor;
+        private readonly Func<T, double> _xExtractor;
+        private readonly Func<T, double> _yExtractor;
+        private readonly Func<T, double> _zExtractor;
 
         public Simplifier3D(Func<T, T, Boolean> equalityChecker,
             Func<T, double> xExtractor, Func<T, double> yExtractor, Func<T, double> zExtractor) :
@@ -135,11 +133,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-
     public class Simplifier2D<T> : BaseSimplifier<T>
     {
-        readonly Func<T, double> _xExtractor;
-        readonly Func<T, double> _yExtractor;
+        private readonly Func<T, double> _xExtractor;
+        private readonly Func<T, double> _yExtractor;
 
         public Simplifier2D(Func<T, T, Boolean> equalityChecker,
             Func<T, double> xExtractor, Func<T, double> yExtractor) :
@@ -197,7 +194,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public abstract class BaseSimplifier<T>
     {
-        Func<T, T, Boolean> _equalityChecker;
+        private Func<T, T, Boolean> _equalityChecker;
 
         private class Range
         {
@@ -222,7 +219,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// <param name="points">Points to be simplified</param>
         /// <param name="tolerance">Amount of wiggle to be tolerated between coordinates.</param>
         /// <param name="highestQuality">
-        /// True for Douglas-Peucker. 
+        /// True for Douglas-Peucker.
         /// False for Radial-Distance before Douglas-Peucker (Runs Faster)
         /// </param>
         /// <returns>Simplified points</returns>
@@ -231,7 +228,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             bool highestQuality,
                             IList<T> output)
         {
-
             if (points == null || points.Count <= 2)
             {
                 //TODO: review here
@@ -254,7 +250,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             SimplifyDouglasPeucker(points, sqTolerance, output);
         }
 
-        void SimplifyRadialDistance(IList<T> points, double sqTolerance, IList<T> output)
+        private void SimplifyRadialDistance(IList<T> points, double sqTolerance, IList<T> output)
         {
             T point = default(T);
             T prevPoint = points[0];
@@ -276,9 +272,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        void SimplifyDouglasPeucker(IList<T> points, double sqTolerance, IList<T> output)
+        private void SimplifyDouglasPeucker(IList<T> points, double sqTolerance, IList<T> output)
         {
-
             BitArray bitArray = new BitArray(points.Count);
             bitArray.Set(0, true);
             bitArray.Set(points.Count - 1, true);
@@ -328,7 +323,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //return newPoints.ToArray();
         }
 
-        int CountNumberOfSetBits(BitArray bitArray)
+        private int CountNumberOfSetBits(BitArray bitArray)
         {
             int counter = 0;
             for (int i = 0; i < bitArray.Length; i++)
@@ -342,6 +337,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         protected abstract double GetSquareDistance(T p1, T p2);
+
         protected abstract double GetSquareSegmentDistance(T p0, T p1, T p2);
     }
 }

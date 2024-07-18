@@ -5,7 +5,7 @@
 //   Mike Kestner (mkestner@speakeasy.net)
 //
 // Copyright (C) 2001 Mike Kestner
-// Copyright (C) 2004 Novell, Inc.  http://www.novell.com 
+// Copyright (C) 2004 Novell, Inc.  http://www.novell.com
 //
 
 //
@@ -18,10 +18,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -31,12 +31,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
 namespace PixelFarm.Drawing
 {
     public struct Rectangle
     {
-        int _x, _y, _width, _height;
+        private int _x, _y, _width, _height;
         /// <summary>
         ///	Empty Shared Field
         /// </summary>
@@ -51,7 +50,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         ///
         /// <remarks>
-        ///	Produces a Rectangle structure from a RectangleF 
+        ///	Produces a Rectangle structure from a RectangleF
         ///	structure by taking the ceiling of the X, Y, Width,
         ///	and Height properties.
         /// </remarks>
@@ -91,7 +90,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         ///
         /// <remarks>
-        ///	Produces a new Rectangle by inflating an existing 
+        ///	Produces a new Rectangle by inflating an existing
         ///	Rectangle by the specified coordinate values.
         /// </remarks>
 
@@ -136,7 +135,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         ///
         /// <remarks>
-        ///	Produces a new Rectangle by intersecting 2 existing 
+        ///	Produces a new Rectangle by intersecting 2 existing
         ///	Rectangles. Returns null if there is no	intersection.
         /// </remarks>
 
@@ -220,7 +219,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         ///
         /// <remarks>
-        ///	Produces a new Rectangle from the union of 2 existing 
+        ///	Produces a new Rectangle from the union of 2 existing
         ///	Rectangles.
         /// </remarks>
 
@@ -238,7 +237,7 @@ namespace PixelFarm.Drawing
         ///
         /// <remarks>
         ///	Compares two Rectangle objects. The return value is
-        ///	based on the equivalence of the Location and Size 
+        ///	based on the equivalence of the Location and Size
         ///	properties of the two Rectangles.
         /// </remarks>
 
@@ -254,7 +253,7 @@ namespace PixelFarm.Drawing
         ///
         /// <remarks>
         ///	Compares two Rectangle objects. The return value is
-        ///	based on the equivalence of the Location and Size 
+        ///	based on the equivalence of the Location and Size
         ///	properties of the two Rectangles.
         /// </remarks>
 
@@ -263,7 +262,6 @@ namespace PixelFarm.Drawing
             return ((left.Location != right.Location) ||
                 (left.Size != right.Size));
         }
-
 
         // -----------------------
         // Public Constructors
@@ -301,6 +299,7 @@ namespace PixelFarm.Drawing
             _width = width;
             _height = height;
         }
+
         public Rectangle(int width, int height)
         {
             _x = 0;
@@ -308,7 +307,6 @@ namespace PixelFarm.Drawing
             _width = width;
             _height = height;
         }
-
 
         /// <summary>
         ///	Bottom Property
@@ -318,7 +316,6 @@ namespace PixelFarm.Drawing
         ///	The Y coordinate of the bottom edge of the Rectangle.
         ///	Read only.
         /// </remarks>
-
 
         public int Bottom => _y + _height;
 
@@ -334,7 +331,6 @@ namespace PixelFarm.Drawing
             get => _height;
 
             set => _height = value;
-
         }
 
         /// <summary>
@@ -343,7 +339,7 @@ namespace PixelFarm.Drawing
         ///
         /// <remarks>
         ///	Indicates if the width or height are zero. Read only.
-        /// </remarks>		
+        /// </remarks>
 
         public bool IsEmpty => ((_x == 0) && (_y == 0) && (_width == 0) && (_height == 0));
 
@@ -364,7 +360,7 @@ namespace PixelFarm.Drawing
         ///
         /// <remarks>
         ///	The Location of the top-left corner of the Rectangle.
-        /// </remarks> 
+        /// </remarks>
         public Point Location
         {
             get => new Point(_x, _y);
@@ -383,10 +379,8 @@ namespace PixelFarm.Drawing
         /// <remarks>
         ///	The X coordinate of the right edge of the Rectangle.
         ///	Read only.
-        /// </remarks> 
+        /// </remarks>
         public int Right => X + Width;
-
-
 
         /// <summary>
         ///	Size Property
@@ -394,7 +388,7 @@ namespace PixelFarm.Drawing
         ///
         /// <remarks>
         ///	The Size of the Rectangle.
-        /// </remarks> 
+        /// </remarks>
         public Size Size
         {
             get => new Size(Width, Height);
@@ -457,7 +451,6 @@ namespace PixelFarm.Drawing
             get => _y;
 
             set => _y = value;
-
         }
 
         /// <summary>
@@ -486,11 +479,10 @@ namespace PixelFarm.Drawing
 
         /// <summary>
         ///	Contains Method,
-        ///	Checks if a Rectangle lies entirely within this 
+        ///	Checks if a Rectangle lies entirely within this
         ///	Rectangle.
-        /// </summary>  
+        /// </summary>
         public bool Contains(in Rectangle rect) => (rect == Intersect(this, rect));
-
 
         /// <summary>
         ///	Equals Method
@@ -501,7 +493,6 @@ namespace PixelFarm.Drawing
         /// </remarks>
 
         public override bool Equals(object obj) => (obj is Rectangle rect) && (rect == this);
-
 
         /// <summary>
         ///	GetHashCode Method
@@ -529,6 +520,7 @@ namespace PixelFarm.Drawing
             return !((Left >= rect.Right) || (Right <= rect.Left) ||
                 (Top >= rect.Bottom) || (Bottom <= rect.Top));
         }
+
         public bool IntersectsWith(int left, int top, int right, int bottom)
         {
             if (((this.Left <= left) && (this.Right > left)) || ((this.Left >= left) && (this.Left < right)))
@@ -540,6 +532,7 @@ namespace PixelFarm.Drawing
             }
             return false;
         }
+
         private bool IntersectsWithInclusive(in Rectangle r)
         {
             return !((Left > r.Right) || (Right < r.Left) ||
@@ -573,10 +566,12 @@ namespace PixelFarm.Drawing
             _x += pos.X;
             _y += pos.Y;
         }
+
         public void OffsetX(int dx)
         {
             _x += dx;
         }
+
         public void OffsetY(int dy)
         {
             _y += dy;
@@ -595,7 +590,6 @@ namespace PixelFarm.Drawing
             return String.Format("{{X={0},Y={1},Width={2},Height={3}}}",
                          _x, _y, _width, _height);
         }
-
 
         public RectangleF CreateNormalizedRect(float totalW, float totalH) => new RectangleF(_x / totalW, _y / totalH, _width / totalW, _height / totalH);
     }

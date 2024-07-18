@@ -1,30 +1,30 @@
 ﻿//BSD, 2014-present, WinterDev
 
-using System;
-using System.Collections.Generic;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-
     public struct VxsContext1 : IDisposable
     {
         internal readonly VertexStore _vxs;
+
         internal VxsContext1(out VertexStore outputVxs)
         {
             VxsTemp.GetFreeVxs(out outputVxs);
             _vxs = outputVxs;
-
         }
+
         public void Dispose()
         {
             VxsTemp.ReleaseVxs(_vxs);
         }
     }
+
     public struct VxsContext2 : IDisposable
     {
         internal readonly VertexStore _vxs1;
         internal readonly VertexStore _vxs2;
+
         internal VxsContext2(out VertexStore outputVxs1, out VertexStore outputVxs2)
         {
             VxsTemp.GetFreeVxs(out _vxs1);
@@ -32,6 +32,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             outputVxs1 = _vxs1;
             outputVxs2 = _vxs2;
         }
+
         public void Dispose()
         {
             //release
@@ -39,11 +40,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             VxsTemp.ReleaseVxs(_vxs2);
         }
     }
+
     public struct VxsContext3 : IDisposable
     {
         internal readonly VertexStore _vxs1;
         internal readonly VertexStore _vxs2;
         internal readonly VertexStore _vxs3;
+
         internal VxsContext3(out VertexStore outputVxs1, out VertexStore outputVxs2, out VertexStore outputVxs3)
         {
             VxsTemp.GetFreeVxs(out _vxs1);
@@ -52,8 +55,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             outputVxs1 = _vxs1;
             outputVxs2 = _vxs2;
             outputVxs3 = _vxs3;
-
         }
+
         public void Dispose()
         {
             //release
@@ -63,10 +66,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-    public
-    static class VxsTemp
+    public static class VxsTemp
     {
-
         public static VxsContext1 Borrow(out VertexStore vxs) => new VxsContext1(out vxs);
 
         public static VxsContext2 Borrow(out VertexStore vxs1, out VertexStore vxs2) => new VxsContext2(out vxs1, out vxs2);
@@ -77,18 +78,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         ////TODO: https://stackoverflow.com/questions/18333885/threadstatic-v-s-threadlocalt-is-generic-better-than-attribute
 
         [System.ThreadStatic]
-        static Stack<VertexStore> s_vxsPool = new Stack<VertexStore>();
+        private static Stack<VertexStore> s_vxsPool = new Stack<VertexStore>();
 
         internal static void GetFreeVxs(out VertexStore vxs1)
         {
             vxs1 = GetFreeVxs();
         }
+
         internal static void ReleaseVxs(VertexStore vxs1)
         {
             vxs1.Clear();
             s_vxsPool.Push(vxs1);
         }
-        static VertexStore GetFreeVxs()
+
+        private static VertexStore GetFreeVxs()
         {
             if (s_vxsPool == null)
             {
@@ -107,11 +110,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-
-
-    static class VectorToolBox
+    internal static class VectorToolBox
     {
-
         public static TempContext<Stroke> Borrow(out Stroke stroke)
         {
             if (!Temp<Stroke>.IsInit())
@@ -128,7 +128,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return Temp<Stroke>.Borrow(out stroke);
         }
-        static TempContext<PixelFarm.CpuBlit.PathWriter> Borrow(out PixelFarm.CpuBlit.PathWriter pathWriter)
+
+        private static TempContext<PixelFarm.CpuBlit.PathWriter> Borrow(out PixelFarm.CpuBlit.PathWriter pathWriter)
         {
             if (!Temp<PixelFarm.CpuBlit.PathWriter>.IsInit())
             {
@@ -138,12 +139,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return Temp<PixelFarm.CpuBlit.PathWriter>.Borrow(out pathWriter);
         }
+
         public static TempContext<PixelFarm.CpuBlit.PathWriter> Borrow(VertexStore vxs, out PixelFarm.CpuBlit.PathWriter pathWriter)
         {
             var tmpPw = Borrow(out pathWriter);
             tmpPw._tool.BindVxs(vxs);
             return tmpPw;
         }
+
         public static TempContext<Arc> Borrow(out Arc arc)
         {
             if (!Temp<Arc>.IsInit())
@@ -162,9 +165,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return Temp<SvgArcSegment>.Borrow(out arc);
         }
 
-
-
-
         public static TempContext<VxsClipper> Borrow(out VxsClipper clipper)
         {
             if (!Temp<VxsClipper>.IsInit())
@@ -175,28 +175,25 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return Temp<VxsClipper>.Borrow(out clipper);
         }
-
-
     }
-
-
 
     public class PolygonSimplifier
     {
         public PolygonSimplifier()
         {
-
         }
+
         public void Reset()
         {
             EnableHighQuality = false;
             Tolerance = 0.5f;//default
         }
+
         public bool EnableHighQuality { get; set; }
         public float Tolerance { get; set; }
+
         public void Simplify(List<VectorMath.Vector2> inputPoints, List<VectorMath.Vector2> simplifiedOutput)
         {
-
             PixelFarm.CpuBlit.VertexProcessing.SimplificationHelpers.Simplify(
                  inputPoints,
                  (p1, p2) => p1 == p2,
@@ -211,27 +208,34 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public interface IVector2dProvider
     {
         int CoordCount { get; }
+
         void GetCoord(int index, out double x, out double y);
+
         void GetCoord(int index, out float x, out float y);
     }
 
     public class Vec2dSource : IVector2dProvider
     {
-        List<PixelFarm.VectorMath.Vector2> _vecSource;
+        private List<PixelFarm.VectorMath.Vector2> _vecSource;
+
         public Vec2dSource()
         {
         }
+
         public void SetVectorSource(List<PixelFarm.VectorMath.Vector2> source)
         {
             _vecSource = source;
         }
+
         int IVector2dProvider.CoordCount => _vecSource.Count;
+
         void IVector2dProvider.GetCoord(int index, out double x, out double y)
         {
             PixelFarm.VectorMath.Vector2 vec = _vecSource[index];
             x = vec.x;
             y = vec.y;
         }
+
         void IVector2dProvider.GetCoord(int index, out float x, out float y)
         {
             PixelFarm.VectorMath.Vector2 vec = _vecSource[index];
@@ -239,7 +243,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             y = (float)vec.y;
         }
     }
-
 
     public static class PathWriterExtensions
     {
@@ -257,6 +260,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
+
         public static void WritePolylines(this PathWriter pw, float[] points)
         {
             int j = points.Length;
@@ -270,6 +274,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
+
         public static void WritePolylines(this PathWriter pw, double[] points)
         {
             int j = points.Length;
@@ -298,8 +303,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 pw.CloseFigure();
             }
-
         }
+
         public static void WritePolygon(this PathWriter pw, float[] points)
         {
             int j = points.Length;
@@ -314,6 +319,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 pw.CloseFigure();
             }
         }
+
         public static void WritePolygon(this PathWriter pw, double[] points)
         {
             int j = points.Length;
@@ -328,6 +334,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 pw.CloseFigure();
             }
         }
+
         //-----------------------------------------------------------------------------------------
 
         public static void WriteSmoothCurve3(this PathWriter pw, IVector2dProvider points, bool closedShape)
@@ -345,6 +352,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         pw.LineTo(x, y);
                     }
                     break;
+
                 case 3:
                     {
                         points.GetCoord(0, out double x0, out double y0);
@@ -358,6 +366,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         }
                     }
                     break;
+
                 default:
                     {
                         points.GetCoord(0, out double x0, out double y0);
@@ -378,6 +387,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     break;
             }
         }
+
         public static void WriteSmoothCurve4(this PathWriter pw, IVector2dProvider points, bool closedShape)
         {
             int coordCount = points.CoordCount;
@@ -393,6 +403,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         pw.LineTo(x, y);
                     }
                     break;
+
                 case 3:
                     {
                         points.GetCoord(0, out double x0, out double y0);
@@ -406,6 +417,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         }
                     }
                     break;
+
                 default:
                     {
                         points.GetCoord(0, out double x0, out double y0);
@@ -432,26 +444,24 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-
-
-
     public class Spiral
     {
-        double _x;
-        double _y;
-        double _r1;
-        double _r2;
-        double _step;
-        double _start_angle;
-        double _angle;
-        double _curr_r;
-        double _da;
-        double _dr;
-        bool _start;
+        private double _x;
+        private double _y;
+        private double _r1;
+        private double _r2;
+        private double _step;
+        private double _start_angle;
+        private double _angle;
+        private double _curr_r;
+        private double _da;
+        private double _dr;
+        private bool _start;
+
         public Spiral()
         {
-
         }
+
         public void SetParameters(double x, double y, double r1, double r2, double step, double start_angle = 0)
         {
             _x = x;
@@ -464,7 +474,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _da = AggMath.deg2rad(4.0);
             _dr = _step / 90.0;
         }
-        IEnumerable<VertexData> GetVertexIter()
+
+        private IEnumerable<VertexData> GetVertexIter()
         {
             //--------------
             //rewind
@@ -493,9 +504,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
+
         public VertexStore MakeVxs(VertexStore vxs)
         {
-
             foreach (VertexData v in this.GetVertexIter())
             {
                 vxs.AddVertex(v.x, v.y, v.command);

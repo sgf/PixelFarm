@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -16,8 +16,7 @@
 // Contact: mcseem@antigrain.com
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
-//---------------------------------------------------------------------------- 
-
+//----------------------------------------------------------------------------
 
 namespace PixelFarm.CpuBlit
 {
@@ -26,6 +25,7 @@ namespace PixelFarm.CpuBlit
         internal readonly ArrayList<T> _arrList;
         public readonly int beginAt;
         public readonly int len;
+
         public ArrayListSegment(ArrayList<T> arrList, int beginAt, int len)
         {
             this._arrList = arrList;
@@ -42,27 +42,31 @@ namespace PixelFarm.CpuBlit
 
         public static readonly ArrayListSegment<T> Empty = new ArrayListSegment<T>();
 #if DEBUG
+
         public override string ToString()
         {
             return beginAt + "," + len;
         }
+
 #endif
     }
 
     public sealed class ArrayList<T>
     {
-        static readonly T[] s_empty = new T[0];
-        
-        int _currentSize;
-        T[] _internalArray = s_empty;
+        private static readonly T[] s_empty = new T[0];
+
+        private int _currentSize;
+        private T[] _internalArray = s_empty;
 
         public ArrayList()
         {
         }
+
         public ArrayList(int cap)
         {
             Allocate(cap, 0);
         }
+
         public ArrayList(ArrayList<T> srcCopy, int plusSize)
         {
             Allocate(srcCopy.AllocatedSize, srcCopy.AllocatedSize + plusSize);
@@ -71,6 +75,7 @@ namespace PixelFarm.CpuBlit
                 srcCopy._internalArray.CopyTo(_internalArray, 0);
             }
         }
+
         public void RemoveLast()
         {
             if (_currentSize != 0)
@@ -78,22 +83,25 @@ namespace PixelFarm.CpuBlit
                 _currentSize--;
             }
         }
+
         //
         public int Count => _currentSize;
+
         //
         public int AllocatedSize => _internalArray.Length;
+
         //
         public void Clear()
         {
             _currentSize = 0;
         }
 
-
         // Set new capacity. All data is lost, size is set to zero.
         public void Clear(int newCapacity)
         {
             Clear(newCapacity, 0);
         }
+
         public void Clear(int newCapacity, int extraTail)
         {
             _currentSize = 0;
@@ -107,14 +115,15 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
-        // Allocate n elements. All data is lost, 
-        // but elements can be accessed in range 0...size-1. 
+
+        // Allocate n elements. All data is lost,
+        // but elements can be accessed in range 0...size-1.
         public void Allocate(int size)
         {
             Allocate(size, 0);
         }
 
-        void Allocate(int size, int extraTail)
+        private void Allocate(int size, int extraTail)
         {
             Clear(size, extraTail);
             _currentSize = size;
@@ -128,7 +137,7 @@ namespace PixelFarm.CpuBlit
         {
             if (newSize > _currentSize && newSize > AllocatedSize)
             {
-                //create new array and copy data to that 
+                //create new array and copy data to that
                 var newArray = new T[newSize];
                 if (_internalArray != null)
                 {
@@ -142,11 +151,11 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-
         public void Zero()
         {
             System.Array.Clear(_internalArray, 0, _internalArray.Length);
         }
+
         public T[] ToArray()
         {
             T[] output = new T[_currentSize];
@@ -154,7 +163,7 @@ namespace PixelFarm.CpuBlit
             return output;
         }
 
-        void EnsureSpaceForAppend(int newAppendLen)
+        private void EnsureSpaceForAppend(int newAppendLen)
         {
             int newSize = _currentSize + newAppendLen;
             if (_internalArray.Length < newSize)
@@ -170,6 +179,7 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
+
         /// <summary>
         /// append element to latest index
         /// </summary>
@@ -192,15 +202,17 @@ namespace PixelFarm.CpuBlit
 
         public void Append(T[] arr)
         {
-            //append arr             
+            //append arr
             Append(arr, 0, arr.Length);
         }
+
         public void Append(T[] arr, int start, int len)
         {
             EnsureSpaceForAppend(len);
             System.Array.Copy(arr, start, _internalArray, _currentSize, len);
             _currentSize = _currentSize + len;
         }
+
         public void CopyAndAppend(int srcIndex, int len)
         {
             EnsureSpaceForAppend(len);
@@ -208,20 +220,22 @@ namespace PixelFarm.CpuBlit
             _currentSize = _currentSize + len;
         }
 
-
         public T this[int i]
         {
             get => _internalArray[i];
             set => _internalArray[i] = value;
         }
+
         /// <summary>
         /// access to internal array,
         /// </summary>
         public T[] UnsafeInternalArray => _internalArray;
+
         public void SetData(int index, T data)
         {
             _internalArray[index] = data;
         }
+
         //
         public int Length => _currentSize;
 

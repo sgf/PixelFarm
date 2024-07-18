@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,6 +22,7 @@
 //
 //----------------------------------------------------------------------------
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     /// <summary>
@@ -29,10 +30,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     /// </summary>
     public class SimpleRect
     {
-        Q1RectD _bounds;
+        private Q1RectD _bounds;
+
         public SimpleRect()
         {
         }
+
         public SimpleRect(double left, double bottom, double right, double top)
         {
             _bounds = new Q1RectD(left, bottom, right, top);
@@ -48,22 +51,27 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 _bounds.Top = bottom;
             }
         }
+
         public void SetRect(double left, double bottom, double right, double top)
         {
             _bounds = new Q1RectD(left, bottom, right, top);
             if (left > right) { _bounds.Left = right; _bounds.Right = left; }
             if (bottom > top) { _bounds.Bottom = top; _bounds.Top = bottom; }
         }
+
         public void SetRectFromLTWH(double left, double top, double width, double height)
         {
             SetRect(left, top + height, left + width, top);
         }
+
         public void Offset(double dx, double dy)
         {
             _bounds.Offset(dx, dy);
         }
+
         //
         public double Height => _bounds.Height;
+
         public double Width => _bounds.Width;
 
         public VertexStore MakeVxs(VertexStore output)
@@ -74,6 +82,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return output;
         }
+
         public void MakeVxs(PathWriter pathWriter)
         {
             pathWriter.MoveTo(_bounds.Left, _bounds.Bottom);
@@ -84,4 +93,3 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 }
-

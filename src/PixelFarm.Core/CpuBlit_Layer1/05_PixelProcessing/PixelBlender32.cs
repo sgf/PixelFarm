@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,22 +18,22 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by 
+// Adaptation for high precision colors has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//
 //----------------------------------------------------------------------------
 #define USE_BLENDER
 
 using PixelFarm.Drawing;
 using CO = PixelFarm.Drawing.Internal.CO;
+
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
     public abstract class PixelBlender32
     {
-
         public const int NUM_PIXEL_BITS = 32;
         internal const byte BASE_MASK = 255;
 
@@ -44,6 +44,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <param name="arrayOffset"></param>
         /// <param name="srcColor"></param>
         internal abstract void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
+
         //
         /// <summary>
         /// blend multiple pixels
@@ -57,6 +58,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             int[] dstBuffer, int arrayElemOffset,
             Color[] sourceColors, int sourceColorsOffset,
             byte[] covers, int coversIndex, bool firstCoverForAll, int count);
+
         /// <summary>
         /// blend multiple pixels
         /// </summary>
@@ -81,6 +83,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <param name="srcColor"></param>
         /// <param name="count"></param>
         internal abstract void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count);
+
         /// <summary>
         /// copy single pixel
         /// </summary>
@@ -97,6 +100,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <param name="srcColor"></param>
         /// <param name="count"></param>
         internal abstract void CopyPixels(TempMemPtr dstBuffer, int arrayOffset, Color srcColor, int count);
+
         /// <summary>
         /// copy single pixel
         /// </summary>
@@ -105,8 +109,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <param name="srcColor"></param>
         internal abstract void CopyPixel(TempMemPtr dstBuffer, int arrayOffset, Color srcColor);
 
-
         internal abstract unsafe void BlendPixel32(int* ptr, Color sc);
+
         //----------------
         internal unsafe Color PixelToColorRGBA(int* buffer, int bufferOffset32)
         {
@@ -116,14 +120,14 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                (byte)((value >> (CO.R_SHIFT)) & 0xff),
                (byte)((value >> (CO.G_SHIFT)) & 0xff),
                (byte)((value >> (CO.B_SHIFT)) & 0xff));
-
         }
+
         //internal Color PixelToColorRGBA(int[] buffer, int bufferOffset32)
         //{
-        //    //TODO: review here ...             
+        //    //TODO: review here ...
         //    //check if the buffer is pre-multiplied color?
-        //    //if yes=> this is not correct, 
-        //    //we must convert the pixel from pre-multiplied color 
+        //    //if yes=> this is not correct,
+        //    //we must convert the pixel from pre-multiplied color
         //    //to the 'straight alpha color'
 
         //    int value = buffer[bufferOffset32];
@@ -142,6 +146,4 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
         //}
     }
-
 }
-

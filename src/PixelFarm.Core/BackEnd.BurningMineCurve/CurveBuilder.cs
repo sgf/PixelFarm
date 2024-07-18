@@ -1,14 +1,14 @@
 ﻿//ZLIB, 2015,burningmime
 // Copyright (c) 2015 burningmime
-// 
+//
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
 // arising from the use of this software.
-// 
+//
 // Permission is granted to anyone to use this software for any purpose,
 // including commercial applications, and to alter it and redistribute it
 // freely, subject to the following restrictions:
-// 
+//
 // 1. The origin of this software must not be misrepresented; you must not
 //    claim that you wrote the original software. If you use this software
 //    in a product, an acknowledgement in the product documentation would be
@@ -17,17 +17,16 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-
-
 #define PIXEL_FARM
-
 
 #if SYSTEM_WINDOWS_VECTOR
 using VECTOR = System.Windows.Vector;
 using FLOAT = System.Double;
 #elif SYSTEM_NUMERICS_VECTOR
-using VECTOR = System.Numerics.Vector2;
+
 using FLOAT = System.Single;
+using VECTOR = System.Numerics.Vector2;
+
 #elif UNITY
 using VECTOR = UnityEngine.Vector2;
 using FLOAT = System.Single;
@@ -46,7 +45,7 @@ namespace burningmime.curves;
 /// than is necessary. Only the most recent two curves will be modified, once another curve is being built on top of it, curves
 /// lower in the "stack" are permanent. This reduces visual jumpiness as the user draws since the entire spline doesn't move
 /// around as points are added. It only uses linearization-based preprocessing; it doesn't support the RDP method.
-/// 
+///
 /// Add points using the <see cref="AddPoint"/> method.To get the results, either enumerate (foreach) the CurveBuilder itself
 /// or use the <see cref="Curves"/> property. The results might be updated every time a point is added.
 /// </summary>
@@ -59,6 +58,7 @@ public sealed class CurveBuilder : CurveFitBase, IEnumerable<CubicBezier>
     private VECTOR _tanL;                                            // left tangent of current curve (can't change this except on first curve or we'll lose C1 continuity)
     private FLOAT _totalLength;                                      // Total length of the curve so far (for updating arclen)
     private int _first;                                              // Index of first point in current curve
+
     public CurveBuilder(FLOAT linDist, FLOAT error)
     {
         _squaredError = error * error;
@@ -192,7 +192,9 @@ public sealed class CurveBuilder : CurveFitBase, IEnumerable<CubicBezier>
     // We provide these for both convience and performance, since a call to List<T>.GetEnumerator() doesn't actually allocate if
     // the type is never boxed
     public List<CubicBezier>.Enumerator GetEnumerator() => _result.GetEnumerator();
+
     IEnumerator<CubicBezier> IEnumerable<CubicBezier>.GetEnumerator() => GetEnumerator();
+
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// <summary>
@@ -206,11 +208,13 @@ public sealed class CurveBuilder : CurveFitBase, IEnumerable<CubicBezier>
     /// </summary>
     public readonly struct AddPointResult
     {
-        readonly int _data; // packed value... need this so that default(AddPointResult) which is always 0 to represent no change
+        private readonly int _data; // packed value... need this so that default(AddPointResult) which is always 0 to represent no change
+
         /// <summary>
         /// No changes were made.
         /// </summary>
         public static readonly AddPointResult NO_CHANGE = default(AddPointResult);
+
         /// <summary>
         /// Were any curves changed or added?
         /// </summary>

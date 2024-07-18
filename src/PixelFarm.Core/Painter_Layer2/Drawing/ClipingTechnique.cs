@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,10 +18,8 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-
 namespace PixelFarm.Drawing
 {
-
     public enum ClipingTechnique
     {
         None,
@@ -31,14 +29,14 @@ namespace PixelFarm.Drawing
 
     public static class SimpleRectClipEvaluator
     {
-        enum RectSide
+        private enum RectSide
         {
             None,
             Vertical,
             Horizontal
         }
 
-        static RectSide FindRectSide(float x0, float y0, float x1, float y1)
+        private static RectSide FindRectSide(float x0, float y0, float x1, float y1)
         {
             if (x0 == x1 && y0 != y1)
             {
@@ -77,12 +75,14 @@ namespace PixelFarm.Drawing
                     case VertexCmd.NoMore:
                         if (i > 6) return false;
                         break;
+
                     case VertexCmd.Close:
                         if (i > 5)
                         {
                             return false;
                         }
                         break;
+
                     case VertexCmd.LineTo:
                         {
                             switch (i)
@@ -92,16 +92,19 @@ namespace PixelFarm.Drawing
                                     y1 = (float)y;
                                     sideCount++;
                                     break;
+
                                 case 2:
                                     x2 = (float)x;
                                     y2 = (float)y;
                                     sideCount++;
                                     break;
+
                                 case 3:
                                     x3 = (float)x;
                                     y3 = (float)y;
                                     sideCount++;
                                     break;
+
                                 case 4:
                                     x4 = (float)x;
                                     y4 = (float)y;
@@ -110,6 +113,7 @@ namespace PixelFarm.Drawing
                             }
                         }
                         break;
+
                     case VertexCmd.MoveTo:
                         {
                             if (i == 0)
@@ -142,7 +146,6 @@ namespace PixelFarm.Drawing
                 //
                 if (x4 == x0 && y4 == y0)
                 {
-
                     if (s0 == RectSide.Horizontal)
                     {
                         clipRect = new RectangleF(x0, y0, x1 - x0, y3 - y0);
@@ -153,12 +156,9 @@ namespace PixelFarm.Drawing
                     }
 
                     return true;
-
                 }
             }
             return false;
-
         }
     }
-
 }

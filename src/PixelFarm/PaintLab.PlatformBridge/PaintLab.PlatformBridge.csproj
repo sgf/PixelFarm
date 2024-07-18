@@ -7,6 +7,5 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm.Core\PixelFarm.Core.csproj" />
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
   </ItemGroup>
 </Project>

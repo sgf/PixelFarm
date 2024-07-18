@@ -1,14 +1,14 @@
 ﻿//ZLIB, 2015,burningmime
 // Copyright (c) 2015 burningmime
-// 
+//
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
 // arising from the use of this software.
-// 
+//
 // Permission is granted to anyone to use this software for any purpose,
 // including commercial applications, and to alter it and redistribute it
 // freely, subject to the following restrictions:
-// 
+//
 // 1. The origin of this software must not be misrepresented; you must not
 //    claim that you wrote the original software. If you use this software
 //    in a product, an acknowledgement in the product documentation would be
@@ -17,18 +17,16 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-
 #define PIXEL_FARM
 
-
-
-using System.Diagnostics;
 #if SYSTEM_WINDOWS_VECTOR
 using VECTOR = System.Windows.Vector;
 using FLOAT = System.Double;
 #elif SYSTEM_NUMERICS_VECTOR
-using VECTOR = System.Numerics.Vector2;
+
 using FLOAT = System.Single;
+using VECTOR = System.Numerics.Vector2;
+
 #elif UNITY
 using VECTOR = UnityEngine.Vector2;
 using FLOAT = System.Single;
@@ -49,6 +47,7 @@ namespace burningmime.curves
     {
         private readonly CurveBuilder _builder;      // Underlying curve fitter
         private readonly Spline _spline;             // Underlying spline
+
         public SplineBuilder(FLOAT pointDistance, FLOAT error, int samplesPerCurve)
         {
             _builder = new CurveBuilder(pointDistance, error);

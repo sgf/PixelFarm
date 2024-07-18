@@ -8,8 +8,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,11 +18,10 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-// Bessel function (besj) was adapted for use in AGG library by Andy Wilk 
+// Bessel function (besj) was adapted for use in AGG library by Andy Wilk
 // Contact: castor.vulgaris@gmail.com
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit
 {
     public static partial class AggMath
@@ -31,15 +30,17 @@ namespace PixelFarm.CpuBlit
         {
             return Math.Abs(v1 - v2) <= (epsilon);
         }
-       
+
         public static double deg2rad(double degree)
         {
             return degree * (Math.PI / 180d);
         }
+
         public static double rad2deg(double degree)
         {
             return degree * (180d / Math.PI);
         }
+
         public static int iround(double v)
         {
             unchecked
@@ -47,6 +48,7 @@ namespace PixelFarm.CpuBlit
                 return (int)((v < 0.0) ? v - 0.5 : v + 0.5);
             }
         }
+
         public static int iround_f(float v)
         {
             unchecked
@@ -54,6 +56,7 @@ namespace PixelFarm.CpuBlit
                 return (int)((v < 0.0) ? v - 0.5 : v + 0.5);
             }
         }
+
         public static int iround(double v, int saturationLimit)
         {
             if (v < (double)(-saturationLimit)) return -saturationLimit;
@@ -65,10 +68,12 @@ namespace PixelFarm.CpuBlit
         {
             return (int)(uint)(v + 0.5);
         }
+
         public static int uround_f(float v)
         {
             return (int)(uint)(v + 0.5);
         }
+
         public static int ufloor(double v)
         {
             return (int)(uint)(v);
@@ -78,13 +83,15 @@ namespace PixelFarm.CpuBlit
         {
             return (int)(uint)(Math.Ceiling(v));
         }
-        
+
         //------------------------------------------------------vertex_dist_epsilon
         // Coinciding points maximal distance (Epsilon)
         public const double VERTEX_DISTANCE_EPSILON = 1e-14;
+
         //-----------------------------------------------------intersection_epsilon
         // See calc_intersection
         public const double INTERSECTION_EPSILON = 1.0e-30;
+
         //------------------------------------------------------------cross_product
         public static double Cross(double x1, double y1,
                                         double x2, double y2,
@@ -224,7 +231,7 @@ namespace PixelFarm.CpuBlit
         public static bool intersection_exists(double x1, double y1, double x2, double y2,
                                             double x3, double y3, double x4, double y4)
         {
-            // It's less expensive but you can't control the 
+            // It's less expensive but you can't control the
             // boundary conditions: Less or LessEqual
             double dx1 = x2 - x1;
             double dy1 = y2 - y1;
@@ -234,7 +241,7 @@ namespace PixelFarm.CpuBlit
                    ((x4 - x2) * dy1 - (y4 - y2) * dx1 < 0.0) &&
                    ((x1 - x4) * dy2 - (y1 - y4) * dx2 < 0.0) !=
                    ((x2 - x4) * dy2 - (y2 - y4) * dx2 < 0.0);
-            // It's is more expensive but more flexible 
+            // It's is more expensive but more flexible
             // in terms of boundary conditions.
             //--------------------
             //double den  = (x2-x1) * (y4-y3) - (y2-y1) * (x4-x3);
@@ -398,6 +405,7 @@ namespace PixelFarm.CpuBlit
             64731,64763,64796,64828,64861,64893,64925,64957,64990,65022,65054,65086,65119,65151,
             65183,65215,65247,65279,65312,65344,65376,65408,65440,65472,65504
         };
+
         public static byte[] g_elder_bit_table = //---------g_elder_bit_table
         {
             0,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
@@ -409,18 +417,19 @@ namespace PixelFarm.CpuBlit
             7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
             7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
         };
+
         //---------------------------------------------------------------fast_sqrt
         //Fast integer Sqrt - really fast: no cycles, divisions or multiplications
         public static int fast_sqrt(int val)
         {
-            //This code is actually pure C and portable to most 
-            //architectures including 64bit ones. 
+            //This code is actually pure C and portable to most
+            //architectures including 64bit ones.
             int t = val;
             int bit = 0;
             int shift = 11;
             //The following piece of code is just an emulation of the
             //Ix86 assembler command "bsr" (see above). However on old
-            //Intels (like Intel MMX 233MHz) this code is about twice 
+            //Intels (like Intel MMX 233MHz) this code is about twice
             //as fast as just one "bsr". On PIII and PIV the
             //bsr is optimized quite well.
             bit = (int)t >> 24;
@@ -550,7 +559,5 @@ namespace PixelFarm.CpuBlit
                 m2 += 3;
             }
         }
-
-       
     }
 }

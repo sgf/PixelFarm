@@ -12,6 +12,10 @@
 		<DefineConstants>$(DefineConstants);SYSTEM_NUMERICS_VECTOR</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DefineConstants>$(DefineConstants);SYSTEM_NUMERICS_VECTOR</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Remove="CpuBlit_Layer2\x_backup\2_ImgSpanGenRGB.txt" />
 		<None Remove="CpuBlit_Layer2\x_backup\4_ImgSpanGenGray.txt" />
@@ -40,10 +44,6 @@
 		<Content Include="CpuBlit_Layer2\x_backup\PixelBlenderGray.txt" />
 		<Content Include="CpuBlit_Layer2\x_backup\PixelBlenderRGB.txt" />
 		<Content Include="CpuBlit_Layer2\x_backup\ScanlineRasToDestBitmapRendererExtension.txt" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Shapes\" />
 	</ItemGroup>
 
 </Project>

@@ -1,10 +1,8 @@
 ﻿//MIT, 2017-present, WinterDev
-using System;
 using PixelFarm.VectorMath;
 
 namespace PixelFarm.Contours
 {
-
     /// <summary>
     /// link between  (GlyphBoneJoint and Joint) or (GlyphBoneJoint and tipEdge)
     /// </summary>
@@ -13,14 +11,15 @@ namespace PixelFarm.Contours
         public readonly Joint JointA;
         public readonly Joint JointB;
         public readonly EdgeLine TipEdge;
-        double _len;
-#if DEBUG 
-        static int dbugTotalId;
+        private double _len;
+#if DEBUG
+        private static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
+
         public Bone(Joint a, Joint b)
         {
-#if DEBUG 
+#if DEBUG
             if (a == b)
             {
                 throw new NotSupportedException();
@@ -32,18 +31,17 @@ namespace PixelFarm.Contours
             Vector2f bpos = b.OriginalJointPos;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluateSlope();
-
         }
+
         public Bone(Joint a, EdgeLine tipEdge)
         {
-
             JointA = a;
             TipEdge = tipEdge;
             Vector2f midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluateSlope();
-
         }
+
         public Vector2f GetVector()
         {
             if (this.JointB != null)
@@ -59,6 +57,7 @@ namespace PixelFarm.Contours
                 throw new NotSupportedException();
             }
         }
+
         public bool IsTipBone => this.TipEdge != null;
 
         internal void EvaluateSlope()
@@ -73,6 +72,7 @@ namespace PixelFarm.Contours
                 EvaluateSlope(this.JointA.DynamicFitPos, this.TipEdge.GetMidPoint());
             }
         }
+
         internal float EvaluateFitLength()
         {
             if (this.JointB != null)
@@ -84,6 +84,7 @@ namespace PixelFarm.Contours
                 return (float)(JointA.DynamicFitPos - this.TipEdge.GetMidPoint()).Length();
             }
         }
+
         internal float EvaluateY()
         {
             if (this.JointB != null)
@@ -95,9 +96,9 @@ namespace PixelFarm.Contours
                 return (JointA.DynamicFitPos.Y + TipEdge.GetMidPoint().Y) / 2;
             }
         }
-        void EvaluateSlope(Vector2f p, Vector2f q)
-        {
 
+        private void EvaluateSlope(Vector2f p, Vector2f q)
+        {
             double x0 = p.X;
             double y0 = p.Y;
             //q
@@ -131,6 +132,7 @@ namespace PixelFarm.Contours
         public bool IsLongBone { get; internal set; }
 
 #if DEBUG
+
         public override string ToString()
         {
             if (TipEdge != null)
@@ -142,13 +144,12 @@ namespace PixelFarm.Contours
                 return dbugId + ":" + JointA.ToString() + "->" + JointB.ToString();
             }
         }
+
 #endif
     }
 
-
     public static class GlyphBoneExtensions
     {
-
         //utils for glyph bones
         public static Vector2f GetMidPoint(this Bone bone)
         {
@@ -166,7 +167,6 @@ namespace PixelFarm.Contours
                 return Vector2f.Zero;
             }
         }
-
 
         /// <summary>
         /// find all outside edge a
@@ -202,7 +202,8 @@ namespace PixelFarm.Contours
                 }
             }
         }
-        static EdgeLine FindAnotherOutsideEdge(AnalyzedTriangle tri, EdgeLine knownOutsideEdge)
+
+        private static EdgeLine FindAnotherOutsideEdge(AnalyzedTriangle tri, EdgeLine knownOutsideEdge)
         {
             if (tri.e0.IsOutside && tri.e0 != knownOutsideEdge) { return tri.e0; }
             if (tri.e1.IsOutside && tri.e1 != knownOutsideEdge) { return tri.e1; }
@@ -210,13 +211,13 @@ namespace PixelFarm.Contours
             return null;
         }
 
-        static bool ContainsEdge(AnalyzedTriangle tri, EdgeLine edge)
+        private static bool ContainsEdge(AnalyzedTriangle tri, EdgeLine edge)
         {
             return tri.e0 == edge || tri.e1 == edge || tri.e2 == edge;
         }
-        static AnalyzedTriangle FindCommonTriangle(Joint a, Joint b)
-        {
 
+        private static AnalyzedTriangle FindCommonTriangle(Joint a, Joint b)
+        {
             if (a.P_Tri == b.P_Tri || a.P_Tri == b.Q_Tri)
             {
                 return a.P_Tri;
@@ -231,5 +232,4 @@ namespace PixelFarm.Contours
             }
         }
     }
-
 }

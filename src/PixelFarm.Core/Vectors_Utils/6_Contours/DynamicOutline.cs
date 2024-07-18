@@ -1,38 +1,35 @@
 ﻿//MIT, 2017-present, WinterDev
-using System;
-using System.Collections.Generic;
-
 namespace PixelFarm.Contours
 {
-
     public class DynamicOutline
     {
-
         internal List<Contour> _contours;
-        List<CentroidLine> _allCentroidLines;
+        private List<CentroidLine> _allCentroidLines;
 
         /// <summary>
         /// offset in pixel unit from master outline, accept + and -
         /// </summary>
-        float _offsetFromMasterOutline = 0; //pixel unit
-        float _pxScale;
-        bool _needRefreshBoneGroup;
-        bool _needAdjustGridFitValues;
+        private float _offsetFromMasterOutline = 0; //pixel unit
+
+        private float _pxScale;
+        private bool _needRefreshBoneGroup;
+        private bool _needAdjustGridFitValues;
 
         /// <summary>
         /// pixel-size-specific x offset (start from abstract origin) to fit the grid
         /// </summary>
-        float _avg_x_fitOffset = 0;
-        BoneGroupingHelper _groupingHelper;
+        private float _avg_x_fitOffset = 0;
+
+        private BoneGroupingHelper _groupingHelper;
+
         //
         public DynamicOutline(IntermediateOutline intermediateOutline)
         {
-
             //setup default values
             _needRefreshBoneGroup = true; //first time
             _needAdjustGridFitValues = true;//first time
             this.GridBoxWidth = 32; //pixels
-            this.GridBoxHeight = 50; //pixels 
+            this.GridBoxHeight = 50; //pixels
             _groupingHelper = BoneGroupingHelper.CreateBoneGroupingHelper();
 #if DEBUG
             this.GridBoxHeight = dbugGridHeight; //pixels
@@ -42,25 +39,26 @@ namespace PixelFarm.Contours
             //we convert data from GlyphIntermediateOutline to newform (lightweight form).
             //and save it here.
             //1. joints and its bones
-            //2. bones and its controlled edge 
+            //2. bones and its controlled edge
             _contours = intermediateOutline.GetContours(); //original contours
             //3.
             CollectAllCentroidLines(intermediateOutline.GetCentroidLineHubs());
-
         }
+
         private DynamicOutline()
         {
             //for empty dynamic outline
-
         }
+
         public static DynamicOutline CreateBlankDynamicOutline()
         {
             return new DynamicOutline();
         }
 
         public List<Contour> GetContours() => _contours;
+
         /// <summary>
-        ///classify bone group by gridbox(w,h) 
+        ///classify bone group by gridbox(w,h)
         /// </summary>
         /// <param name="gridBoxW"></param>
         /// <param name="gridBoxH"></param>
@@ -74,14 +72,14 @@ namespace PixelFarm.Contours
 
             for (int i = _allCentroidLines.Count - 1; i >= 0; --i)
             {
-                //apply new grid to this centroid line 
+                //apply new grid to this centroid line
                 _groupingHelper.CollectBoneGroups(_allCentroidLines[i]);
             }
             //analyze bone group (stem) as a whole
             _groupingHelper.AnalyzeHorizontalBoneGroups();
             _groupingHelper.AnalyzeVerticalBoneGroups();
 
-            //at this state we have a list of BoneGroup. 
+            //at this state we have a list of BoneGroup.
             //but we don't know the  'fit-adjust' value for each GlyphPoint
             //we will known the 'fit-adjust' value after we know the pxscale
         }
@@ -92,11 +90,10 @@ namespace PixelFarm.Contours
         /// <param name="offsetFromMasterOutline"></param>
         public void SetDynamicEdgeOffsetFromMasterOutline(float offsetFromMasterOutline)
         {
-
             if (_contours == null) return; //blank
             //preserve original outline
             //regenerate outline from original outline
-            //----------------------------------------------------------        
+            //----------------------------------------------------------
             if (_offsetFromMasterOutline != offsetFromMasterOutline)
             {
                 //change
@@ -108,7 +105,7 @@ namespace PixelFarm.Contours
                     cnts[i].ApplyNewEdgeOffsetFromMasterOutline(offsetFromMasterOutline);
                 }
                 //***
-                //changing offset from master outline affects the grid fit-> need to recalculate 
+                //changing offset from master outline affects the grid fit-> need to recalculate
                 //_needRefreshBoneGroup = true;
             }
         }
@@ -117,10 +114,12 @@ namespace PixelFarm.Contours
         /// use grid fit or not
         /// </summary>
         public bool EnableGridFit { get; set; }
+
         /// <summary>
         /// grid box width in pixels
         /// </summary>
         public int GridBoxWidth { get; private set; }
+
         /// <summary>
         /// grid box height in pixels
         /// </summary>
@@ -130,6 +129,7 @@ namespace PixelFarm.Contours
         public int MinY { get; private set; }
         public int MaxX { get; private set; }
         public int MaxY { get; private set; }
+
         public void SetOriginalGlyphControlBounds(int minX, int minY, int maxX, int maxY)
         {
             MinX = minX;
@@ -137,6 +137,7 @@ namespace PixelFarm.Contours
             MaxX = maxX;
             MaxY = maxY;
         }
+
         /// <summary>
         /// original glyph advance width
         /// </summary>
@@ -194,18 +195,17 @@ namespace PixelFarm.Contours
             }
         }
 
-        struct FitDiffCollector
+        private struct FitDiffCollector
         {
+            private float _negative_diff;
+            private float _positive_diff;
 
-            float _negative_diff;
-            float _positive_diff;
-
-            float _weighted_sum_negativeDiff;
-            float _weighted_sum_positiveDiff;
+            private float _weighted_sum_negativeDiff;
+            private float _weighted_sum_positiveDiff;
 
             public void Collect(float diff, float groupLen)
             {
-                //group len for weighting 
+                //group len for weighting
                 if (diff < 0)
                 {
                     _negative_diff += (diff * groupLen);
@@ -222,7 +222,7 @@ namespace PixelFarm.Contours
             {
                 if (_weighted_sum_positiveDiff != 0 && _weighted_sum_negativeDiff != 0)
                 {
-                    //check if we should move to positive or negative  
+                    //check if we should move to positive or negative
                     //tech: choose minimum move to reach the target
                     if (_positive_diff > -_negative_diff)
                     {
@@ -250,16 +250,14 @@ namespace PixelFarm.Contours
                     return 0;
                 }
             }
-
-
         }
 
         /// <summary>
         /// adjust vertical fitting value
         /// </summary>
-        void ReCalculateFittingValues()
+        private void ReCalculateFittingValues()
         {
-            //(1) 
+            //(1)
             //clear all prev adjust value
             for (int i = _contours.Count - 1; i >= 0; --i)
             {
@@ -283,7 +281,6 @@ namespace PixelFarm.Contours
             List<BoneGroup> selectedHBoneGroups = _groupingHelper.SelectedHorizontalBoneGroups;
             for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
             {
-
                 BoneGroup boneGroup = selectedHBoneGroups[i];
                 if (boneGroup._lengKind == BoneGroupSumLengthKind.Short)
                 {
@@ -297,14 +294,14 @@ namespace PixelFarm.Contours
                 //
                 int edgeCount = h_edges.Length;
                 //we need to calculate the avg of the glyph point
-                //and add a total summary to this 
+                //and add a total summary to this
                 FitDiffCollector y_fitDiffCollector = new FitDiffCollector();
                 float groupLen = boneGroup.approxLength;
                 //
                 for (int e = edgeCount - 1; e >= 0; --e)
                 {
                     EdgeLine ee = h_edges[e];
-                    //p                    
+                    //p
                     y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.Y * _pxScale), groupLen);
                     //q
                     y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.Y * _pxScale), groupLen);
@@ -314,8 +311,7 @@ namespace PixelFarm.Contours
 
                 for (int e = edgeCount - 1; e >= 0; --e)
                 {
-
-                    //TODO: review here again        
+                    //TODO: review here again
                     EdgeLine ee = h_edges[e];
                     ee.P.FitAdjustY = avg_ydiff;//assign px scale specific fit value
                     ee.Q.FitAdjustY = avg_ydiff;//assign px scale specific fit value
@@ -326,7 +322,7 @@ namespace PixelFarm.Contours
             //vertical group for horizontal fit:
             //this different from the vertical fitting.
             //we calculate the value as a whole.
-            //and apply it as a whole in later state 
+            //and apply it as a whole in later state
             List<BoneGroup> verticalGroups = _groupingHelper.SelectedVerticalBoneGroups;
             FitDiffCollector x_fitDiffCollector = new FitDiffCollector();
 
@@ -350,7 +346,7 @@ namespace PixelFarm.Contours
 
                 int edgeCount = v_edges.Length;
                 //we need to calculate the avg of the glyph point
-                //and add a total summary to this 
+                //and add a total summary to this
                 float groupLen = boneGroup.approxLength;
                 for (int e = 0; e < edgeCount; ++e)
                 {
@@ -370,14 +366,15 @@ namespace PixelFarm.Contours
             }
             //(4)
             _avg_x_fitOffset = x_fitDiffCollector.CalculateProperDiff();
-
         }
+
         /// <summary>
         /// pxscale-specific, average horizontal diff to fit the grid, this result come from fitting process
         /// </summary>
         public float AvgXFitOffset => _avg_x_fitOffset;
+
         //
-        void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
+        private void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
             //collect all centroid lines from each line CentroidLineHub
             _allCentroidLines = new List<CentroidLine>();
@@ -387,20 +384,17 @@ namespace PixelFarm.Contours
                 _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
             }
         }
-        void GenerateContourOutput(IContourBuilder tx, Contour contour)
-        {
 
+        private void GenerateContourOutput(IContourBuilder tx, Contour contour)
+        {
             List<Vertex> points = contour.flattenPoints;
             int j = points.Count;
             if (j == 0) return;
-            //------------------------------------------------- 
+            //-------------------------------------------------
             //Bounds controlBounds = this.OriginalGlyphControlBounds;
-
-
 
             //walk along the edge in the contour to generate new edge output
             float pxscale = _pxScale;
-
 
 #if DEBUG
             //            dbugWriteLine("===begin===" + fit_x_offset);
@@ -410,12 +404,12 @@ namespace PixelFarm.Contours
             //            }
 #endif
 
-            //------------------------------------------------- 
+            //-------------------------------------------------
             //fineSubPixelRenderingOffset = 0.33f;
 
-            //------------------------------------------------- 
+            //-------------------------------------------------
 
-            //TODO: review here 
+            //TODO: review here
             float fit_x, fit_y;
             points[0].GetFitXY(pxscale, out fit_x, out fit_y);
             //
@@ -426,7 +420,7 @@ namespace PixelFarm.Contours
             //2. others
             for (int i = 1; i < j; ++i)
             {
-                //try to fit to grid  
+                //try to fit to grid
                 points[i].GetFitXY(pxscale, out fit_x, out fit_y);
                 tx.LineTo(fit_x, fit_y);
 #if DEBUG
@@ -434,36 +428,42 @@ namespace PixelFarm.Contours
                 //dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
             }
-            //close 
+            //close
             tx.CloseContour();
 #if DEBUG
             //dbugWriteLine("===end===");
 #endif
         }
+
 #if DEBUG
-        void dbugWriteLine(string text)
+
+        private void dbugWriteLine(string text)
         {
             //Console.WriteLine(text);
         }
-        void dbugWriteOutput(string cmd, float pre_x, float post_x, float y)
+
+        private void dbugWriteOutput(string cmd, float pre_x, float post_x, float y)
         {
             // Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
         }
+
         public static bool dbugActualPosToConsole { get; set; }
         public static bool dbugUseHorizontalFitValue { get; set; }
         public static bool dbugTestNewGridFitting { get; set; }
         public static int dbugGridHeight = 50;
+
         internal List<AnalyzedTriangle> dbugGetGlyphTriangles()
         {
             return _dbugTempIntermediateOutline.GetTriangles();
         }
+
         internal List<CentroidLineHub> dbugGetCentroidLineHubs()
         {
             return _dbugTempIntermediateOutline.GetCentroidLineHubs();
         }
+
         public IntermediateOutline _dbugTempIntermediateOutline;
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
-
     }
 }

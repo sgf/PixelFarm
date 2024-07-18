@@ -6,21 +6,21 @@
 ** this file except in compliance with the License. You may obtain a copy
 ** of the License at Silicon Graphics, Inc., attn: Legal Services, 1600
 ** Amphitheatre Parkway, Mountain View, CA 94043-1351, or at:
-** 
+**
 ** http://oss.sgi.com/projects/FreeB
-** 
+**
 ** Note that, as provided in the License, the Software is distributed on an
 ** "AS IS" basis, with ALL EXPRESS AND IMPLIED WARRANTIES AND CONDITIONS
 ** DISCLAIMED, INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES AND
 ** CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY, FITNESS FOR A
 ** PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
-** 
+**
 ** Original Code. The Original Code is: OpenGL Sample Implementation,
 ** Version 1.2.1, released January 26, 2000, developed by Silicon Graphics,
 ** Inc. The Original Code is Copyright (c) 1991-2000 Silicon Graphics, Inc.
 ** Copyright in any portions created by third parties is as indicated
 ** elsewhere herein. All Rights Reserved.
-** 
+**
 ** Additional Notice Provisions: The application programming interfaces
 ** established by SGI in conjunction with the Original Code are The
 ** OpenGL(R) Graphics System: A Specification (Version 1.2.1), released
@@ -40,7 +40,6 @@
 **
 */
 
-using System;
 namespace Tesselate
 {
     public class ContourVertex : IComparable<ContourVertex>
@@ -109,7 +108,7 @@ namespace Tesselate
             return 0;
         }
 
-        static public double EdgeSign(ContourVertex u, ContourVertex v, ContourVertex w)
+        public static double EdgeSign(ContourVertex u, ContourVertex v, ContourVertex w)
         {
             /* Returns a number whose sign matches EdgeEval(u,w) but which
              * is cheaper to evaluate.  Returns > 0, == 0 , or < 0
@@ -137,7 +136,6 @@ namespace Tesselate
 
         public bool TransLeq(ContourVertex v) => ((y < v.y) || (y == v.y && x <= v.x));
 
-
         public static bool VertCCW(ContourVertex u, ContourVertex v, ContourVertex w)
         {
             /* For almost-degenerate situations, the results are not reliable.
@@ -150,10 +148,12 @@ namespace Tesselate
         }
 
 #if DEBUG
+
         public override string ToString()
         {
             return _C_0 + "," + _C_1 + "," + _C_2;
         }
+
 #endif
     }
 }

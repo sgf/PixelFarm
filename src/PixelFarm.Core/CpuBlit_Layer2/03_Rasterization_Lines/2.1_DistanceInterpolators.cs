@@ -5,8 +5,8 @@
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -19,11 +19,12 @@
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     //===================================================distance_interpolator0
-    struct DistanceInterpolator0
+    internal struct DistanceInterpolator0
     {
-        readonly int _dx;
-        readonly int _dy;
-        int _dist;
+        private readonly int _dx;
+        private readonly int _dy;
+        private int _dist;
+
         public DistanceInterpolator0(int x1, int y1, int x2, int y2, int x, int y)
         {
             unchecked
@@ -36,22 +37,26 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 _dy <<= LineAA.MR_SUBPIXEL_SHIFT;
             }
         }
+
         //
         public void IncX() => _dist += _dy;
+
         //
         public int Distance => _dist;
+
         //
     }
 
     //==================================================distance_interpolator00
-    struct DistanceInterpolator00
+    internal struct DistanceInterpolator00
     {
-        readonly int _dx1;
-        readonly int _dy1;
-        readonly int _dx2;
-        readonly int _dy2;
-        int _dist1;
-        int _dist2;
+        private readonly int _dx1;
+        private readonly int _dy1;
+        private readonly int _dx2;
+        private readonly int _dy2;
+        private int _dist1;
+        private int _dist2;
+
         public DistanceInterpolator00(int xc, int yc,
                                 int x1, int y1, int x2, int y2,
                                 int x, int y)
@@ -71,19 +76,23 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
 
         //---------------------------------------------------------------------
-        public void IncX() { _dist1 += _dy1; _dist2 += _dy2; }
+        public void IncX()
+        { _dist1 += _dy1; _dist2 += _dy2; }
+
         //
         public int Distance1 => _dist1;
+
         public int Distance2 => _dist2;
         //
     }
 
     //===================================================distance_interpolator1
-    struct DistanceInterpolator1
+    internal struct DistanceInterpolator1
     {
-        readonly int _dx;
-        readonly int _dy;
-        int _dist;
+        private readonly int _dx;
+        private readonly int _dy;
+        private int _dist;
+
         public DistanceInterpolator1(int x1, int y1, int x2, int y2, int x, int y)
         {
             _dx = (x2 - x1);
@@ -93,7 +102,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _dx <<= LineAA.SUBPIXEL_SHIFT;
             _dy <<= LineAA.SUBPIXEL_SHIFT;
         }
-
 
         public void IncX(int dy)
         {
@@ -108,7 +116,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-
         public void DecX(int dy)
         {
             _dist -= _dy;
@@ -122,7 +129,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-
         public void IncY(int dx)
         {
             _dist -= _dx;
@@ -135,6 +141,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 _dist -= _dy;
             }
         }
+
         public void DecY(int dx)
         {
             _dist += _dx;
@@ -147,19 +154,20 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 _dist -= _dy;
             }
         }
+
         //---------------------------------------------------------------------
         public int Distance => _dist;
     }
 
     //===================================================distance_interpolator2
-    struct DistanceInterpolator2
+    internal struct DistanceInterpolator2
     {
-        readonly int _dx;
-        readonly int _dy;
-        readonly int _dx_start;
-        readonly int _dy_start;
-        int _dist;
-        int _dist_start;
+        private readonly int _dx;
+        private readonly int _dy;
+        private readonly int _dx_start;
+        private readonly int _dy_start;
+        private int _dist;
+        private int _dist_start;
         //---------------------------------------------------------------------
 
         public DistanceInterpolator2(int x1, int y1, int x2, int y2,
@@ -195,8 +203,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _dx_start <<= LineAA.MR_SUBPIXEL_SHIFT;
             _dy_start <<= LineAA.MR_SUBPIXEL_SHIFT;
         }
-
-
 
         //---------------------------------------------------------------------
         public void IncX(int dy)
@@ -268,6 +274,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         //---------------------------------------------------------------------
         public int Distance => _dist;
+
         public int DistanceStart => _dist_start;
         public int DistanceEnd => _dist_start;
 
@@ -287,19 +294,18 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         //public void dec_y() { m_dist += m_dx; m_dist_start += m_dx_start; }
     }
 
-
     //===================================================distance_interpolator3
-    struct DistanceInterpolator3
+    internal struct DistanceInterpolator3
     {
-        readonly int _dx;
-        readonly int _dy;
-        readonly int _dx_start;
-        readonly int _dy_start;
-        readonly int _dx_end;
-        readonly int _dy_end;
-        int _dist;
-        int _dist_start;
-        int _dist_end;
+        private readonly int _dx;
+        private readonly int _dy;
+        private readonly int _dx_start;
+        private readonly int _dy_start;
+        private readonly int _dx_end;
+        private readonly int _dy_end;
+        private int _dist;
+        private int _dist_start;
+        private int _dist_end;
         //---------------------------------------------------------------------
 
         public DistanceInterpolator3(int x1, int y1, int x2, int y2,
@@ -328,7 +334,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 _dy_end <<= LineAA.MR_SUBPIXEL_SHIFT;
             }
         }
-
 
         public void IncX(int dy)
         {
@@ -409,7 +414,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public int Distance => _dist;
         public int dist_start => _dist_start;
         public int dist_end => _dist_end;
-
 
         public int DxStart => _dx_start;
         public int DyStart => _dy_start;

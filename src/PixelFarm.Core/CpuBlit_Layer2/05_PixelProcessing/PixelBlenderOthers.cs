@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,27 +18,24 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by 
+// Adaptation for high precision colors has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//
 //----------------------------------------------------------------------------
 
-using System;
 using PixelFarm.Drawing;
 using CO = PixelFarm.Drawing.Internal.CO;
 
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
-
     /// <summary>
     /// change destination alpha change with red color from source
     /// </summary>
     public class PixelBlenderGrey : PixelBlender32
     {
-
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
@@ -98,13 +95,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
                 else
                 {
-
                     unsafe
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])
@@ -131,7 +126,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
@@ -161,24 +155,19 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         while (--count != 0);
                     }
                 }
-
             }
         }
-
 
         internal override void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
-
                 fixed (int* ptr = &dstBuffer[arrayOffset])
                 {
-                    //TODO: consider use memcpy() impl*** 
+                    //TODO: consider use memcpy() impl***
                     *ptr = srcColor.ToGrayValueARGB();
                 }
-
             }
-
         }
 
         internal override void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
@@ -218,17 +207,14 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                             ptr++; //move next
                             count--;
                         }
-
                     }
                 }
             }
         }
 
-        static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, int coverageValue)
+        private static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, int coverageValue)
         {
-
             //calculate new alpha
-
 
             int src_a = (byte)((srcColor.A * coverageValue + 255) >> 8);
             //after apply the alpha
@@ -251,7 +237,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     byte g = (byte)((dest >> CO.G_SHIFT) & 0xff);
                     byte b = (byte)((dest >> CO.B_SHIFT) & 0xff);
 
-
                     *dstPtr =
                      ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> CO.BASE_SHIFT)) << CO.A_SHIFT) |
                      ((byte)(((srcColor.R - r) * src_a + (r << CO.BASE_SHIFT)) >> CO.BASE_SHIFT) << CO.R_SHIFT) |
@@ -260,13 +245,12 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 }
             }
         }
-        static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
+
+        private static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
         {
             unchecked
             {
-
                 //convert srcColor to grey-scale image
-
 
                 if (srcColor.A == 255)
                 {
@@ -346,13 +330,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
                 else
                 {
-
                     unsafe
                     {
                         int* dstBuffer = (int*)dstBuffer1.Ptr;
@@ -380,7 +362,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
@@ -411,7 +392,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         while (--count != 0);
                     }
                 }
-
             }
         }
 
@@ -422,7 +402,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 int* ptr1 = (int*)dstBuffer.Ptr;
                 int* ptr_byte = &ptr1[arrayOffset];
                 {
-                    //TODO: consider use memcpy() impl*** 
+                    //TODO: consider use memcpy() impl***
                     int* ptr = ptr_byte;
                     int argb = srcColor.ToGrayValueARGB();
 
@@ -447,9 +427,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         ptr++; //move next
                         count--;
                     }
-
                 }
-
             }
         }
 
@@ -460,16 +438,14 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 int* ptr1 = (int*)dstBuffer.Ptr;
                 int* ptr = &ptr1[arrayOffset];
                 {
-                    //TODO: consider use memcpy() impl***  
+                    //TODO: consider use memcpy() impl***
                     *ptr = srcColor.ToGrayValueARGB();
                 }
-
             }
         }
     }
 
-
-    static class ColorExtensions
+    internal static class ColorExtensions
     {
         /// <summary>
         /// with ratio, R77,B151,B28
@@ -482,10 +458,10 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             return ((srcColor.A << 24) | (y << 16) | (y << 8) | y);
         }
     }
+
     public abstract class CustomPixelBlender : PixelBlender32
     {
-
-        internal sealed override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
+        internal override sealed void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
@@ -496,12 +472,12 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        internal sealed override unsafe void BlendPixel32(int* dstPtr, Color srcColor)
+        internal override sealed unsafe void BlendPixel32(int* dstPtr, Color srcColor)
         {
             BlendPixel32Internal(dstPtr, srcColor);
         }
 
-        internal sealed override void BlendPixels(int[] dstBuffer,
+        internal override sealed void BlendPixels(int[] dstBuffer,
             int arrayElemOffset,
             Color[] srcColors,
             int srcColorOffset,
@@ -544,13 +520,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
                 else
                 {
-
                     unsafe
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])
@@ -577,7 +551,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
@@ -607,27 +580,22 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         while (--count != 0);
                     }
                 }
-
             }
         }
 
-
-        internal sealed override void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
+        internal override sealed void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
-
                 fixed (int* ptr = &dstBuffer[arrayOffset])
                 {
-                    //TODO: consider use memcpy() impl***  
+                    //TODO: consider use memcpy() impl***
                     *ptr = srcColor.ToGrayValueARGB();
                 }
-
             }
-
         }
 
-        internal sealed override void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
+        internal override sealed void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
         {
             unsafe
             {
@@ -661,18 +629,16 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                             ptr++; //move next
                             count--;
                         }
-
                     }
                 }
             }
-
         }
 
         protected abstract unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, int coverageValue);
 
         protected abstract unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor);
 
-        internal sealed override void BlendPixels(TempMemPtr dstBuffer, int arrayOffset, Color srcColor)
+        internal override sealed void BlendPixels(TempMemPtr dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
@@ -684,7 +650,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        internal sealed override void BlendPixels(TempMemPtr dstBuffer1, int arrayElemOffset, Color[] srcColors, int srcColorOffset, byte[] covers, int coversIndex, bool firstCoverForAll, int count)
+        internal override sealed void BlendPixels(TempMemPtr dstBuffer1, int arrayElemOffset, Color[] srcColors, int srcColorOffset, byte[] covers, int coversIndex, bool firstCoverForAll, int count)
         {
             if (firstCoverForAll)
             {
@@ -754,7 +720,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
@@ -785,11 +750,10 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         while (--count != 0);
                     }
                 }
-
             }
         }
 
-        internal sealed override void CopyPixels(TempMemPtr dstBuffer, int arrayOffset, Color srcColor, int count)
+        internal override sealed void CopyPixels(TempMemPtr dstBuffer, int arrayOffset, Color srcColor, int count)
         {
             unsafe
             {
@@ -808,12 +772,12 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     while (count > 0)
                     {
                         //-----------
-                        //1. 
+                        //1.
                         BlendPixel32Internal(ptr, srcColor);
                         ptr++; //move next
                         count--;
                         //-----------
-                        //2 
+                        //2
                         BlendPixel32Internal(ptr, srcColor);
                         ptr++; //move next
                         count--;
@@ -822,7 +786,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        internal sealed override void CopyPixel(TempMemPtr dstBuffer, int arrayOffset, Color srcColor)
+        internal override sealed void CopyPixel(TempMemPtr dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
@@ -835,20 +799,15 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         }
     }
 
-
-
-
-
-
-
     /// <summary>
     /// apply mask to srcColor before send it to dest bmp
     /// </summary>
     public class PixelBlenderWithMask : PixelBlender32
     {
-        TempMemPtr _maskInnerBuffer;
-        int _mask_shift;//default
-        PixelBlenderColorComponent _selectedMaskComponent;
+        private TempMemPtr _maskInnerBuffer;
+        private int _mask_shift;//default
+        private PixelBlenderColorComponent _selectedMaskComponent;
+
         public PixelBlenderWithMask()
         {
             SelectedMaskComponent = PixelBlenderColorComponent.R; //default
@@ -876,12 +835,15 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     case PixelBlenderColorComponent.A:
                         _mask_shift = CO.A_SHIFT;
                         break;
+
                     case PixelBlenderColorComponent.R:
                         _mask_shift = CO.R_SHIFT;
                         break;
+
                     case PixelBlenderColorComponent.G:
                         _mask_shift = CO.G_SHIFT;
                         break;
+
                     case PixelBlenderColorComponent.B:
                         _mask_shift = CO.B_SHIFT;
                         break;
@@ -889,15 +851,15 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        Color NewColorFromMask(Color srcColor, int arrayOffset)
+        private Color NewColorFromMask(Color srcColor, int arrayOffset)
         {
             unsafe
             {
                 int* buff = (int*)_maskInnerBuffer.Ptr;
                 return srcColor.NewFromChangeCoverage((byte)((buff[arrayOffset]) >> _mask_shift));
             }
-
         }
+
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
@@ -922,13 +884,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             int coversIndex,
             bool firstCoverForAll, int count)
         {
-
             if (firstCoverForAll)
             {
                 int cover = covers[coversIndex];
                 if (cover == 255)
                 {
-
                     unsafe
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])
@@ -964,7 +924,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 count--;
                                 arrayElemOffset++;
                             }
-
                         }
                     }
                 }
@@ -1004,7 +963,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
@@ -1029,7 +987,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 BlendPixel(dstBuffer, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset].NewFromChangeCoverage(cover), arrayElemOffset));
                             }
 
-
                             arrayElemOffset++;
                             dstBufferPtr++;
                             ++srcColorOffset;
@@ -1039,6 +996,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 }
             }
         }
+
         internal override void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
@@ -1096,12 +1054,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         ptr++; //move next
                         count--;
                     }
-
                 }
             }
         }
 
-        static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
+        private static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
         {
             unchecked
             {
@@ -1249,7 +1206,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 BlendPixels(dst, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset].NewFromChangeCoverage(cover), arrayElemOffset));
                             }
 
-
                             arrayElemOffset++;
                             dstBufferPtr++;
                             ++srcColorOffset;
@@ -1304,9 +1260,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         ptr++; //move next
                         count--;
                     }
-
                 }
-
             }
         }
 
@@ -1319,7 +1273,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 {
                     BlendPixel32(ptr, NewColorFromMask(srcColor, arrayOffset));
                 }
-
             }
         }
     }
@@ -1342,24 +1295,24 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         B
     }
 
-
     //TODO: review this again ...
     /// <summary>
     /// only apply to some dest color component
     /// </summary>
     public class PixelBlenderPerColorComponentWithMask : PixelBlender32
     {
-        TempMemPtr _maskInnerBuffer;
-        int _mask_shift;//default
+        private TempMemPtr _maskInnerBuffer;
+        private int _mask_shift;//default
 
-        PixelBlenderColorComponent _selectedMaskComponent;
-        EnableOutputColorComponent _selectedDestMaskComponent;
+        private PixelBlenderColorComponent _selectedMaskComponent;
+        private EnableOutputColorComponent _selectedDestMaskComponent;
 
         public PixelBlenderPerColorComponentWithMask()
         {
             SelectedMaskComponent = PixelBlenderColorComponent.R; //default
             EnableOutputColorComponent = EnableOutputColorComponent.EnableAll;
         }
+
         /// <summary>
         /// set mask image, please note that size of mask must be the same size of the dest buffer
         /// </summary>
@@ -1376,6 +1329,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             get => _selectedDestMaskComponent;
             set => _selectedDestMaskComponent = value;
         }
+
         public PixelBlenderColorComponent SelectedMaskComponent
         {
             get => _selectedMaskComponent;
@@ -1388,25 +1342,29 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     case PixelBlenderColorComponent.A:
                         _mask_shift = CO.A_SHIFT;
                         break;
+
                     case PixelBlenderColorComponent.R:
                         _mask_shift = CO.R_SHIFT;
                         break;
+
                     case PixelBlenderColorComponent.G:
                         _mask_shift = CO.G_SHIFT;
                         break;
+
                     case PixelBlenderColorComponent.B:
                         _mask_shift = CO.B_SHIFT;
                         break;
                 }
             }
         }
+
         /// <summary>
         /// new color output after applying with mask
         /// </summary>
         /// <param name="srcColor"></param>
         /// <param name="arrayOffset"></param>
         /// <returns></returns>
-        Color NewColorFromMask(Color srcColor, int arrayOffset)
+        private Color NewColorFromMask(Color srcColor, int arrayOffset)
         {
             unsafe
             {
@@ -1414,6 +1372,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 return srcColor.NewFromChangeCoverage((byte)((ptr[arrayOffset]) >> _mask_shift));
             }
         }
+
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
@@ -1438,13 +1397,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             int coversIndex,
             bool firstCoverForAll, int count)
         {
-
             if (firstCoverForAll)
             {
                 int cover = covers[coversIndex];
                 if (cover == 255)
                 {
-
                     unsafe
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])
@@ -1552,6 +1509,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 }
             }
         }
+
         internal override void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
@@ -1610,7 +1568,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, EnableOutputColorComponent enableCompo)
+        private static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, EnableOutputColorComponent enableCompo)
         {
             unchecked
             {
@@ -1640,6 +1598,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                  ((byte)(((srcColor.B - b) * src_a + (b << CO.BASE_SHIFT)) >> CO.BASE_SHIFT) << CO.B_SHIFT);
                             }
                             break;
+
                         case EnableOutputColorComponent.R:
                             {
                                 *dstPtr =
@@ -1649,6 +1608,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                     (b << CO.B_SHIFT);
                             }
                             break;
+
                         case EnableOutputColorComponent.G:
                             {
                                 *dstPtr =
@@ -1656,9 +1616,9 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 (r << CO.R_SHIFT) |
                                 ((byte)(((srcColor.G - g) * src_a + (g << CO.BASE_SHIFT)) >> CO.BASE_SHIFT) << CO.G_SHIFT) |
                                 (b << CO.B_SHIFT);
-
                             }
                             break;
+
                         case EnableOutputColorComponent.B:
                             {
                                 *dstPtr =
@@ -1864,6 +1824,4 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
     }
-
-
 }

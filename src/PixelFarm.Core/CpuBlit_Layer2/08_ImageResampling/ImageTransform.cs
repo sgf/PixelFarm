@@ -1,5 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.Imaging
 {
     public class CubicInterpolator
@@ -9,7 +10,7 @@ namespace PixelFarm.CpuBlit.Imaging
             return p[1] + 0.5 * x * (p[2] - p[0] + x * (2.0 * p[0] - 5.0 * p[1] + 4.0 * p[2] - p[3] + x * (3.0 * (p[1] - p[2]) + p[3] - p[0])));
         }
     }
- 
+
     public class CubicInterpolator2
     {
         public static double getValue2(double p0, double p1, double p2, double p3, double x)
@@ -17,19 +18,20 @@ namespace PixelFarm.CpuBlit.Imaging
             return p1 + 0.5 * x * (p2 - p0 + x * (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3 +
                     x * (3.0 * (p1 - p2) + p3 - p0)));
         }
+
         public static double getValue2(byte p0, byte p1, byte p2, byte p3, double x)
         {
             return p1 + 0.5 * x * (p2 - p0 + x * (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3 +
                     x * (3.0 * (p1 - p2) + p3 - p0)));
         }
     }
+
     public class BicubicInterpolator2 : CubicInterpolator2
     {
-
         public static void GetInterpolatedColor(Color[] colors, double x, double y,
             out PixelFarm.Drawing.Color outputColor)
         {
-            //interpolate by channel 
+            //interpolate by channel
             //TODO: review arr access again
 
             double v1, v2, v3, v4, v;
@@ -79,7 +81,6 @@ namespace PixelFarm.CpuBlit.Imaging
                 {
                     r = (byte)v;
                 }
-
             }
             //---------------------------------------------------
             byte g;
@@ -135,15 +136,17 @@ namespace PixelFarm.CpuBlit.Imaging
         }
     }
 
-    struct BufferReader4
+    internal struct BufferReader4
     {
         //matrix four ,four reader
-        unsafe int* _buffer;
-        int _width;
-        int _height;
-        int _cX;
-        int _cY;
-        unsafe public BufferReader4(int* buffer, int width, int height)
+        private unsafe int* _buffer;
+
+        private int _width;
+        private int _height;
+        private int _cX;
+        private int _cY;
+
+        public unsafe BufferReader4(int* buffer, int width, int height)
         {
             _buffer = buffer;
 
@@ -151,12 +154,14 @@ namespace PixelFarm.CpuBlit.Imaging
             _height = height;
             _cX = _cY = 0;
         }
+
         public void SetStartPixel(int x, int y)
         {
             _cX = x;
             _cY = y;
         }
-        static Color FromInt(int value)
+
+        private static Color FromInt(int value)
         {
             return new Color(
                 (byte)((value >> 24) & 0xff),
@@ -164,13 +169,12 @@ namespace PixelFarm.CpuBlit.Imaging
                 (byte)((value >> 8) & 0xff),
                 (byte)((value >> 0) & 0xff));
         }
+
         public Color ReadOnePixel()
         {
-
             unsafe
             {
                 return FromInt(_buffer[((_cY * _width) + _cX)]);
-
             }
         }
 
@@ -181,8 +185,9 @@ namespace PixelFarm.CpuBlit.Imaging
                 return FromInt(_buffer[(_cY * _width) + _cX]);
             }
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="x0y0"></param>
         /// <param name="x1y0"></param>
@@ -190,28 +195,28 @@ namespace PixelFarm.CpuBlit.Imaging
         /// <param name="x1y1"></param>
         public void Read4(out Color x0y0, out Color x1y0, out Color x0y1, out Color x1y1)
         {
-            //byte b, g, r, a; 
+            //byte b, g, r, a;
 
             int index = (_cY * _width) + _cX;
             unsafe
             {
                 x0y0 = FromInt(_buffer[index]);
                 index++;
-                //----------------------------------- 
+                //-----------------------------------
                 x1y0 = FromInt(_buffer[index]);
                 index++;
                 //------------------------------------
                 //newline
                 index = ((_cY + 1) * _width) + _cX;
-                //------------------------------------ 
+                //------------------------------------
                 x0y1 = FromInt(_buffer[index]);
                 index++;
-                //------------------------------------ 
+                //------------------------------------
                 x1y1 = FromInt(_buffer[index]);
                 index++;
             }
-
         }
+
         /// <summary>
         /// read 4 x 4 pixels
         /// </summary>
@@ -219,7 +224,7 @@ namespace PixelFarm.CpuBlit.Imaging
         public void Read16(Color[] outputBuffer)
         {
             //bgra to argb
-            //16 px 
+            //16 px
             //byte b, g, r, a;
             int m = 0;
             int tmpY = _cY - 1;
@@ -227,18 +232,18 @@ namespace PixelFarm.CpuBlit.Imaging
             index--;
 
             unsafe
-            {  //-------------------------------------------------             
+            {  //-------------------------------------------------
                 for (int n = 0; n < 4; ++n)
                 {
                     outputBuffer[m] = FromInt(_buffer[index]);
                     index++;
-                    //------------------------------------------------ 
+                    //------------------------------------------------
                     outputBuffer[m + 1] = FromInt(_buffer[index]);
                     index++;
-                    //------------------------------------------------ 
+                    //------------------------------------------------
                     outputBuffer[m + 2] = FromInt(_buffer[index]);
                     index++;
-                    //------------------------------------------------ 
+                    //------------------------------------------------
                     outputBuffer[m + 3] = FromInt(_buffer[index]);
                     index++;
                     //------------------------------------------------
@@ -250,12 +255,13 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
         }
+
         public bool CanReadAsBlock()
         {
             return _cX > 2 && _cY > 2 &&
                    _cX < _width - 2 && _cY < _height - 2;
-
         }
     }
+
     //------------------------------------------------------------------------
 }

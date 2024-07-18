@@ -2,12 +2,10 @@
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
- * 
+ *
  * Contributions by Georg W�chter.
  */
 
-using System;
-using System.Collections.Generic;
 namespace PixelFarm.VectorMath
 {
     /// <summary>
@@ -16,8 +14,8 @@ namespace PixelFarm.VectorMath
     //[Serializable]
     public struct BezierCurve
     {
+        private List<Vector2> _points;
 
-        List<Vector2> _points;
         /// <summary>
         /// The parallel value.
         /// </summary>
@@ -83,9 +81,6 @@ namespace PixelFarm.VectorMath
             _points = new List<Vector2>(points);
         }
 
-
-
-
         /// <summary>
         /// Calculates the point with the specified t.
         /// </summary>
@@ -107,7 +102,6 @@ namespace PixelFarm.VectorMath
         {
             return BezierCurve.CalculateLength(_points, precision, Parallel);
         }
-
 
         /// <summary>
         /// Calculates the length of the specified bezier curve.
@@ -218,7 +212,5 @@ namespace PixelFarm.VectorMath
 
             return r;
         }
-
-
     }
 }

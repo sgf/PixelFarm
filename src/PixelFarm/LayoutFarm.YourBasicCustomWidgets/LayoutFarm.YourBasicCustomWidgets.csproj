@@ -57,10 +57,6 @@
       <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
       <Name>PaintLab.Svg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
       <Name>PixelFarm.Typography</Name>

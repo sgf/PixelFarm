@@ -1,26 +1,29 @@
-﻿//MIT, 2018-present, WinterDev 
+﻿//MIT, 2018-present, WinterDev
 namespace PixelFarm.Drawing
 {
     public enum LenUnit : byte
     {
         NotAssigned,
         Empty,
+
         //
         Pixel, //px
+
         Point, //pt
         Percent, //%
         Milimeters,//mm
         Centimeters,//cm
         Inches,//in
-        Em, //em 
+        Em, //em
         Ex, //ex
-        Picas, //pc 
+        Picas, //pc
     }
 
     public readonly struct Len
     {
         public readonly float Number;
         public readonly LenUnit Unit;
+
         public Len(float number, LenUnit lengthUnit)
         {
             Number = number;
@@ -61,19 +64,17 @@ namespace PixelFarm.Drawing
         /// <param name="number"></param>
         /// <returns></returns>
         public static Len Pt(float number) => new Len(number, LenUnit.Point);
-
-
     }
 
     public static class LenExtensions
     {
-
         //------------------
         //TODO: review here again***
         //if the system does not use 96 dpi or 72 ppi
         //------------------
-        const int POINTS_PER_INCH = 72; //default value 
-        static int s_PIXELS_PER_INCH = 96; //default value        
+        private const int POINTS_PER_INCH = 72; //default value
+
+        private static int s_PIXELS_PER_INCH = 96; //default value
 
         public static float ToPixels(this Len len)
         {
@@ -92,6 +93,7 @@ namespace PixelFarm.Drawing
                 default: throw new System.NotSupportedException();//TODO: implement this
             }
         }
+
         public static float ToPixels(this Len len, int pixelsPerInch)
         {
             switch (len.Unit)
@@ -109,6 +111,7 @@ namespace PixelFarm.Drawing
                 default: throw new System.NotSupportedException();//TODO: implement this
             }
         }
+
         public static float ToPoints(this Len len)
         {
             switch (len.Unit)
@@ -126,6 +129,7 @@ namespace PixelFarm.Drawing
                 default: throw new System.NotSupportedException();//TODO: implement this
             }
         }
+
         public static float ToPoints(this Len len, int pixelsPerInch)
         {
             switch (len.Unit)
@@ -133,6 +137,7 @@ namespace PixelFarm.Drawing
                 case LenUnit.NotAssigned:
                 case LenUnit.Empty:
                     return 0;
+
                 case LenUnit.Pixel:
                     return (len.Number / s_PIXELS_PER_INCH) * POINTS_PER_INCH;
 
@@ -143,8 +148,4 @@ namespace PixelFarm.Drawing
             }
         }
     }
-
-
-
-
 }

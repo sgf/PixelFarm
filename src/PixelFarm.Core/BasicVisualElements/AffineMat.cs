@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -27,12 +27,8 @@
 //#include <math.h>
 //#include "agg_basics.h"
 
-using System;
-
-
 namespace PixelFarm.CpuBlit
 {
-
     /// <summary>
     /// struct version of Affine (Matrix)
     /// </summary>
@@ -52,6 +48,7 @@ namespace PixelFarm.CpuBlit
             shx = v2_shx; sy = v3_sy;
             tx = v4_tx; ty = v5_ty;
         }
+
         public float[] Get3x3MatrixElements() =>
             new float[]
             {
@@ -59,6 +56,7 @@ namespace PixelFarm.CpuBlit
                (float) shx, (float) sy, 0,
                (float) tx, (float) ty, 1
             };
+
         /// <summary>
         /// inside-values will be CHANGED after call this
         /// </summary>
@@ -97,16 +95,19 @@ namespace PixelFarm.CpuBlit
             shx = t2;
             tx = t4;
         }
+
         public void Rotate(double angleRad, double centerX, double centerY)
         {
             Translate(-centerX, -centerY);//move to center
             Rotate(angleRad);
             Translate(centerX, centerY);//move back
         }
+
         public void RotateDeg(double degree)
         {
             Rotate(DegToRad(degree));
         }
+
         public void RotateDeg(double degree, double centerX, double centerY)
         {
             Translate(-centerX, -centerY);//move to center
@@ -129,6 +130,7 @@ namespace PixelFarm.CpuBlit
             sy *= mm3;
             ty *= mm3;
         }
+
         public void Scale(double mm)
         {
             if (mm == 1) return;
@@ -140,6 +142,7 @@ namespace PixelFarm.CpuBlit
             sy *= mm;
             ty *= mm;
         }
+
         /// <summary>
         /// inside-values will be CHANGED after call this
         /// </summary>
@@ -151,8 +154,9 @@ namespace PixelFarm.CpuBlit
             ty += dy;
         }
 
-        const double m_sx = 1;
-        const double m_sy = 1;
+        private const double m_sx = 1;
+        private const double m_sy = 1;
+
         /// <summary>
         /// inside-values will be CHANGED after call this
         /// </summary>
@@ -160,7 +164,6 @@ namespace PixelFarm.CpuBlit
         /// <param name="shy"></param>
         public void Skew(double dx, double dy)
         {
-
             double m_shx = Math.Tan(dx);
             double m_shy = Math.Tan(dy);
 
@@ -174,6 +177,7 @@ namespace PixelFarm.CpuBlit
             shx = t2;
             tx = t4;
         }
+
         /// <summary>
         /// inside-values will be CHANGED after call this
         /// </summary>
@@ -201,15 +205,13 @@ namespace PixelFarm.CpuBlit
             return clone;
         }
 
-
-        double CalculateDeterminantReciprocal()
+        private double CalculateDeterminantReciprocal()
         {
             return 1.0 / (sx * sy - shy * shx);
         }
 
-
-
-        static readonly AffineMat s_Iden = new AffineMat() {
+        private static readonly AffineMat s_Iden = new AffineMat()
+        {
             sx = 1,
             shy = 0,
             shx = 0,
@@ -229,6 +231,7 @@ namespace PixelFarm.CpuBlit
             x = tmp * sx + y * shx + tx;
             y = tmp * shy + y * sy + ty;
         }
+
         public void Transform(ref float x, ref float y)
         {
             double tmp = x;
@@ -265,12 +268,12 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-
-        static double DegToRad(double degree)
+        private static double DegToRad(double degree)
         {
             return degree * (Math.PI / 180d);
         }
-        static double RadToDeg(double degree)
+
+        private static double RadToDeg(double degree)
         {
             return degree * (180d / Math.PI);
         }
@@ -286,43 +289,47 @@ namespace PixelFarm.CpuBlit
             mat.Rotate(rad);
             return mat;
         }
+
         public static AffineMat GetRotateDegMat(double deg)
         {
             AffineMat mat = s_Iden;//copy
             mat.RotateDeg(deg);
             return mat;
         }
+
         public static AffineMat GetRotateMat(double rad, double center_x, double center_y)
         {
             AffineMat mat = s_Iden;//copy
             mat.Rotate(rad, center_x, center_y);
             return mat;
         }
+
         public static AffineMat GetRotateDegMat(double deg, double center_x, double center_y)
         {
             AffineMat mat = s_Iden;//copy
             mat.RotateDeg(deg, center_x, center_y);
             return mat;
         }
+
         public static AffineMat GetTranslateMat(double dx, double dy)
         {
             AffineMat mat = s_Iden;//copy
             mat.Translate(dx, dy);
             return mat;
         }
+
         public static AffineMat GetScaleMat(double sx, double sy)
         {
             AffineMat mat = s_Iden;//copy
             mat.Scale(sx, sy);
             return mat;
         }
+
         public static AffineMat GetScaleMat(double s)
         {
             AffineMat mat = s_Iden;//copy
             mat.Scale(s, s);
             return mat;
         }
-
-
     }
 }

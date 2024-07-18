@@ -1,13 +1,11 @@
 ﻿//MIT, 2014-present, WinterDev
 
-using System;
-using System.Collections.Generic;
-
 namespace PixelFarm.Drawing
 {
     public abstract class Brush : System.IDisposable
     {
         public abstract BrushKind BrushKind { get; }
+
         public abstract void Dispose();
 
         public abstract object InnerBrush { get; set; }
@@ -29,13 +27,16 @@ namespace PixelFarm.Drawing
             //default
             this.Color = Color.Transparent;
         }
+
         public SolidBrush(Color color)
         {
             this.Color = color;
         }
+
         public Color Color { get; }
         public override BrushKind BrushKind => BrushKind.Solid;
         public override object InnerBrush { get; set; }
+
         public override void Dispose()
         {
         }
@@ -47,36 +48,39 @@ namespace PixelFarm.Drawing
         {
             TextureImage = textureImage;
         }
+
         public override BrushKind BrushKind => BrushKind.Texture;
 
         public Image TextureImage { get; }
         public override object InnerBrush { get; set; }
+
         public override void Dispose()
         {
         }
     }
 
-
     public abstract class GeometryGradientBrush : Brush
     {
-        object _innerBrush;
+        private object _innerBrush;
         public PixelFarm.CpuBlit.VertexProcessing.ICoordTransformer CoordTransformer { get; set; }
+
         public override object InnerBrush
         {
             get => _innerBrush;
             set => _innerBrush = value;
         }
+
         public override void Dispose()
         {
         }
     }
-
 
     public enum GradientOffsetUnit : byte
     {
         Pixel,
         Ratio,//0-1
     }
+
     public struct ColorStop
     {
         public readonly float Offset; //relative offset from center of circular gradient
@@ -105,6 +109,7 @@ namespace PixelFarm.Drawing
             OffsetUnit = unit;
             Color = color;
         }
+
         public ColorStop(float offset, Color color)
         {
 #if DEBUG
@@ -127,6 +132,7 @@ namespace PixelFarm.Drawing
             OffsetUnit = GradientOffsetUnit.Ratio;
             Color = color;
         }
+
         public static readonly ColorStop Empty = new ColorStop();
     }
 
@@ -158,6 +164,7 @@ namespace PixelFarm.Drawing
             })
         {
         }
+
         public RadialGradientBrush(PointF start, float r, Color c1, Color c2)
             : this(start, new PointF(start.X + r, start.Y), new ColorStop[]
             {
@@ -166,10 +173,12 @@ namespace PixelFarm.Drawing
             })
         {
         }
+
         public RadialGradientBrush(PointF start, float r, ColorStop[] stops)
             : this(start, new PointF(start.X + r, start.Y), stops)
         {
         }
+
         public RadialGradientBrush(PointF start, PointF end, ColorStop[] stops)
         {
             StartPoint = start;
@@ -185,6 +194,7 @@ namespace PixelFarm.Drawing
             IsValid = true;
             ColorStops = stops;
         }
+
         public override BrushKind BrushKind => BrushKind.CircularGradient;
         public SpreadMethod SpreadMethod { get; set; }
         public PointF StartPoint { get; }
@@ -211,6 +221,7 @@ namespace PixelFarm.Drawing
                 new ColorStop(1, GradientOffsetUnit.Ratio,c2),
             };
         }
+
         public LinearGradientBrush(PointF start, PointF end, ColorStop[] stops)
         {
             StartPoint = start;
@@ -226,20 +237,22 @@ namespace PixelFarm.Drawing
             IsValid = true;
             ColorStops = stops;
         }
+
         public override BrushKind BrushKind => BrushKind.LinearGradient;
         public SpreadMethod SpreadMethod { get; set; }
         public PointF StartPoint { get; }
         public PointF EndPoint { get; }
         public ColorStop[] ColorStops { get; }
         public bool IsValid { get; }
+
         //
         public double Length => System.Math.Sqrt(
                                     (EndPoint.Y - StartPoint.Y) * (EndPoint.Y - StartPoint.Y) +
                                     (EndPoint.X - StartPoint.X) * (EndPoint.X - StartPoint.X)
                                     );
+
         public double Angle => System.Math.Atan2(EndPoint.Y - StartPoint.Y, EndPoint.X - StartPoint.X);
     }
-
 
     public sealed class PolygonGradientBrush : GeometryGradientBrush
     {
@@ -251,6 +264,7 @@ namespace PixelFarm.Drawing
             public readonly float X;
             public readonly float Y;
             public readonly Color C;
+
             public ColorVertex2d(float x, float y, Color c)
             {
                 X = x;
@@ -269,36 +283,42 @@ namespace PixelFarm.Drawing
         public List<ColorVertex2d> Vertices { get; } = new List<ColorVertex2d>();
         public override BrushKind BrushKind => BrushKind.PolygonGradient;
         public override object InnerBrush { get; set; }
+
         public override void Dispose()
         {
         }
     }
+
     public abstract class PenBase : System.IDisposable
     {
         public abstract void Dispose();
+
         public abstract float[] DashPattern { get; set; }
         public abstract float Width { get; set; }
         public abstract DashStyle DashStyle { get; set; }
         public abstract object InnerPen { get; set; }
         public abstract Brush Brush { get; }
     }
+
     public sealed class Pen : PenBase
     {
+        private readonly Brush _brush;
+        private Color _strokeColor;
 
-        readonly Brush _brush;
-        Color _strokeColor;
         public Pen(Color color)
         {
             Width = 1;
             _strokeColor = color;
             _brush = new SolidBrush(color);
         }
+
         public Pen(Color color, float width)
         {
             Width = width;
             _strokeColor = color;
             _brush = new SolidBrush(color);
         }
+
         public Pen(Brush brush)
         {
             Width = 1;//default
@@ -314,6 +334,7 @@ namespace PixelFarm.Drawing
 
             //TODO: review here
         }
+
         public override Brush Brush => _brush;
         public Color StrokeColor => _strokeColor;
         public override float[] DashPattern { get; set; }

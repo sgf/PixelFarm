@@ -20,13 +20,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
-using System.Runtime.InteropServices;
 namespace PixelFarm.VectorMath
 {
     public class JsonIgnoreAttribute : Attribute
     {
     }
+
     /// <summary>
     /// Represents a 3D vector using three double-precision floating-point numbers.
     /// </summary>
@@ -34,20 +33,20 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector3 : IEquatable<Vector3>
     {
-
         /// <summary>
         /// The X component of the Vector3.
         /// </summary>
         public double x;
+
         /// <summary>
         /// The Y component of the Vector3.
         /// </summary>
         public double y;
+
         /// <summary>
         /// The Z component of the Vector3.
         /// </summary>
         public double z;
-
 
         /// <summary>
         /// Constructs a new Vector3.
@@ -109,9 +108,6 @@ namespace PixelFarm.VectorMath
             z = v.z;
         }
 
-
-
-
         public double this[int index]
         {
             get
@@ -120,10 +116,13 @@ namespace PixelFarm.VectorMath
                 {
                     case 0:
                         return x;
+
                     case 1:
                         return y;
+
                     case 2:
                         return z;
+
                     default:
                         return 0;
                 }
@@ -136,21 +135,20 @@ namespace PixelFarm.VectorMath
                     case 0:
                         x = value;
                         break;
+
                     case 1:
                         y = value;
                         break;
+
                     case 2:
                         z = value;
                         break;
+
                     default:
                         throw new Exception();
                 }
             }
         }
-
-
-
-
 
         /// <summary>
         /// Gets the length (magnitude) of the vector.
@@ -165,8 +163,6 @@ namespace PixelFarm.VectorMath
                 return System.Math.Sqrt(x * x + y * y + z * z);
             }
         }
-
-
 
         /// <summary>
         /// Gets the square of the vector length (magnitude).
@@ -185,8 +181,6 @@ namespace PixelFarm.VectorMath
                 return x * x + y * y + z * z;
             }
         }
-
-
 
         /// <summary>
         /// Returns a normalized Vector of this.
@@ -210,50 +204,50 @@ namespace PixelFarm.VectorMath
             z *= scale;
         }
 
-
-
         public double[] ToArray()
         {
             return new double[] { x, y, z };
         }
 
-
-
-
-
         /// <summary>
         /// Defines a unit-length Vector3d that points towards the X-axis.
         /// </summary>
         public static readonly Vector3 UnitX = new Vector3(1, 0, 0);
+
         /// <summary>
         /// Defines a unit-length Vector3d that points towards the Y-axis.
         /// </summary>
         public static readonly Vector3 UnitY = new Vector3(0, 1, 0);
+
         /// <summary>
         /// /// Defines a unit-length Vector3d that points towards the Z-axis.
         /// </summary>
         public static readonly Vector3 UnitZ = new Vector3(0, 0, 1);
+
         /// <summary>
         /// Defines a zero-length Vector3.
         /// </summary>
         public static readonly Vector3 Zero = new Vector3(0, 0, 0);
+
         /// <summary>
         /// Defines an instance with all components set to 1.
         /// </summary>
         public static readonly Vector3 One = new Vector3(1, 1, 1);
+
         /// <summary>
         /// Defines an instance with all components set to positive infinity.
         /// </summary>
         public static readonly Vector3 PositiveInfinity = new Vector3(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity);
+
         /// <summary>
         /// Defines an instance with all components set to negative infinity.
         /// </summary>
         public static readonly Vector3 NegativeInfinity = new Vector3(double.NegativeInfinity, double.NegativeInfinity, double.NegativeInfinity);
+
         /// <summary>
         /// Defines the size of the Vector3d struct in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(new Vector3());
-
 
         /// <summary>
         /// Adds two vectors.
@@ -278,8 +272,6 @@ namespace PixelFarm.VectorMath
             result = new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
         }
 
-
-
         /// <summary>
         /// Subtract one Vector from another
         /// </summary>
@@ -302,8 +294,6 @@ namespace PixelFarm.VectorMath
         {
             result = new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
         }
-
-
 
         /// <summary>
         /// Multiplies a vector by a scalar.
@@ -351,8 +341,6 @@ namespace PixelFarm.VectorMath
             result = new Vector3(vector.x * scale.x, vector.y * scale.y, vector.z * scale.z);
         }
 
-
-
         /// <summary>
         /// Divides a vector by a scalar.
         /// </summary>
@@ -399,8 +387,6 @@ namespace PixelFarm.VectorMath
             result = new Vector3(vector.x / scale.x, vector.y / scale.y, vector.z / scale.z);
         }
 
-
-
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
         /// </summary>
@@ -427,8 +413,6 @@ namespace PixelFarm.VectorMath
             result.y = a.y < b.y ? a.y : b.y;
             result.z = a.z < b.z ? a.z : b.z;
         }
-
-
 
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
@@ -457,8 +441,6 @@ namespace PixelFarm.VectorMath
             result.z = a.z > b.z ? a.z : b.z;
         }
 
-
-
         /// <summary>
         /// Returns the Vector3d with the minimum magnitude
         /// </summary>
@@ -470,8 +452,6 @@ namespace PixelFarm.VectorMath
             return left.LengthSquared < right.LengthSquared ? left : right;
         }
 
-
-
         /// <summary>
         /// Returns the Vector3d with the minimum magnitude
         /// </summary>
@@ -482,8 +462,6 @@ namespace PixelFarm.VectorMath
         {
             return left.LengthSquared >= right.LengthSquared ? left : right;
         }
-
-
 
         /// <summary>
         /// Clamp a vector to the given minimum and maximum vectors
@@ -514,8 +492,6 @@ namespace PixelFarm.VectorMath
             result.z = vec.z < min.z ? min.z : vec.z > max.z ? max.z : vec.z;
         }
 
-
-
         /// <summary>
         /// Scale a vector to unit length
         /// </summary>
@@ -543,8 +519,6 @@ namespace PixelFarm.VectorMath
             result.z = vec.z * scale;
         }
 
-
-
         /// <summary>
         /// Calculate the dot (scalar) product of two vectors
         /// </summary>
@@ -566,8 +540,6 @@ namespace PixelFarm.VectorMath
         {
             result = left.x * right.x + left.y * right.y + left.z * right.z;
         }
-
-
 
         /// <summary>
         /// Caclulate the cross (vector) product of two vectors
@@ -595,7 +567,6 @@ namespace PixelFarm.VectorMath
                 left.z * right.x - left.x * right.z,
                 left.x * right.y - left.y * right.x);
         }
-
 
         /// <summary>
         /// Checks if 3 points are collinear (all lie on the same line).
@@ -632,8 +603,6 @@ namespace PixelFarm.VectorMath
             }
         }
 
-
-
         /// <summary>
         /// Returns a new Vector that is the linear blend of the 2 given Vectors
         /// </summary>
@@ -662,8 +631,6 @@ namespace PixelFarm.VectorMath
             result.y = blend * (b.y - a.y) + a.y;
             result.z = blend * (b.z - a.z) + a.z;
         }
-
-
 
         /// <summary>
         /// Interpolate 3 Vectors using Barycentric coordinates
@@ -698,8 +665,6 @@ namespace PixelFarm.VectorMath
             Multiply(ref temp, v, out temp);
             Add(ref result, ref temp, out result);
         }
-
-
 
         /// <summary>Transform a direction vector by the given Matrix
         /// Assumes the matrix has a bottom row of (0,0,0,1), that is the translation part is ignored.
@@ -937,8 +902,6 @@ namespace PixelFarm.VectorMath
             result.z = v.z / v.w;
         }
 
-
-
         /// <summary>
         /// Calculates the angle (in radians) between two vectors.
         /// </summary>
@@ -963,16 +926,11 @@ namespace PixelFarm.VectorMath
             result = System.Math.Acos(temp / (first.Length * second.Length));
         }
 
-
-
-
         /// <summary>
         /// Gets or sets an OpenTK.Vector2d with the X and Y components of this instance.
         /// </summary>
         [JsonIgnoreAttribute]
         public Vector2 Xy { get { return new Vector2(x, y); } set { x = value.x; y = value.y; } }
-
-
 
         /// <summary>
         /// Adds two instances.
@@ -1105,9 +1063,6 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-
-
-
         /// <summary>
         /// Returns a System.String that represents the current Vector3.
         /// </summary>
@@ -1117,8 +1072,6 @@ namespace PixelFarm.VectorMath
             return String.Format("[{0}, {1}, {2}]", x, y, z);
         }
 
-
-
         /// <summary>
         /// Returns the hashcode for this instance.
         /// </summary>
@@ -1127,8 +1080,6 @@ namespace PixelFarm.VectorMath
         {
             return new { x, y, z }.GetHashCode();
         }
-
-
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -1160,10 +1111,6 @@ namespace PixelFarm.VectorMath
             return false;
         }
 
-
-
-
-
         /// <summary>Indicates whether the current vector is equal to another vector.</summary>
         /// <param name="other">A vector to compare with this vector.</param>
         /// <returns>true if the current vector is equal to the vector parameter; otherwise, false.</returns>
@@ -1174,7 +1121,6 @@ namespace PixelFarm.VectorMath
                 y == other.y &&
                 z == other.z;
         }
-
 
         public static double ComponentMax(Vector3 vector3)
         {

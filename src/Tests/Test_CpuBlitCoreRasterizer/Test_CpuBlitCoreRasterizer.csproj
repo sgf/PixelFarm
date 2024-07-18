@@ -9,13 +9,13 @@
 		<!--<UseWindowsForms>true</UseWindowsForms>-->
 	</PropertyGroup>
 
-	<ItemGroup>
-		<Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\MemBitmap.cs" Link="MemBitmap.cs" />
-		<Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\MemMx.cs" Link="MemMx.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="System.Drawing.Common" Version="9.0.0-preview.5.24306.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
 	</ItemGroup>
 
 </Project>

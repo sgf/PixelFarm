@@ -2,10 +2,9 @@
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
- * 
+ *
  * Contributions by Georg W�chter.
  */
-
 
 namespace PixelFarm.VectorMath
 {
@@ -15,19 +14,21 @@ namespace PixelFarm.VectorMath
     //[Serializable]
     public struct BezierCurveQuadric
     {
-
         /// <summary>
         /// Start anchor point.
         /// </summary>
         public Vector2 StartAnchor;
+
         /// <summary>
         /// End anchor point.
         /// </summary>
         public Vector2 EndAnchor;
+
         /// <summary>
         /// Control point, controls the direction of both endings of the curve.
         /// </summary>
         public Vector2 ControlPoint;
+
         /// <summary>
         /// The parallel value.
         /// </summary>
@@ -36,7 +37,6 @@ namespace PixelFarm.VectorMath
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the orignal curve at any point.</remarks>
         public float Parallel;
-
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveQuadric"/>.
@@ -66,8 +66,6 @@ namespace PixelFarm.VectorMath
             this.EndAnchor = endAnchor;
             this.ControlPoint = controlPoint;
         }
-
-
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -123,6 +121,5 @@ namespace PixelFarm.VectorMath
 
             return (float)length;
         }
-
     }
 }

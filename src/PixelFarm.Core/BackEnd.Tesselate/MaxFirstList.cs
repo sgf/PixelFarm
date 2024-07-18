@@ -1,54 +1,59 @@
 ﻿//BSD, 2014-present, WinterDev
 
-using System;
-using System.Collections.Generic;
 namespace Tesselate
 {
-
     //TODO: review this again....
     //-----
     //design for our tess only
     //not for general use.
-    //----- 
-    class RefItem<T>
+    //-----
+    internal class RefItem<T>
       where T : IComparable<T>
     {
         public RefItem(T data)
         {
             this.Data = data;
         }
+
         public T Data { get; private set; }
 #if DEBUG
+
         public override string ToString()
         {
             return this.Data.ToString();
         }
+
 #endif
     }
 
-    class MaxFirstList<T>
+    internal class MaxFirstList<T>
       where T : IComparable<T>
     {
-        readonly List<RefItem<T>> _innerList = new List<RefItem<T>>();
-        bool _isSorted = false;
+        private readonly List<RefItem<T>> _innerList = new List<RefItem<T>>();
+        private bool _isSorted = false;
+
         public MaxFirstList()
         {
         }
+
         //
         public bool IsEmpty => _innerList.Count == 0;
+
         //
-        static int MaxFirstSort(RefItem<T> t1, RefItem<T> t2)
+        private static int MaxFirstSort(RefItem<T> t1, RefItem<T> t2)
         {
             return t2.Data.CompareTo(t1.Data);
         }
-        void SortData()
+
+        private void SortData()
         {
             _innerList.Sort(MaxFirstSort);
             _isSorted = true;
         }
+
         public T DeleteMin()
         {
-            //find min and delete 
+            //find min and delete
             if (!_isSorted)
             {
                 SortData();
@@ -58,6 +63,7 @@ namespace Tesselate
             _innerList.RemoveAt(last);
             return tmp.Data;
         }
+
         public T FindMin()
         {
             if (!_isSorted)
@@ -66,6 +72,7 @@ namespace Tesselate
             }
             return _innerList[_innerList.Count - 1].Data;
         }
+
         public void Add(T data, out RefItem<T> refItem)
         {
             RefItem<T> item = new RefItem<T>(data);
@@ -87,7 +94,6 @@ namespace Tesselate
                 //int actualPos = BinSearch(item, 0, _innerList.Count - 1);
                 //if (actualPos != pos)
                 //{
-
                 //}
             }
             else
@@ -95,6 +101,7 @@ namespace Tesselate
                 _innerList.Add(item);
             }
         }
+
         internal int FindProperInsertPos(T data)
         {
             int begin = 0;
@@ -124,7 +131,7 @@ namespace Tesselate
                 {
                     //this is MaxFirst list
                     //data at this pos is lesser than refItem.Data
-                    //we need to move to the begin side of the list                      
+                    //we need to move to the begin side of the list
                     end = pos - 1;
                     goto TRY_AGAIN;
                     //return BinSearch(refItem, begin, pos - 1);
@@ -133,14 +140,15 @@ namespace Tesselate
                 {
                     //this is MaxFirst list
                     //data at this pos is greater than refItem.Data
-                    //we need to move to the end of this list                     
+                    //we need to move to the end of this list
                     begin = pos + 1;
                     goto TRY_AGAIN;
                     //return BinSearch(refItem, pos + 1, end);
                 }
             }
         }
-        int BinSearch(RefItem<T> refItem, int begin, int end)
+
+        private int BinSearch(RefItem<T> refItem, int begin, int end)
         {
         TRY_AGAIN:
             int pos = begin + ((end - begin) / 2);
@@ -160,7 +168,7 @@ namespace Tesselate
                 {
                     //this is MaxFirst list
                     //data at this pos is lesser than refItem.Data
-                    //we need to move to the begin side of the list                      
+                    //we need to move to the begin side of the list
                     end = pos - 1;
                     goto TRY_AGAIN;
                     //return BinSearch(refItem, begin, pos - 1);
@@ -169,13 +177,14 @@ namespace Tesselate
                 {
                     //this is MaxFirst list
                     //data at this pos is greater than refItem.Data
-                    //we need to move to the end of this list                     
+                    //we need to move to the end of this list
                     begin = pos + 1;
                     goto TRY_AGAIN;
                     //return BinSearch(refItem, pos + 1, end);
                 }
             }
         }
+
         public int Search(RefItem<T> refItem)
         {
             if (!_isSorted)
@@ -184,9 +193,10 @@ namespace Tesselate
             }
             return BinSearch(refItem, 0, _innerList.Count - 1);
         }
+
         public void Delete(RefItem<T> refItem)
         {
-            //delete specfic node 
+            //delete specfic node
 
             if (_isSorted)
             {
@@ -207,7 +217,6 @@ namespace Tesselate
 
                 //if (pos != actualPos)
                 //{
-
                 //}
                 //for (int i = _innerList.Count - 1; i >= 0; --i)
                 //{
@@ -230,7 +239,7 @@ namespace Tesselate
                 }
             }
             //----------------------------------------------
-            //delete that item  
+            //delete that item
         }
     }
 }

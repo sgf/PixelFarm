@@ -1,15 +1,15 @@
 ﻿//MIT, 2014-present, WinterDev
 
-
 namespace PixelFarm.Drawing
 {
     public sealed class UpdateArea
     {
-        int _left, _top, _width, _height;
+        private int _left, _top, _width, _height;
+
         public UpdateArea()
         {
-
         }
+
         public Rectangle CurrentRect
         {
             get => new Rectangle(_left, _top, _width, _height);
@@ -21,6 +21,7 @@ namespace PixelFarm.Drawing
                 _height = value.Height;
             }
         }
+
         public void Reset()
         {
             _left = _top = _width = _height = 0;
@@ -39,6 +40,7 @@ namespace PixelFarm.Drawing
                 System.Math.Min(_left + _width, left + width),
                 System.Math.Min(_top + _height, top + height));
         }
+
         /// <summary>
         /// create a copy of intersect rectangle
         /// </summary>
@@ -54,7 +56,8 @@ namespace PixelFarm.Drawing
                 System.Math.Min(_left + _width, width),
                 System.Math.Min(_top + _height, height));
         }
-        int _prev_left, _prev_top, _prev_width, _prev_height;
+
+        private int _prev_left, _prev_top, _prev_width, _prev_height;
 
         public Rectangle PreviousRect => new Rectangle(_prev_left, _prev_top, _prev_width, _prev_height);
 
@@ -80,27 +83,29 @@ namespace PixelFarm.Drawing
             _left += dx;
             _top += dy;
         }
+
         public void OffsetX(int dx)
         {
             _left += dx;
         }
+
         public void OffsetY(int dy)
         {
             _top += dy;
         }
 
-
 #if DEBUG
+
         public override string ToString()
         {
             return $"({_left},{_top},{_width},{_height})";
         }
+
 #endif
     }
 
     public abstract class DrawBoard : System.IDisposable
     {
-
         //------------------------------
         //this class provides canvas interface for drawing
         //with 'screen' coordinate system
@@ -109,7 +114,7 @@ namespace PixelFarm.Drawing
         //(0,0) is on left-upper corner
         //-------------------------------
         //who implement this class
-        //1. PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard (for win32,legacy) 
+        //1. PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard (for win32,legacy)
         //2. PixelFarm.Drawing.GLES2.MyGLDrawBoard  (for GLES2)
 
         //------------------------------
@@ -122,8 +127,11 @@ namespace PixelFarm.Drawing
         public int debug_resetCount = 0;
         public int debug_releaseCount = 0;
         public int debug_canvas_id = 0;
+
         public abstract void dbug_DrawRuler(int x);
+
         public abstract void dbug_DrawCrossRect(Color color, Rectangle rect);
+
 #endif
 
         public abstract void CloseCanvas();
@@ -131,20 +139,22 @@ namespace PixelFarm.Drawing
         ////////////////////////////////////////////////////////////////////////////
         //drawing properties
         public abstract SmoothingMode SmoothingMode { get; set; }
+
         public abstract float StrokeWidth { get; set; }
         public abstract Color StrokeColor { get; set; }
-
 
         ////////////////////////////////////////////////////////////////////////////
         //states
         public abstract void ResetInvalidateArea();
-        public abstract void Invalidate(Rectangle rect);
-        public abstract Rectangle InvalidateArea { get; }
 
+        public abstract void Invalidate(Rectangle rect);
+
+        public abstract Rectangle InvalidateArea { get; }
 
         ////////////////////////////////////////////////////////////////////////////
         // canvas dimension, canvas origin
         public abstract int Top { get; }
+
         public abstract int Left { get; }
         public abstract int Width { get; }
         public abstract int Height { get; }
@@ -155,52 +165,75 @@ namespace PixelFarm.Drawing
 
         public abstract int OriginX { get; }
         public abstract int OriginY { get; }
+
         public abstract void SetCanvasOrigin(int x, int y);
 
         //---------------------------------------------------------------------
         //clip area
         public abstract bool PushClipAreaRect(int width, int height, UpdateArea updateArea);
+
         public abstract bool PushClipAreaRect(int left, int top, int width, int height, UpdateArea updateArea);
 
         public abstract void PopClipAreaRect();
+
         public abstract void SetClipRect(Rectangle clip, CombineMode combineMode = CombineMode.Replace);
+
         public abstract Rectangle CurrentClipRect { get; }
+
         //------------------------------------------------------
         //buffer
-        public abstract void Clear(Color c); //TODO: add SetClearColor(), Clear(), 
-        public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea); //TODO: review here
-        public virtual void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH) { }
-        //------------------------------------------------------- 
+        public abstract void Clear(Color c); //TODO: add SetClearColor(), Clear(),
 
-        //lines         
+        public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea); //TODO: review here
+
+        public virtual void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)
+        { }
+
+        //-------------------------------------------------------
+
+        //lines
         public abstract void DrawLine(float x1, float y1, float x2, float y2);
+
         //-------------------------------------------------------
         //rects
         public abstract void FillRectangle(Color color, float left, float top, float width, float height);
+
         public abstract void FillRectangle(Brush brush, float left, float top, float width, float height);
+
         public abstract void DrawRectangle(Color color, float left, float top, float width, float height);
-        //------------------------------------------------------- 
+
+        //-------------------------------------------------------
 
         public abstract void FillPolygon(Brush brush, PointF[] points);
+
         public abstract void FillPolygon(Color color, PointF[] points);
-        //-------------------------------------------------------  
+
+        //-------------------------------------------------------
         //images
         public abstract void DrawImage(Image image, RectangleF dest, RectangleF src);
+
         public abstract void DrawImage(Image image, RectangleF dest);
+
         public abstract void DrawImages(Image image, RectangleF[] destAndSrcPairs);
+
         public abstract void DrawImage(Image image, int x, int y);//draw image unscaled at specific pos
+
         //---------------------------------------------------------------------------
-        //text ,font, strings 
+        //text ,font, strings
         //TODO: review these funcs
         public abstract RequestFont CurrentFont { get; set; }
+
         public abstract Color CurrentTextColor { get; set; }
 
         public abstract TextDrawingTech TextDrawingTech { get; set; }
+
         //TODO: review here again
         public abstract Color TextBackgroundColorHint { get; set; }//explicit set current text background color hint
 
         public abstract void DrawText(char[] buffer, int x, int y);
+
         public abstract void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment);
+
         public abstract void DrawText(char[] buffer, int startAt, int len, Rectangle logicalTextBox, int textAlignment);
 
         /// <summary>
@@ -209,24 +242,34 @@ namespace PixelFarm.Drawing
         /// <param name="buffer"></param>
         /// <returns></returns>
         public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay);
+
         public abstract RenderVxFormattedString CreateFormattedString(int[] buffer, int startAt, int len, bool delay);
 
         public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
+
         public abstract void Dispose();
+
         //--
         public abstract IPainter GetPainter();
+
         /// <summary>
         /// get software rendering surface drawboard
         /// </summary>
         /// <returns></returns>
         public abstract DrawBoard GetCpuBlitDrawBoard();
+
         //
         public abstract DrawboardBuffer CreateBackbuffer(int w, int h);
+
         public abstract void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer);
+
         public abstract void ExitCurrentDrawboardBuffer();
+
         //
         public abstract bool IsGpuDrawBoard { get; }
+
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
+
         public abstract ImageBinder GetInternalBitmapProvider();
     }
 
@@ -236,22 +279,24 @@ namespace PixelFarm.Drawing
         LcdSubPix,
         Copy,
     }
+
     public abstract class DrawboardBuffer : System.IDisposable
     {
         public abstract Image GetImage();
-        public bool IsValid { 
-            get; 
-            set; 
+
+        public bool IsValid
+        {
+            get;
+            set;
         }
+
         public abstract int Width { get; }
         public abstract int Height { get; }
+
         public abstract void Dispose();
+
         public abstract Image CopyToNewMemBitmap();
     }
-
-
-
-
 
     public enum RenderQuality
     {
@@ -277,11 +322,13 @@ namespace PixelFarm.Drawing
         Invalid = -1,
         None = 3
     }
+
     public enum RenderSurfaceOriginKind
     {
         LeftTop,
         LeftBottom,
     }
+
     public enum CanvasBackEnd
     {
         Software,
@@ -291,12 +338,12 @@ namespace PixelFarm.Drawing
 
     public static class DrawBoardExtensionMethods
     {
-
         public static SmoothingModeState SaveSmoothMode(this DrawBoard drawBoard)
         {
             //TODO: review offset function
             return new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
         }
+
         public static SmoothingModeState SetSmoothMode(this DrawBoard drawBoard, SmoothingMode value)
         {
             //TODO: review offset function
@@ -304,51 +351,47 @@ namespace PixelFarm.Drawing
             drawBoard.SmoothingMode = value;
             return saveState;
         }
+
         public static StrokeState SaveStroke(this DrawBoard drawBoard)
         {
             return new StrokeState(drawBoard);
         }
+
         public struct SmoothingModeState : System.IDisposable
         {
-            readonly DrawBoard _drawBoard;
-            readonly SmoothingMode _latestSmoothMode;
+            private readonly DrawBoard _drawBoard;
+            private readonly SmoothingMode _latestSmoothMode;
+
             internal SmoothingModeState(DrawBoard drawBoard, SmoothingMode state)
             {
                 _latestSmoothMode = state;
-                _drawBoard = drawBoard; 
-
+                _drawBoard = drawBoard;
             }
+
             public void Dispose()
             {
                 _drawBoard.SmoothingMode = _latestSmoothMode;
             }
         }
-        
+
         public struct StrokeState : System.IDisposable
         {
-            readonly DrawBoard _d;
-            readonly Color _stokeColor;
-            readonly float _strokeW;
+            private readonly DrawBoard _d;
+            private readonly Color _stokeColor;
+            private readonly float _strokeW;
+
             public StrokeState(DrawBoard d)
             {
                 _d = d;
                 _stokeColor = d.StrokeColor;
                 _strokeW = d.StrokeWidth;
             }
+
             public void Dispose()
             {
                 _d.StrokeColor = _stokeColor;
                 _d.StrokeWidth = _strokeW;
             }
         }
-
-
     }
-
-
-
-
 }
-
-
-

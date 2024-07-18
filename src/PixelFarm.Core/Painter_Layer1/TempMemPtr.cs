@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,15 +18,13 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit
 {
-
     public struct TempMemPtr : IDisposable
     {
-        readonly int _lenInBytes; //in bytes         
-        readonly bool _isOwner;
-        IntPtr _nativeBuffer;
+        private readonly int _lenInBytes; //in bytes
+        private readonly bool _isOwner;
+        private IntPtr _nativeBuffer;
 
         public TempMemPtr(IntPtr nativeBuffer32, int lenInBytes, bool isOwner = false)
         {
@@ -34,10 +32,13 @@ namespace PixelFarm.CpuBlit
             _nativeBuffer = nativeBuffer32;
             _isOwner = isOwner;
         }
+
         //
         public int LengthInBytes => _lenInBytes;
+
         //
         public IntPtr Ptr => _nativeBuffer;
+
         //
         public void Dispose()
         {
@@ -48,14 +49,12 @@ namespace PixelFarm.CpuBlit
                 _nativeBuffer = IntPtr.Zero;
             }
         }
-        public unsafe static TempMemPtr FromBmp(IBitmapSrc actualBmp, out int* headPtr)
+
+        public static unsafe TempMemPtr FromBmp(IBitmapSrc actualBmp, out int* headPtr)
         {
             TempMemPtr ptr = actualBmp.GetBufferPtr();
             headPtr = (int*)ptr.Ptr;
             return ptr;
         }
-
-
-       
     }
 }

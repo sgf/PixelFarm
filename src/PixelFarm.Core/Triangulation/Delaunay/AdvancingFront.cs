@@ -35,19 +35,20 @@
 ///   Eliminate Add/RemoveNode ?
 ///   Comments comments and more comments!
 
-
 using System.Text;
-using System;
+
 namespace Poly2Tri
 {
     /**
      * @author Thomas Åhlen (thahlen@gmail.com)
      */
-    class AdvancingFront
+
+    internal class AdvancingFront
     {
         public readonly AdvancingFrontNode Head;
         public readonly AdvancingFrontNode Tail;
-        AdvancingFrontNode _search;
+        private AdvancingFrontNode _search;
+
         public AdvancingFront(AdvancingFrontNode head, AdvancingFrontNode tail)
         {
             this.Head = head;

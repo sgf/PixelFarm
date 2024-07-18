@@ -1,5 +1,4 @@
-﻿
-//
+﻿//
 // System.Drawing.Drawing2D.DashStyle.cs
 //
 // Author:

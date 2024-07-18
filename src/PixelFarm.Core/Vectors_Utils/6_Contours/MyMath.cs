@@ -1,11 +1,11 @@
 ﻿//MIT, 2017-present, WinterDev
 using PixelFarm.VectorMath;
+
 namespace PixelFarm.Contours
 {
-
     public static class MyMath
     {
-        static internal void FindMinMax(ref float currentMin, ref float currentMax, float value)
+        internal static void FindMinMax(ref float currentMin, ref float currentMax, float value)
         {
             if (value < currentMin) { currentMin = value; }
             if (value > currentMax) { currentMax = value; }
@@ -21,12 +21,13 @@ namespace PixelFarm.Contours
             //optimized version, assum gridSize = 1
             int floor = (int)value;
             return ((value - floor) >= (1 / 2f)) ?
-                (floor + 1) - value : //if true, more than half of 1 
+                (floor + 1) - value : //if true, more than half of 1
                 floor - value; //else
         }
+
         internal static int FitToHalfGrid(float value, int gridSize)
         {
-            //fit to grid 
+            //fit to grid
             //1. lower
             int floor = ((int)(value / gridSize) * gridSize);
 
@@ -46,8 +47,8 @@ namespace PixelFarm.Contours
             {
                 return floor;
             }
-
         }
+
         public static double AngleBetween(Vector2f vector1, Vector2f vector2)
         {
             double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
@@ -65,6 +66,7 @@ namespace PixelFarm.Contours
 
             return rad1 - rad2;
         }
+
         /// <summary>
         /// Convert degrees to radians
         /// </summary>
@@ -75,6 +77,7 @@ namespace PixelFarm.Contours
             const double degToRad = System.Math.PI / 180.0f;
             return degrees * degToRad;
         }
+
         public static bool MinDistanceFirst(Vector2f baseVec, Vector2f compare0, Vector2f compare1)
         {
             return (SquareDistance(baseVec, compare0) < SquareDistance(baseVec, compare1)) ? true : false;
@@ -86,6 +89,7 @@ namespace PixelFarm.Contours
             double ydiff = v1.Y - v0.Y;
             return (xdiff * xdiff) + (ydiff * ydiff);
         }
+
         public static int Min(double v0, double v1, double v2)
         {
             //find min of 3
@@ -105,8 +109,8 @@ namespace PixelFarm.Contours
                 }
                 return foundAt;
             }
-
         }
+
         /// <summary>
         /// find cut point and check if the cut point is on the edge
         /// </summary>
@@ -126,24 +130,26 @@ namespace PixelFarm.Contours
             GetMinMax(edge, out min, out max);
             return (cutResult.X >= min.X && cutResult.X <= max.X && cutResult.Y >= min.Y && cutResult.Y <= max.Y);
         }
+
         /// <summary>
         /// which one is min,max
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
-        static void GetMinMax(EdgeLine edge, out Vector2f min, out Vector2f max)
+        private static void GetMinMax(EdgeLine edge, out Vector2f min, out Vector2f max)
         {
             Vector2f a_pos = new Vector2f((float)edge.PX, (float)edge.PY);
             Vector2f b_pos = new Vector2f((float)edge.QX, (float)edge.QY);
             min = Vector2f.Min(a_pos, b_pos);
             max = Vector2f.Max(a_pos, b_pos);
         }
-        static void GetMinMax(Vector2f a_pos, Vector2f b_pos, out Vector2f min, out Vector2f max)
-        {
 
+        private static void GetMinMax(Vector2f a_pos, Vector2f b_pos, out Vector2f min, out Vector2f max)
+        {
             min = Vector2f.Min(a_pos, b_pos);
             max = Vector2f.Max(a_pos, b_pos);
         }
+
         public static int FindMin(Vector2f a, Vector2f b)
         {
             if (a.X < b.X)
@@ -171,9 +177,7 @@ namespace PixelFarm.Contours
             }
         }
 
-
-
-        static void GetMinMax(Bone bone, out Vector2f min, out Vector2f max)
+        private static void GetMinMax(Bone bone, out Vector2f min, out Vector2f max)
         {
             if (bone.JointB != null)
             {
@@ -182,7 +186,6 @@ namespace PixelFarm.Contours
 
                 min = Vector2f.Min(a_pos, b_pos);
                 max = Vector2f.Max(a_pos, b_pos);
-
             }
             else if (bone.TipEdge != null)
             {
@@ -196,6 +199,7 @@ namespace PixelFarm.Contours
                 throw new System.NotSupportedException();
             }
         }
+
         /// <summary>
         /// find a perpendicular cut-point from p to bone
         /// </summary>
@@ -235,12 +239,12 @@ namespace PixelFarm.Contours
                 }
             }
         }
+
         public static Vector2f FindPerpendicularCutPoint(Vector2f p0, Vector2f p1, Vector2f p2)
         {
             //a line from p0 to p1
             //p2 is any point
-            //return p3 -> cutpoint on p0,p1 
-
+            //return p3 -> cutpoint on p0,p1
 
             double xdiff = p1.X - p0.X;
             double ydiff = p1.Y - p0.Y;
@@ -263,6 +267,7 @@ namespace PixelFarm.Contours
             double cuty = (m2 * cutx) + b2;
             return new Vector2f((float)cutx, (float)cuty);
         }
+
         /// <summary>
         /// find parameter A,B,C from Ax + By = C, with given 2 points
         /// </summary>
@@ -271,16 +276,17 @@ namespace PixelFarm.Contours
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="c"></param>
-        static void FindABC(Vector2f p0, Vector2f p1, out double a, out double b, out double c)
+        private static void FindABC(Vector2f p0, Vector2f p1, out double a, out double b, out double c)
         {
             //line is in the form
-            //Ax + By = C 
+            //Ax + By = C
             //from http://stackoverflow.com/questions/4543506/algorithm-for-intersection-of-2-lines
             //and https://www.topcoder.com/community/data-science/data-science-tutorials/geometry-concepts-line-intersection-and-its-applications/
             a = p1.Y - p0.Y;
             b = p0.X - p1.X;
             c = a * p0.X + b * p0.Y;
         }
+
         public static bool FindCutPoint(
               Vector2f p0, Vector2f p1,
               Vector2f p2, Vector2f p3, out Vector2f result)
@@ -321,22 +327,22 @@ namespace PixelFarm.Contours
             return true; //has cutpoint
         }
 
-        static Vector2f FindCutPoint_Algebra(
+        private static Vector2f FindCutPoint_Algebra(
             Vector2f p0, Vector2f p1,
             Vector2f p2, Vector2f p3)
         {
             //prefer matrix style (upper)
 
-            //TODO: refactor here... 
-            //find cut point of 2 line 
+            //TODO: refactor here...
+            //find cut point of 2 line
             //y = mx + b
             //from line equation
             //y = mx + b ... (1)
             //from (1)
-            //b = y- mx ... (2) 
+            //b = y- mx ... (2)
             //----------------------------------
             //line1:
-            //y1 = (m1 * x1) + b1 ...(3)            
+            //y1 = (m1 * x1) + b1 ...(3)
             //line2:
             //y2 = (m2 * x2) + b2 ...(4)
             //----------------------------------
@@ -346,13 +352,13 @@ namespace PixelFarm.Contours
             //----------------------------------
             //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
             //or find (x,y) where (3)==(4)
-            //---------------------------------- 
+            //----------------------------------
             //at cutpoint, find x
             // (m1 * x1) + b1 = (m2 * x1) + b2  ...(11), replace x2 with x1
             // (m1 * x1) - (m2 * x1) = b2 - b1  ...(12)
             //  x1 * (m1-m2) = b2 - b1          ...(13)
             //  x1 = (b2-b1)/(m1-m2)            ...(14), now we know x1
-            //---------------------------------- 
+            //----------------------------------
             //at cutpoint, find y
             //  y1 = (m1 * x1) + b1 ... (15), replace x1 with value from (14)
             //Ans: (x1,y1)
@@ -360,11 +366,11 @@ namespace PixelFarm.Contours
 
             double y1diff = p1.Y - p0.Y;
             double x1diff = p1.X - p0.X;
-            //find slope 
+            //find slope
             double m1 = y1diff / x1diff;
             double b1 = p0.Y - (m1 * p0.X);
             //from (2) b = y-mx, and (5)
-            //so ...  
+            //so ...
             //------------------------------
             double y2diff = p3.Y - p2.Y;
             double x2diff = p3.X - p2.X;
@@ -376,7 +382,7 @@ namespace PixelFarm.Contours
                 float ky = p0.Y;
                 //so find X
                 //from y1=m1x1 +b1;
-                //x1= (y1-b1)/m1 
+                //x1= (y1-b1)/m1
                 if (x2diff == 0)
                 {   //p2p3 -> same x, p2p3 is vertical
                     return new Vector2f((float)p3.X, ky);
@@ -385,7 +391,7 @@ namespace PixelFarm.Contours
                 {
                     double m2 = y2diff / x2diff;
                     double b2 = p2.Y - (m2) * p2.X;
-                    //from (6)             
+                    //from (6)
                     //find cut point
                     //from y2=m2x2 +b2;
                     //
@@ -396,7 +402,6 @@ namespace PixelFarm.Contours
                     double findingX = (ky - b2) / m2;
                     return new Vector2f((float)findingX, ky);
                 }
-
             }
             else if (x1diff == 0)
             {
@@ -415,11 +420,11 @@ namespace PixelFarm.Contours
                     {
                         double m2 = y2diff / x2diff;
                         double b2 = p2.Y - (m2) * p2.X;
-                        //from (6)             
+                        //from (6)
                         //find cut point
 
                         //check if (m1-m2 !=0)
-                        double cutx = cutx_p2p3; //from  (14) 
+                        double cutx = cutx_p2p3; //from  (14)
                         double cuty = (m2 * cutx) + b2;  //from (15)
                         return new Vector2f((float)cutx, (float)cuty);
                     }
@@ -449,17 +454,17 @@ namespace PixelFarm.Contours
             {
                 double m2 = y2diff / x2diff;
                 double b2 = p2.Y - (m2) * p2.X;
-                //from (6)             
+                //from (6)
                 //find cut point
 
                 //check if (m1-m2 !=0)
-                double cutx = (b2 - b1) / (m1 - m2); //from  (14) 
+                double cutx = (b2 - b1) / (m1 - m2); //from  (14)
                 double cuty = (m1 * cutx) + b1;  //from (15)
                 return new Vector2f((float)cutx, (float)cuty);
             }
-
         }
-        static Vector2f FindCutPoint(Vector2f p0, Vector2f p1, Vector2f p2, float cutAngle)
+
+        private static Vector2f FindCutPoint(Vector2f p0, Vector2f p1, Vector2f p2, float cutAngle)
         {
             //a line from p0 to p1
             //p2 is any point
@@ -468,10 +473,10 @@ namespace PixelFarm.Contours
             //from line equation
             //y = mx + b ... (1)
             //from (1)
-            //b = y- mx ... (2) 
+            //b = y- mx ... (2)
             //----------------------------------
             //line1:
-            //y1 = (m1 * x1) + b1 ...(3)            
+            //y1 = (m1 * x1) + b1 ...(3)
             //line2:
             //y2 = (m2 * x2) + b2 ...(4)
             //----------------------------------
@@ -486,21 +491,21 @@ namespace PixelFarm.Contours
             //m2 = cutAngle of m1 ...(10)
             //
             //replace value (x1,y1) and (x2,y2)
-            //we know b1 and b2         
-            //----------------------------------              
+            //we know b1 and b2
+            //----------------------------------
             //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
             //or find (x,y) where (3)==(4)
-            //---------------------------------- 
+            //----------------------------------
             //at cutpoint, find x
             // (m1 * x1) + b1 = (m2 * x1) + b2  ...(11), replace x2 with x1
             // (m1 * x1) - (m2 * x1) = b2 - b1  ...(12)
             //  x1 * (m1-m2) = b2 - b1          ...(13)
             //  x1 = (b2-b1)/(m1-m2)            ...(14), now we know x1
-            //---------------------------------- 
+            //----------------------------------
             //at cutpoint, find y
             //  y1 = (m1 * x1) + b1 ... (15), replace x1 with value from (14)
             //Ans: (x1,y1)
-            //---------------------------------- 
+            //----------------------------------
 
             double y1diff = p1.Y - p0.Y;
             double x1diff = p1.X - p0.X;
@@ -516,29 +521,29 @@ namespace PixelFarm.Contours
             }
             //------------------------------
             //
-            //find slope 
+            //find slope
             double m1 = y1diff / x1diff;
             //from (2) b = y-mx, and (5)
             //so ...
             double b1 = p0.Y - (m1 * p0.X);
-            // 
+            //
             //from (10)
             //double invert_m = -(1 / slope_m);
             //double m2 = -1 / m1;   //rotate m1
             //---------------------
-            double angle = System.Math.Atan2(y1diff, x1diff); //rad in degree 
+            double angle = System.Math.Atan2(y1diff, x1diff); //rad in degree
                                                               //double m2 = -1 / m1;
 
             double m2 = cutAngle == 90 ?
                 //short cut
                 (-1 / m1) :
-                //or 
+                //or
                 System.Math.Tan(
                 //radial_angle of original line + radial of cutAngle
                 //return new line slope
                 System.Math.Atan2(y1diff, x1diff) +
-                MyMath.DegreesToRadians(cutAngle)); //new m 
-            //--------------------- 
+                MyMath.DegreesToRadians(cutAngle)); //new m
+            //---------------------
             //from (6)
             double b2 = p2.Y - (m2) * p2.X;
             //find cut point
@@ -547,15 +552,13 @@ namespace PixelFarm.Contours
             double cutx = (b2 - b1) / (m1 - m2); //from  (14)
             double cuty = (m1 * cutx) + b1;  //from (15)
             return new Vector2f((float)cutx, (float)cuty);
-
         }
 
         public static bool FindPerpendicularCutPoint2(Vector2f p0, Vector2f p1, Vector2f p2, out Vector2f cutPoint)
         {
             //a line from p0 to p1
             //p2 is any point
-            //return p3 -> cutpoint on p0,p1 
-
+            //return p3 -> cutpoint on p0,p1
 
             double xdiff = p1.X - p0.X;
             double ydiff = p1.Y - p0.Y;
@@ -566,7 +569,6 @@ namespace PixelFarm.Contours
                 Vector2f min, max;
                 GetMinMax(p0, p1, out min, out max);
                 return cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
-
             }
             if (ydiff == 0)
             {
@@ -592,14 +594,14 @@ namespace PixelFarm.Contours
                 return cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
             }
         }
-        static double FindB(Vector2f p0, Vector2f p1)
-        {
 
+        private static double FindB(Vector2f p0, Vector2f p1)
+        {
             double m1 = (p1.Y - p0.Y) / (p1.X - p0.X);
             //y = mx + b ...(1)
             //b = y- mx
 
-            //substitute with known value to gett b 
+            //substitute with known value to gett b
             //double b0 = p0.Y - (slope_m) * p0.X;
             //double b1 = p1.Y - (slope_m) * p1.X;
             //return b0;
@@ -607,9 +609,9 @@ namespace PixelFarm.Contours
             return p0.Y - (m1) * p0.X;
         }
 
-
         internal static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         internal static readonly double _03degreeToRad = MyMath.DegreesToRadians(3);
+
         /// <summary>
         /// compare d0, d1, d2 return min value by index 0 or 1 or 2
         /// </summary>
@@ -617,11 +619,11 @@ namespace PixelFarm.Contours
         /// <param name="d1"></param>
         /// <param name="d2"></param>
         /// <returns></returns>
-        static int FindMinByIndex(double d0, double d1, double d2)
+        private static int FindMinByIndex(double d0, double d1, double d2)
         {
             unsafe
             {
-                double* tmpArr = stackalloc double[] { d0, d1, d2 };                
+                double* tmpArr = stackalloc double[] { d0, d1, d2 };
 
                 int minAt = -1;
                 double currentMin = double.MaxValue;
@@ -638,7 +640,6 @@ namespace PixelFarm.Contours
             }
         }
 
-
         //--------------
         //static System.Drawing.PointF FindCutPoint(System.Drawing.PointF p0, System.Drawing.PointF p1, System.Drawing.PointF p2, float cutAngle)
         //{
@@ -649,10 +650,10 @@ namespace PixelFarm.Contours
         //    //from line equation
         //    //y = mx + b ... (1)
         //    //from (1)
-        //    //b = y- mx ... (2) 
+        //    //b = y- mx ... (2)
         //    //----------------------------------
         //    //line1:
-        //    //y1 = (m1 * x1) + b1 ...(3)            
+        //    //y1 = (m1 * x1) + b1 ...(3)
         //    //line2:
         //    //y2 = (m2 * x2) + b2 ...(4)
         //    //----------------------------------
@@ -667,21 +668,21 @@ namespace PixelFarm.Contours
         //    //m2 = cutAngle of m1 ...(10)
         //    //
         //    //replace value (x1,y1) and (x2,y2)
-        //    //we know b1 and b2         
-        //    //----------------------------------              
+        //    //we know b1 and b2
+        //    //----------------------------------
         //    //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
         //    //or find (x,y) where (3)==(4)
-        //    //---------------------------------- 
+        //    //----------------------------------
         //    //at cutpoint, find x
         //    // (m1 * x1) + b1 = (m2 * x1) + b2  ...(11), replace x2 with x1
         //    // (m1 * x1) - (m2 * x1) = b2 - b1  ...(12)
         //    //  x1 * (m1-m2) = b2 - b1          ...(13)
         //    //  x1 = (b2-b1)/(m1-m2)            ...(14), now we know x1
-        //    //---------------------------------- 
+        //    //----------------------------------
         //    //at cutpoint, find y
         //    //  y1 = (m1 * x1) + b1 ... (15), replace x1 with value from (14)
         //    //Ans: (x1,y1)
-        //    //---------------------------------- 
+        //    //----------------------------------
 
         //    double y1diff = p1.Y - p0.Y;
         //    double x1diff = p1.X - p0.X;
@@ -693,30 +694,29 @@ namespace PixelFarm.Contours
         //    }
         //    //------------------------------
         //    //
-        //    //find slope 
+        //    //find slope
         //    double m1 = y1diff / x1diff;
         //    //from (2) b = y-mx, and (5)
         //    //so ...
         //    double b1 = p0.Y - (m1 * p0.X);
-        //    // 
+        //    //
         //    //from (10)
         //    //double invert_m = -(1 / slope_m);
         //    //double m2 = -1 / m1;   //rotate m1
         //    //---------------------
-        //    double angle = Math.Atan2(y1diff, x1diff); //rad in degree 
+        //    double angle = Math.Atan2(y1diff, x1diff); //rad in degree
         //                                               //double m2 = -1 / m1;
 
         //    double m2 = cutAngle == 90 ?
         //        //short cut
         //        (-1 / m1) :
-        //        //or 
+        //        //or
         //        Math.Tan(
         //        //radial_angle of original line + radial of cutAngle
         //        //return new line slope
         //        Math.Atan2(y1diff, x1diff) +
-        //        DegreesToRadians(cutAngle)); //new m 
+        //        DegreesToRadians(cutAngle)); //new m
         //                                     //---------------------
-
 
         //    //from (6)
         //    double b2 = p2.Y - (m2) * p2.X;
@@ -726,7 +726,6 @@ namespace PixelFarm.Contours
         //    double cutx = (b2 - b1) / (m1 - m2); //from  (14)
         //    double cuty = (m1 * cutx) + b1;  //from (15)
         //    return new System.Drawing.PointF((float)cutx, (float)cuty);
-
 
         //    //------
         //    //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
@@ -748,15 +747,15 @@ namespace PixelFarm.Contours
         //    System.Drawing.PointF p0, System.Drawing.PointF p1,
         //    System.Drawing.PointF p2, System.Drawing.PointF p3)
         //{
-        //    //find cut point of 2 line 
+        //    //find cut point of 2 line
         //    //y = mx + b
         //    //from line equation
         //    //y = mx + b ... (1)
         //    //from (1)
-        //    //b = y- mx ... (2) 
+        //    //b = y- mx ... (2)
         //    //----------------------------------
         //    //line1:
-        //    //y1 = (m1 * x1) + b1 ...(3)            
+        //    //y1 = (m1 * x1) + b1 ...(3)
         //    //line2:
         //    //y2 = (m2 * x2) + b2 ...(4)
         //    //----------------------------------
@@ -766,13 +765,13 @@ namespace PixelFarm.Contours
         //    //----------------------------------
         //    //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
         //    //or find (x,y) where (3)==(4)
-        //    //---------------------------------- 
+        //    //----------------------------------
         //    //at cutpoint, find x
         //    // (m1 * x1) + b1 = (m2 * x1) + b2  ...(11), replace x2 with x1
         //    // (m1 * x1) - (m2 * x1) = b2 - b1  ...(12)
         //    //  x1 * (m1-m2) = b2 - b1          ...(13)
         //    //  x1 = (b2-b1)/(m1-m2)            ...(14), now we know x1
-        //    //---------------------------------- 
+        //    //----------------------------------
         //    //at cutpoint, find y
         //    //  y1 = (m1 * x1) + b1 ... (15), replace x1 with value from (14)
         //    //Ans: (x1,y1)
@@ -781,7 +780,6 @@ namespace PixelFarm.Contours
         //    double y1diff = p1.Y - p0.Y;
         //    double x1diff = p1.X - p0.X;
 
-
         //    if (x1diff == 0)
         //    {
         //        //90 or 180 degree
@@ -789,7 +787,7 @@ namespace PixelFarm.Contours
         //    }
         //    //------------------------------
         //    //
-        //    //find slope 
+        //    //find slope
         //    double m1 = y1diff / x1diff;
         //    //from (2) b = y-mx, and (5)
         //    //so ...
@@ -800,7 +798,7 @@ namespace PixelFarm.Contours
         //    double x2diff = p3.X - p2.X;
         //    double m2 = y2diff / x2diff;
 
-        //    // 
+        //    //
         //    //from (6)
         //    double b2 = p2.Y - (m2) * p2.X;
         //    //find cut point
@@ -821,7 +819,6 @@ namespace PixelFarm.Contours
         ///// <returns>The angle expressed in radians</returns>
         //public static double DegreesToRadians(double degrees)
         //{
-
         //    return degrees * degToRad;
         //}
 

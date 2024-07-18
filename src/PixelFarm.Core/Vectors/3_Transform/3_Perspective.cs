@@ -3,8 +3,8 @@
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,39 +18,42 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //=======================================================trans_perspective
 
     public class CoordTransformationChain : ICoordTransformer
     {
-        readonly ICoordTransformer _left;
-        readonly ICoordTransformer _right;
+        private readonly ICoordTransformer _left;
+        private readonly ICoordTransformer _right;
+
         public CoordTransformationChain(ICoordTransformer left, ICoordTransformer right)
         {
             _left = left;
             _right = right;
         }
+
         ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
         {
             return new CoordTransformationChain(_left, _right.MultiplyWith(another));
         }
+
         void ICoordTransformer.Transform(ref double x, ref double y)
         {
             _left.Transform(ref x, ref y);
             _right.Transform(ref x, ref y);
         }
+
         ICoordTransformer ICoordTransformer.CreateInvert()
         {
-            //TODO: impl 
+            //TODO: impl
             throw new System.NotSupportedException();
         }
+
         public ICoordTransformer Left => _left;
         public ICoordTransformer Right => _right;
         public CoordTransformerKind Kind => CoordTransformerKind.TransformChain;
         public bool IsIdentity => false; //TODO: impl here again
-
     }
 
     public struct PerspectiveMat
@@ -63,17 +66,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public sealed class Perspective : ICoordTransformer
     {
-        const double EPSILON = 1e-14;
+        private const double EPSILON = 1e-14;
 
         //this is 3x3 matrix  , (rows x cols)
         internal double
                sx, shy, w0,
                shx, sy, w1,
                tx, ty, w2;
-        //------------------------------------------------------- 
+
+        //-------------------------------------------------------
         // Identity matrix
-        bool _isIdentity = false;
-        bool _isIdentiyMatEvaluated = false;
+        private bool _isIdentity = false;
+
+        private bool _isIdentiyMatEvaluated = false;
+
         public Perspective()
         {
             sx = 1; shy = 0; w0 = 0;
@@ -92,7 +98,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             shx = v3_shx; sy = v4_sy; w1 = v5_w1;
             tx = v6_tx; ty = v7_ty; w2 = v8_w2;
         }
-
 
         // From affine
         public Perspective(Affine a)
@@ -149,12 +154,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             quad_to_quad(src, dst);
         }
+
         public bool IsIdentity
         {
             get
             {
-
-                //else 
+                //else
                 if (!_isIdentiyMatEvaluated)
                 {
                     _isIdentiyMatEvaluated = true;
@@ -168,6 +173,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
+
         ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
         {
             if (another is Affine aff)
@@ -183,7 +189,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 return null;
             }
         }
-        void Set(Perspective Other)
+
+        private void Set(Perspective Other)
         {
             sx = Other.sx;
             shy = Other.shy;
@@ -210,7 +217,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
-        unsafe bool InternalGenerateQuadToQuad(double* qs_h, double* qdHead)
+
+        private unsafe bool InternalGenerateQuadToQuad(double* qs_h, double* qdHead)
         {
             //TODO: review here***
             Perspective p = new Perspective();
@@ -242,9 +250,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-
         // Map square (0,0,1,1) to the quadrilateral and vice versa
-        unsafe bool square_to_quad(double* q)
+        private unsafe bool square_to_quad(double* q)
         {
             double dx = q[0] - q[2] + q[4] - q[6];
             double dy = q[1] - q[3] + q[5] - q[7];
@@ -290,7 +297,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 ty = q[1];
                 w2 = 1.0;
             }
-
 
             //double dx = q[0] - q[2] + q[4] - q[6];
             //double dy = q[1] - q[3] + q[5] - q[7];
@@ -338,6 +344,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //}
             return true;
         }
+
         //--------------------------------------------------------- Operations
         public Perspective from_affine(Affine a)
         {
@@ -348,7 +355,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         // Reset - load an identity matrix
-        Perspective reset()
+        private Perspective reset()
         {
             sx = 1; shy = 0; w0 = 0;
             shx = 0; sy = 1; w1 = 0;
@@ -357,7 +364,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         // Invert matrix. Returns false in degenerate case
-        bool invert()
+        private bool invert()
         {
             double d0 = sy * w2 - w1 * ty;
             double d1 = w0 * ty - shy * w2;
@@ -383,32 +390,32 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         // Direct transformations operations
-        Perspective translate(double x, double y)
+        private Perspective translate(double x, double y)
         {
             tx += x;
             ty += y;
             return this;
         }
 
-        Perspective rotate(double a)
+        private Perspective rotate(double a)
         {
             multiply(Affine.NewRotation(a));
             return this;
         }
 
-        Perspective scale(double s)
+        private Perspective scale(double s)
         {
             multiply(Affine.NewScaling(s));
             return this;
         }
 
-        Perspective scale(double x, double y)
+        private Perspective scale(double x, double y)
         {
             multiply(Affine.NewScaling(x, y));
             return this;
         }
 
-        Perspective multiply(Perspective a)
+        private Perspective multiply(Perspective a)
         {
             Perspective b = new Perspective(this);
             sx = a.sx * b.sx + a.shx * b.shy + a.tx * b.w0;
@@ -424,7 +431,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         //------------------------------------------------------------------------
-        Perspective multiply(Affine a)
+        private Perspective multiply(Affine a)
         {
             Perspective b = new Perspective(this);
             sx = a.sx * b.sx + a.shx * b.shy + a.tx * b.w0;
@@ -437,7 +444,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         //------------------------------------------------------------------------
-        Perspective premultiply(Perspective b)
+        private Perspective premultiply(Perspective b)
         {
             Perspective a = new Perspective(this);
             sx = a.sx * b.sx + a.shx * b.shy + a.tx * b.w0;
@@ -472,7 +479,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //}
 
         //------------------------------------------------------------------------
-        Perspective multiply_inv(Perspective m)
+        private Perspective multiply_inv(Perspective m)
         {
             Perspective t = m;
             t.invert();
@@ -480,7 +487,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         //------------------------------------------------------------------------
-        Perspective trans_perspectivemultiply_inv(Affine m)
+        private Perspective trans_perspectivemultiply_inv(Affine m)
         {
             Affine t = m;
             var invert = t.CreateInvert();
@@ -488,7 +495,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         //------------------------------------------------------------------------
-        Perspective premultiply_inv(Perspective m)
+        private Perspective premultiply_inv(Perspective m)
         {
             Perspective t = m;
             t.invert();
@@ -497,7 +504,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         // Multiply inverse of "m" by "this" and assign the result to "this"
-        Perspective premultiply_inv(Affine m)
+        private Perspective premultiply_inv(Affine m)
         {
             Perspective t = new Perspective(m);
             t.invert();
@@ -506,7 +513,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         //--------------------------------------------------------- Load/Store
-        void store_to(double[] m)
+        private void store_to(double[] m)
         {
             m[0] = sx; m[1] = shy; m[2] = w0;
             m[3] = shx; m[4] = sy; m[5] = w1;
@@ -514,7 +521,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         //------------------------------------------------------------------------
-        Perspective load_from(double[] m)
+        private Perspective load_from(double[] m)
         {
             sx = m[0]; shy = m[1]; w0 = m[2];
             shx = m[3]; sy = m[4]; w1 = m[5];
@@ -590,7 +597,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         // Direct transformation of x and y, affine part only
-        void transform_affine(ref double x, ref double y)
+        private void transform_affine(ref double x, ref double y)
         {
             double tmp = x;
             x = tmp * sx + y * shx + tx;
@@ -598,7 +605,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         // Direct transformation of x and y, 2x2 matrix only, no translation
-        void transform_2x2(ref double x, ref double y)
+        private void transform_2x2(ref double x, ref double y)
         {
             double tmp = x;
             x = tmp * sx + y * shx;
@@ -606,28 +613,27 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         // Inverse transformation of x and y. It works slow because
-        // it explicitly inverts the matrix on every call. For massive 
-        // operations it's better to invert() the matrix and then use 
-        // direct transformations. 
-        void inverse_transform(ref double x, ref double y)
+        // it explicitly inverts the matrix on every call. For massive
+        // operations it's better to invert() the matrix and then use
+        // direct transformations.
+        private void inverse_transform(ref double x, ref double y)
         {
             Perspective t = new Perspective(this);
             if (t.invert()) t.Transform(ref x, ref y);
         }
 
-
         //---------------------------------------------------------- Auxiliary
-        double determinant()
+        private double determinant()
         {
             return sx * (sy * w2 - ty * w1) +
                    shx * (ty * w0 - shy * w2) +
                    tx * (shy * w1 - sy * w0);
         }
-        double determinant_reciprocal()
+
+        private double determinant_reciprocal()
         {
             return 1.0 / determinant();
         }
-
 
         public bool IsValid
         {
@@ -641,7 +647,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public CoordTransformerKind Kind => CoordTransformerKind.Perspective;
 
-        bool is_identity()
+        private bool is_identity()
         {
             return is_equal_eps(sx, 1.0, EPSILON) &&
                     is_equal_eps(shy, 0.0, EPSILON) &&
@@ -653,11 +659,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     is_equal_eps(ty, 0.0, EPSILON) &&
                     is_equal_eps(w2, 1.0, EPSILON);
         }
-        static bool is_equal_eps(double v1, double v2, double epsilon)
+
+        private static bool is_equal_eps(double v1, double v2, double epsilon)
         {
             return Math.Abs(v1 - v2) <= (epsilon);
         }
-
 
         //public bool is_equal(Perspective m)
         //{
@@ -677,15 +683,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //           AggBasics.is_equal_eps(w2, m.w2, epsilon);
         //}
 
-        // Determine the major affine parameters. Use with caution 
+        // Determine the major affine parameters. Use with caution
         // considering possible degenerate cases.
-        double scale()
+        private double scale()
         {
             double x = 0.707106781 * sx + 0.707106781 * shx;
             double y = 0.707106781 * shy + 0.707106781 * sy;
             return Math.Sqrt(x * x + y * y);
         }
-        double rotation()
+
+        private double rotation()
         {
             double x1 = 0.0;
             double y1 = 0.0;
@@ -695,12 +702,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             Transform(ref x2, ref y2);
             return Math.Atan2(y2 - y1, x2 - x1);
         }
-        void translation(out double dx, out double dy)
+
+        private void translation(out double dx, out double dy)
         {
             dx = tx;
             dy = ty;
         }
-        void scaling(out double x, out double y)
+
+        private void scaling(out double x, out double y)
         {
             double x1 = 0.0;
             double y1 = 0.0;
@@ -713,7 +722,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             x = x2 - x1;
             y = y2 - y1;
         }
-        void scaling_abs(out double x, out double y)
+
+        private void scaling_abs(out double x, out double y)
         {
             x = Math.Sqrt(sx * sx + shx * shx);
             y = Math.Sqrt(shy * shy + sy * sy);
@@ -727,12 +737,5 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             m.tx = tx;      /**/m.ty = ty;      /**/m.w2 = w2;
             return m;
         }
-
     }
-
-
-
-
-
-
 }

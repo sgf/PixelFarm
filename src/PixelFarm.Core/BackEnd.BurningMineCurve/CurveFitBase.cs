@@ -1,14 +1,14 @@
 ﻿//ZLIB, 2015,burningmime
 // Copyright (c) 2015 burningmime
-// 
+//
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
 // arising from the use of this software.
-// 
+//
 // Permission is granted to anyone to use this software for any purpose,
 // including commercial applications, and to alter it and redistribute it
 // freely, subject to the following restrictions:
-// 
+//
 // 1. The origin of this software must not be misrepresented; you must not
 //    claim that you wrote the original software. If you use this software
 //    in a product, an acknowledgement in the product documentation would be
@@ -17,20 +17,16 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-
-
 #define PIXEL_FARM
 
-
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 #if SYSTEM_WINDOWS_VECTOR
 using VECTOR = System.Windows.Vector;
 using FLOAT = System.Double;
 #elif SYSTEM_NUMERICS_VECTOR
-using VECTOR = System.Numerics.Vector2;
+
 using FLOAT = System.Single;
+using VECTOR = System.Numerics.Vector2;
+
 #elif UNITY
 using VECTOR = UnityEngine.Vector2;
 using FLOAT = System.Single;
@@ -40,6 +36,7 @@ using FLOAT = System.Double;
 #else
 #error Unknown vector type -- must define one of SYSTEM_WINDOWS_VECTOR, SYSTEM_NUMERICS_VECTOR or UNITY
 #endif
+
 namespace burningmime.curves
 {
     /// <summary>
@@ -52,25 +49,30 @@ namespace burningmime.curves
         protected const int MAX_ITERS = 4;                     // maximum number of iterations of newton's method to run before giving up and splitting curve
         protected const int END_TANGENT_N_PTS = 8;             // maximum number of points to base end tangent on
         protected const int MID_TANGENT_N_PTS = 4;             // maximum number of points on each side to base mid tangent on
+
         /// <summary>
         /// Points in the whole line being used for fitting.
         /// </summary>
         protected readonly List<VECTOR> _pts = new List<VECTOR>(256);
+
         /// <summary>
         /// length of curve before each point (so, arclen[0] = 0, arclen[1] = distance(pts[0], pts[1]),
         /// arclen[2] = arclen[1] + distance(pts[1], pts[2]) ... arclen[n -1] = length of the entire curve, etc).
         /// </summary>
         protected readonly List<FLOAT> _arclen = new List<FLOAT>(256);
+
         /// <summary>
         /// current parametrization of the curve. When fitting, u[i] is the parametrization for the point in pts[first + i]. This is
         /// an optimization for CurveBuilder, since it might not need to allocate as big of a _u as is necessary to hold the whole
         /// curve.
         /// </summary>
         protected readonly List<FLOAT> _u = new List<FLOAT>(256);
+
         /// <summary>
         /// maximum squared error before we split the curve
         /// </summary>
         protected FLOAT _squaredError;
+
         /// <summary>
         /// Tries to fit single Bezier curve to the points in [first ... last]. Destroys anything in <see cref="_u"/> in the process.
         /// Assumes there are at least two points to fit.

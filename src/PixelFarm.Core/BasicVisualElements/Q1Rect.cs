@@ -1,4 +1,4 @@
-﻿//BSD, 2014-present, WinterDev 
+﻿//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -17,10 +17,8 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-
     //beware: the ctor!!=> left,bottom, right, top
 
     /// <summary>
@@ -30,6 +28,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         //(x0,y0)=> (x1,y1)
         public readonly int Left, Bottom, Right, Top;
+
         public Q1Rect(int left, int bottom, int right, int top)
         {
             Left = left;
@@ -37,9 +36,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             Right = right;
             Top = top;
         }
+
         public Q1Rect(int left, int bottom, int right, int top, bool withNormalizeCheck)
         {
-            //Cartesian's Quadrant1 Rect 
+            //Cartesian's Quadrant1 Rect
             //bottom must <  top
             int t;
             if (left > right) { t = left; left = right; right = t; }
@@ -62,9 +62,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// <param name="dy"></param>
         /// <returns></returns>
         public Q1Rect CreateNewFromOffset(int dx, int dy) => new Q1Rect(Left + dx, Bottom + dy, Right + dx, Top + dy);
-         
 
         public bool Contains(int x, int y) => (x >= Left && x <= Right && y >= Bottom && y <= Top);
+
         public static bool IntersectsWith(Q1Rect a, Q1Rect b)
         {
             int a_left = a.Left;
@@ -79,6 +79,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             return (a_left < a_right && a_bottom < a_top);
         }
+
         public static bool IntersectRectangles(Q1Rect a, Q1Rect b, out Q1Rect result)
         {
             int a_left = a.Left;
@@ -122,7 +123,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             result = new Q1Rect();//empty
             return false;
         }
-
 
         //public bool Clip(in Q1Rect r)
         //{
@@ -179,8 +179,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //    Right = Right + inflateSize;
         //    Top = Top + inflateSize;
         //}
-
-
 
         //public override int GetHashCode()
         //{
@@ -307,12 +305,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //    return true;
         //}
 
-
 #if DEBUG
+
         public override string ToString()
         {
             return "L:" + this.Left + ",T:" + this.Top + ",R:" + this.Right + ",B:" + this.Bottom;
         }
+
 #endif
     }
 }

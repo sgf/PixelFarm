@@ -34,35 +34,40 @@
 namespace Poly2Tri
 {
     /**
-     * 
+     *
      * @author Thomas Åhlén, thahlen@gmail.com
      *
      */
+
     public class DTSweepContext : TriangulationContext
     {
         //*** share object !
 
-        // Initial triangle factor, seed triangle will extend 30% of 
+        // Initial triangle factor, seed triangle will extend 30% of
         // PointSet width to both left and right.
         private const float ALPHA = 0.3f;
+
         internal AdvancingFront Front;
-        TriangulationPoint Head { get; set; }
-        TriangulationPoint Tail { get; set; }
+        private TriangulationPoint Head { get; set; }
+        private TriangulationPoint Tail { get; set; }
 
         //----------------------------------
         //basin
         internal AdvancingFrontNode BasinLeftNode;
+
         internal AdvancingFrontNode BasinBottomNode;
         internal AdvancingFrontNode BasinRightNode;
         internal double BasinWidth;
         internal bool BasinLeftHighest;
+
         //----------------------------------
         internal DTSweepConstraint EdgeEventConstrainedEdge;
+
         internal bool EdgeEventRight;
         //----------------------------------
 #if DEBUG
 
-        static int dbugTotalId;
+        private static int dbugTotalId;
         public int dbugId = dbugTotalId++;
 #endif
 
@@ -185,7 +190,7 @@ namespace Poly2Tri
         }
 
         /// <summary>
-        /// Try to map a node to all sides of this triangle that don't have 
+        /// Try to map a node to all sides of this triangle that don't have
         /// a neighbor.
         /// </summary>
         public void MapTriangleToNodes(DelaunayTriangle t)
@@ -202,7 +207,7 @@ namespace Poly2Tri
             //(FindIndexOf(0) + 2) % 3=>2
             //(FindIndexOf(1) + 2) % 3=>0
             //(FindIndexOf(2) + 2) % 3=>1
-            //------------------------------ 
+            //------------------------------
 
             if (t.N0 == null)
             {
@@ -238,7 +243,7 @@ namespace Poly2Tri
         {
             //--------------------
             //initialization phase:
-            //all points are sorted regarding y coordinate, 
+            //all points are sorted regarding y coordinate,
             //regardless of whether they define an edge or not.
             //those points havingthe same y coordinates are also sorted
             //in the x direction.
@@ -250,9 +255,8 @@ namespace Poly2Tri
             //p1 and p2=> artificial points
             //-------------------
             //during the fininalization phase,
-            //all triangles, having at least one vertex among the 
+            //all triangles, having at least one vertex among the
             //artificial points, are erased.
-
 
             base.PrepareTriangulation(t);
             double xmax, xmin;
@@ -270,7 +274,6 @@ namespace Poly2Tri
                 if (p.Y < ymin) ymin = p.Y;
             }
 
-
             double deltaX = ALPHA * (xmax - xmin);
             double deltaY = ALPHA * (ymax - ymin);
             TriangulationPoint p1 = new TriangulationPoint(xmax + deltaX, ymin - deltaY);
@@ -282,7 +285,8 @@ namespace Poly2Tri
             Points.Sort(Compare);
             //logger.info( "Triangulation setup [{}ms]", ( System.nanoTime() - time ) / 1e6 );
         }
-        static int Compare(TriangulationPoint p1, TriangulationPoint p2)
+
+        private static int Compare(TriangulationPoint p1, TriangulationPoint p2)
         {
             if (p1.Y < p2.Y)
             {
@@ -320,7 +324,5 @@ namespace Poly2Tri
             //new DTSweepConstraint(a, b);
             DTSweepConstraintMaker.BuildConstraint(a, b);
         }
-
-
     }
 }

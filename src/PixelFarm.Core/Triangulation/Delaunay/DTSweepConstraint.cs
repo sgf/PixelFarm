@@ -37,19 +37,22 @@ namespace Poly2Tri
     {
         public readonly TriangulationPoint P;
         public readonly TriangulationPoint Q;
+
         public DTSweepConstraint(TriangulationPoint p1, TriangulationPoint p2)
         {
             P = p1;
             Q = p2;
         }
+
         public static readonly DTSweepConstraint Empty = new DTSweepConstraint();
     }
+
     public static class DTSweepConstraintMaker
     {
         /// <summary>
         /// Give two points in any order. Will always be ordered so
-        /// that q.y > p.y and q.x > p.x if same y value 
-        /// </summary> 
+        /// that q.y > p.y and q.x > p.x if same y value
+        /// </summary>
         public static void BuildConstraint(TriangulationPoint p1, TriangulationPoint p2)
         {
             var P = p1;

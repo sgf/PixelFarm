@@ -2,10 +2,9 @@
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
- * 
+ *
  * Contributions by Georg W�chter.
  */
-
 
 namespace PixelFarm.VectorMath
 {
@@ -15,23 +14,26 @@ namespace PixelFarm.VectorMath
     //[Serializable]
     public struct BezierCurveCubic
     {
-
         /// <summary>
         /// Start anchor point.
         /// </summary>
         public Vector2 StartAnchor;
+
         /// <summary>
         /// End anchor point.
         /// </summary>
         public Vector2 EndAnchor;
+
         /// <summary>
         /// First control point, controls the direction of the curve start.
         /// </summary>
         public Vector2 FirstControlPoint;
+
         /// <summary>
         /// Second control point, controls the direction of the curve end.
         /// </summary>
         public Vector2 SecondControlPoint;
+
         /// <summary>
         /// Gets or sets the parallel value.
         /// </summary>
@@ -40,7 +42,6 @@ namespace PixelFarm.VectorMath
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the orignal curve at any point.</remarks>
         public float Parallel;
-
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveCubic"/>.
@@ -74,8 +75,6 @@ namespace PixelFarm.VectorMath
             this.FirstControlPoint = firstControlPoint;
             this.SecondControlPoint = secondControlPoint;
         }
-
-
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -134,6 +133,5 @@ namespace PixelFarm.VectorMath
 
             return (float)length;
         }
-
     }
 }

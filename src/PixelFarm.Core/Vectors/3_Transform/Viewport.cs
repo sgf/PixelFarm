@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -23,40 +23,42 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //----------------------------------------------------------trans_viewport
 
     public sealed class Viewport
     {
-        double _world_x1;
-        double _world_y1;
-        double _world_x2;
-        double _world_y2;
-        double _device_x1;
-        double _device_y1;
-        double _device_x2;
-        double _device_y2;
-        AspectRatio _aspect;
-        bool _is_valid;
-        double _align_x;
-        double _align_y;
-        double _wx1;
-        double _wy1;
-        double _wx2;
-        double _wy2;
-        double _dx1;
-        double _dy1;
-        double _kx;
-        double _ky;
+        private double _world_x1;
+        private double _world_y1;
+        private double _world_x2;
+        private double _world_y2;
+        private double _device_x1;
+        private double _device_y1;
+        private double _device_x2;
+        private double _device_y2;
+        private AspectRatio _aspect;
+        private bool _is_valid;
+        private double _align_x;
+        private double _align_y;
+        private double _wx1;
+        private double _wy1;
+        private double _wx2;
+        private double _wy2;
+        private double _dx1;
+        private double _dy1;
+        private double _kx;
+        private double _ky;
+
         public enum AspectRatio
         {
-            //aspect_ratio_e 
+            //aspect_ratio_e
             Stretch,
+
             Meet,
             Slice
         }
+
         //-------------------------------------------------------------------
         public Viewport()
         {
@@ -143,8 +145,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         //-------------------------------------------------------------------
         public bool is_valid() => _is_valid;
+
         public double align_x() => _align_x;
+
         public double align_y() => _align_y;
+
         public AspectRatio aspect_ratio() => _aspect;
 
         //-------------------------------------------------------------------
@@ -177,6 +182,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         //-------------------------------------------------------------------
         public double device_dx() => _dx1 - _wx1 * _kx;
+
         public double device_dy() => _dy1 - _wy1 * _ky;
 
         //-------------------------------------------------------------------
@@ -200,8 +206,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //-------------------------------------------------------------------
         public Affine to_affine_scale_only() => Affine.NewScaling(_kx, _ky);
 
-
-        void update()
+        private void update()
         {
             double epsilon = 1e-30;
             if (Math.Abs(_world_x1 - _world_x2) < epsilon ||

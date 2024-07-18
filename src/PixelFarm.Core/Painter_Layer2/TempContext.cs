@@ -1,17 +1,16 @@
-﻿//MIT, 2019-present, WinterDev 
-using System;
-using System.Collections.Generic;
-
+﻿//MIT, 2019-present, WinterDev
 namespace PixelFarm
 {
     public struct TempContext<T> : IDisposable
     {
         internal readonly T _tool;
+
         internal TempContext(out T tool)
         {
             Temp<T>.GetFreeItem(out _tool);
             tool = _tool;
         }
+
         public void Dispose()
         {
             Temp<T>.Release(_tool);
@@ -21,14 +20,17 @@ namespace PixelFarm
     public static class Temp<T>
     {
         public delegate T CreateNewItemDelegate();
+
         public delegate void ReleaseItemDelegate(T item);
 
         [System.ThreadStatic]
-        static Stack<T> s_pool;
+        private static Stack<T> s_pool;
+
         [System.ThreadStatic]
-        static CreateNewItemDelegate s_newHandler;
+        private static CreateNewItemDelegate s_newHandler;
+
         [System.ThreadStatic]
-        static ReleaseItemDelegate s_releaseCleanUp;
+        private static ReleaseItemDelegate s_releaseCleanUp;
 
         public static TempContext<T> Borrow(out T freeItem)
         {
@@ -45,6 +47,7 @@ namespace PixelFarm
             s_newHandler = newHandler;
             s_releaseCleanUp = releaseCleanUp;
         }
+
         internal static void GetFreeItem(out T freeItem)
         {
             if (s_pool.Count > 0)
@@ -56,30 +59,32 @@ namespace PixelFarm
                 freeItem = s_newHandler();
             }
         }
+
         internal static void Release(T item)
         {
             s_releaseCleanUp?.Invoke(item);
             s_pool.Push(item);
-            //... 
+            //...
         }
+
         public static bool IsInit()
         {
             return s_pool != null;
         }
     }
 
-
-
     public static class Temp<Owner, T>
     {
         public struct TempContext : IDisposable
         {
             internal readonly T _tool;
+
             internal TempContext(out T tool)
             {
                 Temp<Owner, T>.GetFreeItem(out _tool);
                 tool = _tool;
             }
+
             public void Dispose()
             {
                 Temp<Owner, T>.Release(_tool);
@@ -87,15 +92,17 @@ namespace PixelFarm
         }
 
         public delegate T CreateNewItemDelegate();
+
         public delegate void ReleaseItemDelegate(T item);
 
+        [System.ThreadStatic]
+        private static Stack<T> s_pool;
 
         [System.ThreadStatic]
-        static Stack<T> s_pool;
+        private static CreateNewItemDelegate s_newHandler;
+
         [System.ThreadStatic]
-        static CreateNewItemDelegate s_newHandler;
-        [System.ThreadStatic]
-        static ReleaseItemDelegate s_releaseCleanUp;
+        private static ReleaseItemDelegate s_releaseCleanUp;
 
         public static TempContext Borrow(out T freeItem)
         {
@@ -112,6 +119,7 @@ namespace PixelFarm
             s_newHandler = newHandler;
             s_releaseCleanUp = releaseCleanUp;
         }
+
         internal static void GetFreeItem(out T freeItem)
         {
             if (s_pool.Count > 0)
@@ -123,16 +131,17 @@ namespace PixelFarm
                 freeItem = s_newHandler();
             }
         }
+
         internal static void Release(T item)
         {
             s_releaseCleanUp?.Invoke(item);
             s_pool.Push(item);
-            //... 
+            //...
         }
+
         public static bool IsInit()
         {
             return s_pool != null;
         }
     }
-
 }

@@ -1,4 +1,4 @@
-﻿//MIT, 2014-present, WinterDev 
+﻿//MIT, 2014-present, WinterDev
 //
 // System.Drawing.FontStyle.cs
 //
@@ -14,10 +14,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -27,25 +27,22 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace PixelFarm.Drawing
 {
-
     public interface IFormattedGlyphPlanList
     {
-
     }
+
     public enum RequestFontStyle
     {
         //https://www.w3.org/TR/css-fonts-3/#propdef-font-style
         Regular,
+
         Italic,
         Oblique
     }
-
 
     public enum RequestFontWeight : ushort
     {
@@ -86,23 +83,25 @@ namespace PixelFarm.Drawing
         UltraExpanded = 9
     }
 
-
     public abstract class ReqFontSpec
     {
         internal ReqFontSpec()
         {
             StartCodePoint = -1; //default
         }
+
         /// <summary>
         /// emheight in point unit
         /// </summary>
         public float SizeInPoints { get; internal set; }
+
         public Len Size { get; internal set; }
         public string Name { get; internal set; }
-        public RequestFontStyle Style { get; internal set; } //https://www.w3.org/TR/css-fonts-3/#propdef-font-style 
+        public RequestFontStyle Style { get; internal set; } //https://www.w3.org/TR/css-fonts-3/#propdef-font-style
 
         public ushort WeightClass { get; internal set; } = (ushort)RequestFontWeight.Normal; //400= regular
         public ushort WidthClass { get; internal set; } = (ushort)RequestFontWidthClass.Normal; //Typography Width-Class and https://www.w3.org/TR/css-fonts-3/#propdef-font-stretch
+
         //
         public string Src { get; internal set; } //https://www.w3.org/TR/css-fonts-3/#propdef-font-style
 
@@ -115,8 +114,7 @@ namespace PixelFarm.Drawing
             EndCodePoint = endCodePoint;
         }
 
-
-        int _runtimeReqKey; //this value depends on the system (string.GetHashCode())
+        private int _runtimeReqKey; //this value depends on the system (string.GetHashCode())
 
         /// <summary>
         /// get request key
@@ -146,32 +144,35 @@ namespace PixelFarm.Drawing
                 hash = hash * 31 + (int)WidthClass;
                 hash = hash * 31 + (int)StartCodePoint;
                 return _runtimeReqKey = hash * 31 + (int)EndCodePoint;
-
             }
             return _runtimeReqKey;
         }
 
         [ThreadStatic]
-        static StringBuilder s_stbuilder;
+        private static StringBuilder s_stbuilder;
+
 #if DEBUG
+
         public override string ToString()
         {
             return Name + "," + SizeInPoints + "," + Style;
         }
+
 #endif
 
-
-        //------------------ 
+        //------------------
         //caching ...
 
         //preserve 2 field user cache their actual here
         internal object _resolvedFont1;
+
         internal object _resolvedFont2;
 
         public static void SetResolvedFont1(ReqFontSpec reqFont, object resolvedFont)
         {
             reqFont._resolvedFont1 = resolvedFont;
         }
+
         public static void SetResolvedFont2(ReqFontSpec reqFont, object resolvedFont)
         {
             reqFont._resolvedFont2 = resolvedFont;
@@ -188,6 +189,7 @@ namespace PixelFarm.Drawing
         {
             return reqFont._resolvedFont1 as T;
         }
+
         /// <summary>
         /// get cached resolved-object as specific type
         /// </summary>
@@ -199,7 +201,6 @@ namespace PixelFarm.Drawing
         {
             return reqFont._resolvedFont2 as T;
         }
-
     }
 
     /// <summary>
@@ -207,21 +208,19 @@ namespace PixelFarm.Drawing
     /// </summary>
     public sealed class RequestFont : ReqFontSpec
     {
-
-        //each platform/canvas has its own representation of this Font 
+        //each platform/canvas has its own representation of this Font
         //this is just a request for specficic font presentation at a time
-        //----- 
+        //-----
         public sealed class Choice : ReqFontSpec
         {
             public Choice(string fontFamily, float fontSizeInPts, ushort fontWeight = 400, RequestFontStyle cssFontStyle = RequestFontStyle.Regular)
                  : this(fontFamily, Len.Pt(fontSizeInPts), fontWeight, cssFontStyle)
             {
-
             }
 
             public Choice(string fontFamily, Len fontSize, ushort fontWeight = 400, RequestFontStyle cssFontStyle = RequestFontStyle.Regular)
             {
-                Size = fontSize; //store user font size here 
+                Size = fontSize; //store user font size here
                 SizeInPoints = fontSize.ToPoints();
 
 #if DEBUG
@@ -230,14 +229,15 @@ namespace PixelFarm.Drawing
                 Name = fontFamily.Trim(); //ONLY 1 name
                 Style = cssFontStyle;
             }
+
             internal Choice(Len fontSize)
             {
-                Size = fontSize; //store user font size here 
+                Size = fontSize; //store user font size here
                 SizeInPoints = fontSize.ToPoints();
             }
         }
 
-        List<Choice> _otherChoices;
+        private List<Choice> _otherChoices;
 
         public RequestFont(string fontFamily, float fontSizeInPts, ushort fontWeight = 400, RequestFontStyle cssFontStyle = RequestFontStyle.Regular)
             : this(fontFamily, Len.Pt(fontSizeInPts), fontWeight, cssFontStyle)
@@ -258,19 +258,17 @@ namespace PixelFarm.Drawing
             //*** the first one will be primary font
             //and the other will be our choice
 
-            //see https://www.w3.org/TR/css-fonts-3/ 
-
-
+            //see https://www.w3.org/TR/css-fonts-3/
 
             //<family-name>
-            //    The name of a font family of choice such as Helvetica or Verdana in the previous example. 
+            //    The name of a font family of choice such as Helvetica or Verdana in the previous example.
             //<generic-family>
             //    The following generic family keywords are defined: ‘serif’, ‘sans-serif’, ‘cursive’, ‘fantasy’, and ‘monospace’.
             //    These keywords can be used as a general fallback mechanism when an author's desired font choices are not available.
             //    As keywords, they must not be quoted.
-            //    Authors are encouraged to append a generic font family as a last alternative for improved robustness. 
+            //    Authors are encouraged to append a generic font family as a last alternative for improved robustness.
 
-            Size = fontSize; //store user font size here 
+            Size = fontSize; //store user font size here
             SizeInPoints = fontSize.ToPoints();
 
             //parse the font family name
@@ -298,7 +296,7 @@ namespace PixelFarm.Drawing
 
         private RequestFont(Len fontSize)
         {
-            Size = fontSize; //store user font size here 
+            Size = fontSize; //store user font size here
             SizeInPoints = fontSize.ToPoints();
         }
 
@@ -306,6 +304,7 @@ namespace PixelFarm.Drawing
         {
             AddOtherChoices((IEnumerable<Choice>)choices);
         }
+
         public void AddOtherChoices(IEnumerable<Choice> choices)
         {
             if (choices == null) return;
@@ -323,8 +322,8 @@ namespace PixelFarm.Drawing
         }
 
         public int OtherChoicesCount => (_otherChoices != null) ? _otherChoices.Count : 0;
-        public Choice GetOtherChoice(int index) => _otherChoices[index];
 
+        public Choice GetOtherChoice(int index) => _otherChoices[index];
 
         /// <summary>
         /// create req font+ specific typeface path
@@ -332,8 +331,8 @@ namespace PixelFarm.Drawing
         /// <param name="path">path to typeface file</param>
         /// <returns></returns>
         public static RequestFont FromFile(string path, Len len) => new RequestFont(len) { Src = path };
-        public static RequestFont FromFile(string typefacePath, float sizeInPoints) => FromFile(typefacePath, Len.Pt(sizeInPoints));
 
+        public static RequestFont FromFile(string typefacePath, float sizeInPoints) => FromFile(typefacePath, Len.Pt(sizeInPoints));
 
         /// <summary>
         /// create req font+ specific typeface path
@@ -341,9 +340,7 @@ namespace PixelFarm.Drawing
         /// <param name="path">path to typeface file</param>
         /// <returns></returns>
         public static Choice ChoiceFromFile(string path, Len len) => new Choice(len) { Src = path };
+
         public static Choice ChoiceFromFile(string typefacePath, float sizeInPoints) => ChoiceFromFile(typefacePath, Len.Pt(sizeInPoints));
-
     }
-
-
 }

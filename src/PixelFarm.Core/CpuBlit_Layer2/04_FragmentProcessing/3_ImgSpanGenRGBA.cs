@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,22 +18,19 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by 
+// Adaptation for high precision colors has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-//  
+//
 //----------------------------------------------------------------------------
 
-
-using System;
-using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
-
-using subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
-using filter_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgFilterConst;
+using PixelFarm.Drawing;
 using CO = PixelFarm.Drawing.Internal.CO;
+using filter_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgFilterConst;
+using subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
 
 namespace PixelFarm.CpuBlit.FragmentProcessing;
 
@@ -46,7 +43,7 @@ public static class ISpanInterpolatorExtensions
     {
         interpolator.Begin(inX, inY, 1);
         interpolator.GetCoord(out int x_hr, out int y_hr);
-        //get translate version 
+        //get translate version
         outX = x_hr >> shift;
         outY = y_hr >> shift;
     }
@@ -57,7 +54,7 @@ public static class ISpanInterpolatorExtensions
     {
         interpolator.Begin(inX, inY, 1);
         interpolator.GetCoord(out int x_hr, out int y_hr);
-        //get translate version 
+        //get translate version
         outX = x_hr >> subpix_const.SHIFT;
         outY = y_hr >> subpix_const.SHIFT;
     }
@@ -79,9 +76,9 @@ public class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
     //NN: nearest neighbor
     public ImgSpanGenRGBA_NN_StepXBy1()
     {
-
     }
-    public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
+
+    public override sealed void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
     {
         //ISpanInterpolator spanInterpolator = Interpolator;
         //spanInterpolator.Begin(x + dx, y + dy, len);
@@ -95,15 +92,14 @@ public class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
     }
 }
 
-
 //==============================================span_image_filter_rgba_nn
 /// <summary>
 /// Nearest Neighbor
 /// </summary>
 public class ImgSpanGenRGBA_NN : ImgSpanGen
 {
+    private bool _noTransformation = false;
 
-    bool _noTransformation = false;
     public override void Prepare()
     {
         base.Prepare();
@@ -112,7 +108,8 @@ public class ImgSpanGenRGBA_NN : ImgSpanGen
            spanInterpolatorLinear.Transformer is VertexProcessing.Affine aff &&
            aff.IsIdentity);
     }
-    internal unsafe static void NN_StepXBy1(IBitmapSrc bmpsrc, int srcIndex, Drawing.Color[] outputColors, int dstIndex, int len)
+
+    internal static unsafe void NN_StepXBy1(IBitmapSrc bmpsrc, int srcIndex, Drawing.Color[] outputColors, int dstIndex, int len)
     {
         using (CpuBlit.TempMemPtr srcBufferPtr = bmpsrc.GetBufferPtr())
         {
@@ -120,28 +117,25 @@ public class ImgSpanGenRGBA_NN : ImgSpanGen
             do
             {
                 int srcColor = *pSource;
-                //separate each component 
+                //separate each component
                 //TODO: review here, color from source buffer
                 //should be in 'pre-multiplied' format.
-                //so it should be converted to 'straight' color by call something like ..'FromPreMult()'  
+                //so it should be converted to 'straight' color by call something like ..'FromPreMult()'
                 outputColors[dstIndex++] = Drawing.Color.FromArgb(
                       (srcColor >> CO.A_SHIFT) & 0xff, //a
                       (srcColor >> CO.R_SHIFT) & 0xff, //r
                       (srcColor >> CO.G_SHIFT) & 0xff, //g
-                      (srcColor >> CO.B_SHIFT) & 0xff);//b 
+                      (srcColor >> CO.B_SHIFT) & 0xff);//b
 
                 pSource++;//move next
-
             } while (--len != 0);
         }
-
     }
+
     public override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
     {
-
         if (_noTransformation)
         {
-
             //Interpolator.GetCoord(out int x_hr, out int y_hr);
             //int x_lr = x_hr >> subpix_const.SHIFT;
             //int y_lr = y_hr >> subpix_const.SHIFT;
@@ -174,11 +168,10 @@ public class ImgSpanGenRGBA_NN : ImgSpanGen
                               (srcColor >> CO.A_SHIFT) & 0xff, //a
                               (srcColor >> CO.R_SHIFT) & 0xff, //r
                               (srcColor >> CO.G_SHIFT) & 0xff, //g
-                              (srcColor >> CO.B_SHIFT) & 0xff);//b 
+                              (srcColor >> CO.B_SHIFT) & 0xff);//b
 
                         ++startIndex;
                         spanInterpolator.Next();
-
                     } while (--len != 0);
                 }
             }
@@ -188,8 +181,8 @@ public class ImgSpanGenRGBA_NN : ImgSpanGen
 
 public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
 {
+    private bool _noTransformation = false;
 
-    bool _noTransformation = false;
     public ImgSpanGenRGBA_BilinearClip(Drawing.Color back_color)
     {
         BackgroundColor = back_color;
@@ -202,16 +195,16 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
         _noTransformation = (base.Interpolator is SpanInterpolatorLinear spanInterpolatorLinear &&
            spanInterpolatorLinear.Transformer is VertexProcessing.Affine aff &&
            aff.IsIdentity);
-
     }
-    public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
+
+    public override sealed void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
     {
 #if DEBUG
         int tmp_len = len;
 #endif
         unsafe
         {
-            //TODO: review here 
+            //TODO: review here
 
             if (_noTransformation)
             {
@@ -228,7 +221,7 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                           (srcColor >> CO.A_SHIFT) & 0xff, //a
                           (srcColor >> CO.R_SHIFT) & 0xff, //r
                           (srcColor >> CO.G_SHIFT) & 0xff, //g
-                          (srcColor >> CO.B_SHIFT) & 0xff);//b 
+                          (srcColor >> CO.B_SHIFT) & 0xff);//b
 
                         ++startIndex;
                     } while (--len != 0);
@@ -282,7 +275,6 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                             x_hr &= subpix_const.MASK;
                             y_hr &= subpix_const.MASK;
 
-
                             weight = (subpix_const.SCALE - x_hr) * (subpix_const.SCALE - y_hr);
 
                             if (weight > BASE_MASK)
@@ -292,8 +284,7 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                 acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                                 acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                                 acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                                acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
-
+                                acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
                             }
 
                             weight = (x_hr * (subpix_const.SCALE - y_hr));
@@ -306,7 +297,7 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                 acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                                 acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                                 acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                                acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
+                                acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
                             }
 
                             weight = ((subpix_const.SCALE - x_hr) * y_hr);
@@ -321,7 +312,7 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                 acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                                 acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                                 acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                                acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
+                                acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
                             }
 
                             weight = (x_hr * y_hr);
@@ -334,7 +325,7 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                 acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                                 acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                                 acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                                acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
+                                acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
                             }
                             acc_r >>= subpix_const.SHIFT * 2;
                             acc_g >>= subpix_const.SHIFT * 2;
@@ -353,7 +344,6 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                             }
                             else
                             {
-
                                 acc_r =
                                    acc_g =
                                       acc_b =
@@ -366,7 +356,6 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
 
                                 if (weight > BASE_MASK)
                                 {
-
                                     if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                     {
                                         srcColor = srcBuffer[_bmpSrc.GetBufferOffsetXY32(x_lr, y_lr)];
@@ -374,7 +363,7 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                         acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                                         acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                                         acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                                        acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
+                                        acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
                                     }
                                     else
                                     {
@@ -383,7 +372,6 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                         acc_b += back_b * weight;
                                         acc_a += back_a * weight;
                                     }
-
                                 }
 
                                 x_lr++;
@@ -392,13 +380,12 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                 {
                                     if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                     {
-
                                         srcColor = srcBuffer[_bmpSrc.GetBufferOffsetXY32(x_lr, y_lr)];
                                         //
                                         acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                                         acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                                         acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                                        acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
+                                        acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
                                     }
                                     else
                                     {
@@ -416,15 +403,12 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                 {
                                     if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                     {
-
-
                                         srcColor = srcBuffer[_bmpSrc.GetBufferOffsetXY32(x_lr, y_lr)];
                                         //
                                         acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                                         acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                                         acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                                        acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
-
+                                        acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
                                     }
                                     else
                                     {
@@ -446,7 +430,7 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
                                         acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                                         acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                                         acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                                        acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
+                                        acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
                                     }
                                     else
                                     {
@@ -467,7 +451,6 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
 #if DEBUG
                         if (startIndex >= outputColors.Length)
                         {
-
                         }
 #endif
                         outputColors[startIndex] = PixelFarm.Drawing.Color.FromArgb(
@@ -479,29 +462,28 @@ public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
 
                         ++startIndex;
                         spanInterpolator.Next();
-
                     } while (--len != 0);
-
                 }//using
             }//else
         }//unsafe
     }
 }
 
-
-
 public class ImgSpanGenRGBA_CustomFilter : ImgSpanGen
 {
     //from Agg
     //span_image_filter_rgba
-    ImageFilterLookUpTable _lut;
+    private ImageFilterLookUpTable _lut;
+
     public ImgSpanGenRGBA_CustomFilter()
     {
     }
+
     public void SetLookupTable(ImageFilterLookUpTable lut)
     {
         _lut = lut;
     }
+
     public override void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
     {
         ISpanInterpolator spanInterpolator = this.Interpolator;
@@ -540,7 +522,6 @@ public class ImgSpanGenRGBA_CustomFilter : ImgSpanGen
                           acc_b =
                             acc_a = filter_const.SCALE / 2;
 
-
                     int x_fract = x_hr & subpix_const.MASK;
                     int y_count = diameter;
 
@@ -566,7 +547,7 @@ public class ImgSpanGenRGBA_CustomFilter : ImgSpanGen
                             acc_a += weight * ((srcColor >> CO.A_SHIFT) & 0xff); //a
                             acc_r += weight * ((srcColor >> CO.R_SHIFT) & 0xff); //r
                             acc_g += weight * ((srcColor >> CO.G_SHIFT) & 0xff); //g
-                            acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b 
+                            acc_b += weight * ((srcColor >> CO.B_SHIFT) & 0xff); //b
 
                             if (--x_count == 0) break; //for
 

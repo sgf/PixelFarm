@@ -1,14 +1,13 @@
 ﻿//MIT, 2017-present, WinterDev
-using System;
-using Poly2Tri;
 using PixelFarm.VectorMath;
+using Poly2Tri;
+
 namespace PixelFarm.Contours
 {
-
     public class AnalyzedTriangle
     {
         public readonly int Id;
-        DelaunayTriangle _tri;
+        private DelaunayTriangle _tri;
         public readonly EdgeLine e0;
         public readonly EdgeLine e1;
         public readonly EdgeLine e2;
@@ -25,16 +24,16 @@ namespace PixelFarm.Contours
             //we do not store triangulation points (p0,p1,02)
             //an EdgeLine is created after we create GlyphTriangles.
 
-            //triangulate point p0->p1->p2 is CCW ***             
+            //triangulate point p0->p1->p2 is CCW ***
             e0 = NewEdgeLine(p0, p1, tri.EdgeIsConstrained(tri.FindEdgeIndex(p0, p1)));
             e1 = NewEdgeLine(p1, p2, tri.EdgeIsConstrained(tri.FindEdgeIndex(p1, p2)));
             e2 = NewEdgeLine(p2, p0, tri.EdgeIsConstrained(tri.FindEdgeIndex(p2, p0)));
 
             //if the order of original glyph point is CW
             //we may want to reverse the order of edge creation :
-            //p2->p1->p0 
+            //p2->p1->p0
 
-            //link back 
+            //link back
             tri.userData = this;
             //----------------
 
@@ -42,16 +41,17 @@ namespace PixelFarm.Contours
             AnalyzeInsideEdge(e0, e1, e2);
             AnalyzeInsideEdge(e1, e0, e2);
             AnalyzeInsideEdge(e2, e0, e1);
-            //at this point, 
+            //at this point,
             //we should know the direction of this triangle
-            //then we known that if this triangle is left/right/upper/lower of the 'stroke' line 
+            //then we known that if this triangle is left/right/upper/lower of the 'stroke' line
 
             this.CalculateCentroid(out float cent_x, out float cent_y);
             AnalyzeOutsideEdge(e0, cent_x, cent_y);
             AnalyzeOutsideEdge(e1, cent_x, cent_y);
             AnalyzeOutsideEdge(e2, cent_x, cent_y);
         }
-        void AnalyzeOutsideEdge(EdgeLine d, float centroidX, float centroidY)
+
+        private void AnalyzeOutsideEdge(EdgeLine d, float centroidX, float centroidY)
         {
             //check if edge slope
             if (!d.IsOutside) return;
@@ -61,16 +61,17 @@ namespace PixelFarm.Contours
                 case LineSlopeKind.Horizontal:
 
                     //check if upper or lower
-                    //compare mid point with the centroid  
+                    //compare mid point with the centroid
                     d.IsUpper = d.GetMidPoint().Y > centroidY;
                     break;
+
                 case LineSlopeKind.Vertical:
                     d.IsLeftSide = d.GetMidPoint().X < centroidX;
                     break;
             }
-
         }
-        void AnalyzeInsideEdge(EdgeLine d0, EdgeLine d1, EdgeLine d2)
+
+        private void AnalyzeInsideEdge(EdgeLine d0, EdgeLine d1, EdgeLine d2)
         {
             if (d0._earlyInsideAnalysis) return;
             if (!d0.IsInside) return;
@@ -81,11 +82,11 @@ namespace PixelFarm.Contours
             {
                 if (d2.IsInside)
                 {
-                    //3 inside edges 
+                    //3 inside edges
                 }
                 else
                 {
-                    //1 outside edge (d2) 
+                    //1 outside edge (d2)
                     //2 inside edges (d0,d1)
                     //find a perpendicular line
                     FindPerpendicular(d2, d0);
@@ -97,7 +98,6 @@ namespace PixelFarm.Contours
                 if (d1.IsInside)
                 {
                     //3 inside edges
-
                 }
                 else
                 {
@@ -105,11 +105,11 @@ namespace PixelFarm.Contours
                     //2 inside edges (d0,d2)
                     FindPerpendicular(d1, d0);
                     FindPerpendicular(d1, d2);
-
                 }
             }
         }
-        static void FindPerpendicular(EdgeLine outsideEdge, EdgeLine inside)
+
+        private static void FindPerpendicular(EdgeLine outsideEdge, EdgeLine inside)
         {
             Vector2f m0 = inside.GetMidPoint();
             if (MyMath.FindPerpendicularCutPoint(outsideEdge, new Vector2f(m0.X, m0.Y), out Vector2f cut_fromM0))
@@ -118,12 +118,11 @@ namespace PixelFarm.Contours
             }
             else
             {
-
             }
             outsideEdge._earlyInsideAnalysis = inside._earlyInsideAnalysis = true;
-
         }
-        EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
+
+        private EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
         {
             return isOutside ?
                 (EdgeLine)(new OutsideEdgeLine(this, p.userData as Vertex, q.userData as Vertex)) :
@@ -134,6 +133,7 @@ namespace PixelFarm.Contours
         {
             _tri.GetCentroid(out centroidX, out centroidY);
         }
+
         public bool IsConnectedTo(AnalyzedTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;
@@ -141,11 +141,12 @@ namespace PixelFarm.Contours
             {
                 throw new NotSupportedException();
             }
-            //compare each neighbor 
+            //compare each neighbor
             return _tri.N0 == t2 ||
                    _tri.N1 == t2 ||
                    _tri.N2 == t2;
         }
+
         /// <summary>
         /// neighbor triangle 0
         /// </summary>
@@ -161,12 +162,10 @@ namespace PixelFarm.Contours
         /// </summary>
         public AnalyzedTriangle N2 => GetGlyphTriFromUserData(_tri.N2);
 
-        static AnalyzedTriangle GetGlyphTriFromUserData(DelaunayTriangle tri)
+        private static AnalyzedTriangle GetGlyphTriFromUserData(DelaunayTriangle tri)
         {
             if (tri == null) return null;
             return tri.userData as AnalyzedTriangle;
         }
-
     }
-
 }

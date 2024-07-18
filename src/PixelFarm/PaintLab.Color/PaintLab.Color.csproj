@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm.Core\PixelFarm.Core.csproj" />
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Colorful_SH\Colors\HunterLabColor.cs" />

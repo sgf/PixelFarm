@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -21,30 +21,24 @@
 // Arc vertex generator
 //
 //----------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-
-
     public static class VertexSourceExtensions
     {
-
         public static void AddMoveTo(this VertexStore vxs, double x, double y, ICoordTransformer tx)
         {
             tx.Transform(ref x, ref y);
             vxs.AddMoveTo(x, y);
         }
+
         public static void AddLineTo(this VertexStore vxs, double x, double y, ICoordTransformer tx)
         {
             tx.Transform(ref x, ref y);
             vxs.AddLineTo(x, y);
         }
-
-
 
         public static VertexStore MakeVxs(this Ellipse ellipse, ICoordTransformer tx, VertexStore output)
         {
@@ -56,7 +50,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             int numSteps = ellipse.NumSteps;
             double anglePerStep = MathHelper.Tau / numSteps;
             double angle = 0;
-
 
             double orgX = ellipse.originX;
             double orgY = ellipse.originY;
@@ -85,10 +78,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
 
-
             //3.
             output.AddCloseFigure((int)EndVertexOrientation.CCW, 0);
-            //4. 
+            //4.
             output.AddNoMore();
 
             return output;
@@ -105,7 +97,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double anglePerStep = MathHelper.Tau / numSteps;
             double angle = 0;
 
-
             double orgX = ellipse.originX;
             double orgY = ellipse.originY;
             double radX = ellipse.radiusX;
@@ -131,14 +122,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
 
-
             //3.
             output.AddCloseFigure((int)EndVertexOrientation.CCW, 0);
-            //4. 
+            //4.
             output.AddNoMore();
 
             return output;
         }
+
         public static void MakeVxs(this Ellipse ellipse, PathWriter writer)
         {
             //1. moveto
@@ -149,7 +140,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double anglePerStep = MathHelper.Tau / numSteps;
             double angle = 0;
 
-
             double orgX = ellipse.originX;
             double orgY = ellipse.originY;
             double radX = ellipse.radiusX;
@@ -175,13 +165,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
 
-
             //3.
             //output.AddCloseFigure((int)EndVertexOrientation.CCW, 0);
             writer.CloseFigure();
-            //4.              
+            //4.
             //add no more?
         }
+
         public static void MakeVxs(this Arc arc, VertexStore v)
         {
             foreach (VertexData vertexData in arc.GetVertexIter())
@@ -193,6 +183,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 v.AddVertex(vertexData.x, vertexData.y, vertexData.command);
             }
         }
+
         public static IEnumerable<VertexData> GetVertexIter(this Arc arc)
         {
             // go to the start
@@ -276,7 +267,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public static VertexStore CreateVxs(IEnumerable<VertexData> iter, VertexStore output)
         {
-
             foreach (VertexData v in iter)
             {
                 output.AddVertex(v.x, v.y, v.command);
@@ -284,18 +274,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return output;
         }
 
-
         public static bool IsClockwise(this VertexStore flattenVxs)
         {
             //TODO: review here again***
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
             //check if hole or not
-            //clockwise or counter-clockwise 
-            //Some of the suggested methods will fail in the case of a non-convex polygon, such as a crescent. 
+            //clockwise or counter-clockwise
+            //Some of the suggested methods will fail in the case of a non-convex polygon, such as a crescent.
             //Here's a simple one that will work with non-convex polygons (it'll even work with a self-intersecting polygon like a figure-eight, telling you whether it's mostly clockwise).
 
-            //Sum over the edges, (x2 − x1)(y2 + y1). 
+            //Sum over the edges, (x2 − x1)(y2 + y1).
             //If the result is positive the curve is clockwise,
             //if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
             double total = 0;
@@ -313,8 +302,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 flattenVxs.GetVertex(0, out double x1, out double y1);
                 total += (x1 - x0) * (y1 + y0);
             }
-            return total >= 0; //             
+            return total >= 0; //
         }
     }
-
 }

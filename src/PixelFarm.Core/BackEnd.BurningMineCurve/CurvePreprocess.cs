@@ -1,14 +1,14 @@
 ﻿//ZLIB, 2015,burningmime
 // Copyright (c) 2015 burningmime
-// 
+//
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
 // arising from the use of this software.
-// 
+//
 // Permission is granted to anyone to use this software for any purpose,
 // including commercial applications, and to alter it and redistribute it
 // freely, subject to the following restrictions:
-// 
+//
 // 1. The origin of this software must not be misrepresented; you must not
 //    claim that you wrote the original software. If you use this software
 //    in a product, an acknowledgement in the product documentation would be
@@ -17,19 +17,16 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-
-
 #define PIXEL_FARM
 
-
-using System;
-using System.Collections.Generic;
 #if SYSTEM_WINDOWS_VECTOR
 using VECTOR = System.Windows.Vector;
 using FLOAT = System.Double;
 #elif SYSTEM_NUMERICS_VECTOR
-using VECTOR = System.Numerics.Vector2;
+
 using FLOAT = System.Single;
+using VECTOR = System.Numerics.Vector2;
+
 #elif UNITY
 using VECTOR = UnityEngine.Vector2;
 using FLOAT = System.Single;
@@ -45,6 +42,7 @@ namespace burningmime.curves
     public static class CurvePreprocess
     {
         private const FLOAT EPSILON = VectorHelper.EPSILON;
+
         /// <summary>
         /// Creates a list of equally spaced points that lie on the path described by straight line segments between
         /// adjacent points in the source list.
@@ -210,6 +208,7 @@ namespace burningmime.curves
         /// <param name="p">The point to test.</param>
         /// <returns>The perpendicular distance to the line.</returns>
 #if !UNITY
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)] // originally this method wasn't be inlined
 #endif
         private static FLOAT PerpendicularDistance(VECTOR a, VECTOR b, FLOAT abDist, FLOAT aCrossB, VECTOR p)

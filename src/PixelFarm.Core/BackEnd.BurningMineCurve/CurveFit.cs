@@ -1,14 +1,14 @@
 //ZLIB, 2015,burningmime
 // Copyright (c) 2015 burningmime
-// 
+//
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
 // arising from the use of this software.
-// 
+//
 // Permission is granted to anyone to use this software for any purpose,
 // including commercial applications, and to alter it and redistribute it
 // freely, subject to the following restrictions:
-// 
+//
 // 1. The origin of this software must not be misrepresented; you must not
 //    claim that you wrote the original software. If you use this software
 //    in a product, an acknowledgement in the product documentation would be
@@ -17,20 +17,14 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-
-
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 #if SYSTEM_WINDOWS_VECTOR
 using VECTOR = System.Windows.Vector;
 using FLOAT = System.Double;
 #elif SYSTEM_NUMERICS_VECTOR
-using VECTOR = System.Numerics.Vector2;
+
 using FLOAT = System.Single;
+using VECTOR = System.Numerics.Vector2;
+
 #elif UNITY
 using VECTOR = UnityEngine.Vector2;
 using FLOAT = System.Single;
@@ -40,25 +34,29 @@ using FLOAT = System.Double;
 #else
 #error Unknown vector type -- must define one of SYSTEM_WINDOWS_VECTOR, SYSTEM_NUMERICS_VECTOR or UNITY
 #endif
+
 namespace burningmime.curves
 {
     /// <summary>
-    /// Implements a least-squares bezier curve fitting routine based on http://tog.acm.org/resources/GraphicsGems/gems/FitCurves.c with a few 
+    /// Implements a least-squares bezier curve fitting routine based on http://tog.acm.org/resources/GraphicsGems/gems/FitCurves.c with a few
     /// optimizations made by me. You can read the article here: http://read.pudn.com/downloads141/ebook/610086/Graphics_Gems_I.pdf page 626.
     /// To use, call the <see cref="Fit"/> static function and wait for magic to happen.
     /// </summary>
     public sealed class CurveFit : CurveFitBase
     {
 #if !UNITY
+
         /// <summary>
         /// Use a thread-static instance to prevent multithreading issues without needing to re-allocate on each run.
         /// </summary>
         [ThreadStatic]
         private static CurveFit s_instance;
+
         private static CurveFit GetInstance()
         {
             return s_instance ?? (s_instance = new CurveFit());
         }
+
 #else
         private static CurveFit GetInstance()
         {
@@ -70,23 +68,26 @@ namespace burningmime.curves
         /// <summary>
         /// Private constructor so it can't be constructed externally.
         /// </summary>
-        private CurveFit() { }
+        private CurveFit()
+        { }
 
         /// <summary>
         /// Curves we've found so far.
         /// </summary>
         private readonly List<CubicBezier> _result = new List<CubicBezier>(16);
+
         /// <summary>
         /// Shared zero-curve array.
         /// </summary>
         private static readonly CubicBezier[] NO_CURVES = new CubicBezier[0];
+
         /// <summary>
-        /// Attempts to fit a set of Bezier curves to the given data. It returns a set of curves that form a 
+        /// Attempts to fit a set of Bezier curves to the given data. It returns a set of curves that form a
         /// http://en.wikipedia.org/wiki/Composite_B%C3%A9zier_curve with C1 continuity (that is, each curve's start
         /// point is coincident with the previous curve's end point, and the tangent vectors of the start and end
         /// points are going in the same direction, so the curves will join up smoothly). Returns an empty array
         /// if less than two points in input.
-        /// 
+        ///
         /// Input data MUST not contain repeated points (that is, the same point twice in succession). The best way to
         /// ensure this is to call any one of the methods in <see cref="CurvePreprocess" />, since all three pre-processing
         /// methods will remove duplicate points. If repeated points are encountered, unexpected behavior can occur.

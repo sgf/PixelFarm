@@ -5,26 +5,24 @@
  * User: lbrubaker
  * Date: 3/26/2010
  * Time: 4:37 PM
- * 
+ *
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Collections.Generic;
 using Tesselate;
+
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-
     /// <summary>
     /// listen and handle the event from tesslator
     /// </summary>
-    class TessListener : Tesselator.ITessListener
+    internal class TessListener : Tesselator.ITessListener
     {
         internal List<TessVertex2d> _tempVertexList = new List<TessVertex2d>();
         internal List<ushort> _resultIndexList = new List<ushort>();
-        int _inputVertexCount;
+        private int _inputVertexCount;
 
-        //Tesselator.TriangleListType _triangleListType; 
+        //Tesselator.TriangleListType _triangleListType;
         public TessListener()
         {
             //empty not use
@@ -32,14 +30,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _tempVertexList.Add(new TessVertex2d(0, 0));
         }
 
-        void Tesselator.ITessListener.BeginRead() { }
+        void Tesselator.ITessListener.BeginRead()
+        {
+        }
+
         void Tesselator.ITessListener.Begin(Tesselator.TriangleListType type)
         {
 #if DEBUG
 
             if (type != Tesselator.TriangleListType.Triangles)
             {
-
             }
 #endif
             //_triangleListType = type;
@@ -75,7 +75,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         void Tesselator.ITessListener.Vertext(int index)
         {
             //Assert.IsTrue(GetNextOutputAsString() == "V");
-            //Assert.AreEqual(GetNextOutputAsInt(), index); 
+            //Assert.AreEqual(GetNextOutputAsInt(), index);
             if (index < 0)
             {
                 //use data from temp store***
@@ -93,8 +93,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-
         public bool NeedEdgeFlag { get; set; }
+
         void Tesselator.ITessListener.EdgeFlag(bool boundaryEdge_isEdge)
         {
             //Console.WriteLine("edge: " + IsEdge);
@@ -119,11 +119,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[0], error);
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[1], error);
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[2], error);
-            //Assert.AreEqual(GetNextOutputAsDouble(), weight4[3], error); 
-            //here , outData = index of newly add vertext 
+            //Assert.AreEqual(GetNextOutputAsDouble(), weight4[3], error);
+            //here , outData = index of newly add vertext
             //----------------------------------------------------------------------
-            //*** new vertext is added into user vertext list ***            
-            //use negative to note that this vertext is from temporary source 
+            //*** new vertext is added into user vertext list ***
+            //use negative to note that this vertext is from temporary source
 
             //other implementation:
             // append to end of input list is ok if the input list can grow up ***
@@ -134,14 +134,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //----------------------------------------
         }
 
-
         public bool NeedMash { get; set; }
+
         void Tesselator.ITessListener.Mesh(Mesh mesh)
         {
-
         }
-
-
 
         /// <summary>
         /// connect to actual Tesselator
@@ -150,7 +147,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// <param name="setEdgeFlag"></param>
         public void Connect(Tesselator tesselator, bool setEdgeFlag)
         {
-
             NeedEdgeFlag = setEdgeFlag;
             tesselator.SetListener(this);
 
@@ -163,6 +159,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //    tesselator.callEdgeFlag = OnEdgeFlag;
             //}
         }
+
         /// <summary>
         /// clear previous results and load a new input vertex list
         /// </summary>
@@ -177,12 +174,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-
     public class TessTool
     {
-        readonly Tesselator _tess;
-        readonly TessListener _tessListener;
-        public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.NonZero }) { }
+        private readonly Tesselator _tess;
+        private readonly TessListener _tessListener;
+
+        public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.NonZero })
+        {
+        }
+
         public TessTool(Tesselator tess)
         {
             _tess = tess;
@@ -190,14 +190,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _tessListener.Connect(tess, true);
         }
 
-
         public Tesselator.WindingRuleType WindingRuleType
         {
             get => _tess.WindingRule;
             set => _tess.WindingRule = value;
         }
+
         internal List<ushort> TessIndexList => _tessListener._resultIndexList;
         internal List<TessVertex2d> TempVertexList => _tessListener._tempVertexList;
+
         public bool TessPolygon(float[] vertex2dCoords, int[] contourEndPoints)
         {
             //internal tess the polygon
@@ -222,7 +223,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 beginAt = thisContourEndAt + 1;
                 _tess.EndContour();
-
             }
             else
             {
@@ -237,7 +237,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         _tess.AddVertex(
                             vertex2dCoords[i << 1], //*2
-                            vertex2dCoords[(i << 1) + 1], //*2+1 
+                            vertex2dCoords[(i << 1) + 1], //*2+1
                             i);
                     }
                     beginAt = thisContourEndAt + 1;
@@ -250,7 +250,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-    class TessTool2
+    internal class TessTool2
     {
         //UNDER CONSTRUCTION
 
@@ -269,19 +269,24 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             /// reset current read position to begin state again
             /// </summary>
             void Reset();
+
             State ReadNext(out float x, out float y);
+
             State CurrentState { get; }
         }
 
-        readonly Tesselator _tess;
+        private readonly Tesselator _tess;
+
         public TessTool2()
             : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.NonZero })
         {
         }
+
         public TessTool2(Tesselator tess)
         {
             _tess = tess;
         }
+
         public bool TessPolygon(IPolygonVerticeReader polygonReader, Tesselator.ITessListener listner)
         {
             //internal tess the polygon
@@ -301,16 +306,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     case State.BeginPolygon:
                         _tess.BeginPolygon();
                         break;
+
                     case State.BeginContour:
                         _tess.BeginContour();
                         break;
+
                     case State.Vertex:
                         _tess.AddVertex(cur_x, cur_y, current_vertex);
                         current_vertex++;
                         break;
+
                     case State.EndContour:
                         _tess.EndContour();
                         break;
+
                     case State.EndPolygon:
                         _tess.EndPolygon();
                         goto EXIT_LOOP;
@@ -349,7 +358,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             List<TessVertex2d> tempVertexList = tessTool.TempVertexList;
             //3.
             vertexCount = indexList.Count;
-            //-----------------------------    
+            //-----------------------------
             int orgVertexCount = vertex2dCoords.Length / 2;
             float[] vtx = new float[vertexCount * 2];//***
             int n = 0;
@@ -374,8 +383,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             //triangle list
             return vtx;
-
         }
+
         /// <summary>
         /// tess and read result as triangle list index array (for GLES draw element)
         /// </summary>
@@ -404,9 +413,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             List<TessVertex2d> tempVertexList = tessTool.TempVertexList;
             //3.
             vertexCount = indexList.Count;
-            //-----------------------------   
+            //-----------------------------
 
-            //create a new array and append with original and new tempVertex list 
+            //create a new array and append with original and new tempVertex list
             int tempVertListCount = tempVertexList.Count;
             outputCoords = new float[vertex2dCoords.Length + tempVertListCount * 2];
             //1. copy original array

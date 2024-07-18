@@ -1,5 +1,4 @@
-﻿
-//for .NET 2.0 
+﻿//for .NET 2.0
 /*
 namespace System
 {
@@ -40,7 +39,6 @@ namespace System.Runtime.CompilerServices
 {
     public partial class ExtensionAttribute : Attribute { }
 }
- 
 
 namespace System.Collections.Generic
 {
@@ -101,7 +99,6 @@ namespace System.Collections.Generic
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-
             int ii = arrayIndex;
             foreach (T t in _dic.Values)
             {
@@ -297,7 +294,6 @@ namespace System.Collections.Generic
                 {
                     return default(T);
                 }
-
             }
             else if (list is List<T> list2)
             {
@@ -446,7 +442,6 @@ namespace System.Collections.Generic
         }
         public static T First<T>(this IEnumerable<T> list)
         {
-
             if (list is T[] arr)
             {
                 if (arr.Length > 0)
@@ -457,7 +452,6 @@ namespace System.Collections.Generic
                 {
                     return default(T);
                 }
-
             }
             else if (list is List<T> list2)
             {
@@ -490,7 +484,6 @@ namespace System.Collections.Generic
                 }
                 return lastOne;
             }
-
         }
         public static T Last<T>(this IEnumerable<T> list)
         {
@@ -504,7 +497,6 @@ namespace System.Collections.Generic
                 {
                     return default(T);
                 }
-
             }
             else if (list is List<T> list2)
             {
@@ -550,7 +542,6 @@ namespace System.Collections.Generic
                 {
                     return default(T);
                 }
-
             }
             else if (list is List<T> list2)
             {
@@ -592,7 +583,6 @@ namespace System.Collections.Generic
                 {
                     yield return arr[i];
                 }
-
             }
             else if (list is List<T> list2)
             {
@@ -637,7 +627,6 @@ namespace System.Collections.Generic
             }
             return list2.ToArray();
         }
-
     }
 
     public static class EnumerableEmpty<T>
@@ -718,7 +707,5 @@ namespace System.Collections.Generic
             }
         }
     }
-
-
 }
 */

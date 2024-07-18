@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,7 +22,6 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public class Ellipse
@@ -31,13 +30,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public double originY;
         public double radiusX;
         public double radiusY;
-        double _scale = 1;
-        int _numSteps;
+        private double _scale = 1;
+        private int _numSteps;
         public bool _cw;
+
         public Ellipse()
         {
             Set(0, 0, 1, 1, 4, false);
         }
+
         public Ellipse(double originX, double originY, double radiusX, double radiusY, int num_steps = 0, bool cw = false)
         {
             Set(originX, originY, radiusX, radiusY, num_steps, cw);
@@ -59,6 +60,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 CalculateNumSteps();
             }
         }
+
         public void SetFromLTWH(double left, double top, double width, double height, int num_steps = 0, bool cw = false)
         {
             double x = (left + width / 2);
@@ -67,6 +69,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double ry = Math.Abs(height / 2);
             Set(x, y, rx, ry, num_steps, cw);
         }
+
         public double ApproximateScale
         {
             get => _scale;
@@ -79,16 +82,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public int NumSteps => _numSteps;
 
-        void CalculateNumSteps()
+        private void CalculateNumSteps()
         {
             double ra = (Math.Abs(radiusX) + Math.Abs(radiusY)) / 2;
             double da = Math.Acos(ra / (ra + 0.125 / _scale)) * 2;
             _numSteps = (int)Math.Round(2 * Math.PI / da);
         }
-
-
     }
-
-
-   
 }

@@ -1,19 +1,18 @@
 ﻿//MIT, 2014-present, WinterDev
 
-using System;
 namespace PixelFarm.Drawing
 {
-
     public abstract class Image : IDisposable
     {
-        IDisposable _innerImg;
-        bool _handleInnerImgAsOwner;
+        private IDisposable _innerImg;
+        private bool _handleInnerImgAsOwner;
 
         public abstract void Dispose();
+
         public abstract int Width { get; }
-        public abstract int Height { get; } 
+        public abstract int Height { get; }
         public abstract bool IsReferenceImage { get; }
-        
+
         public abstract int ReferenceX { get; }
         public abstract int ReferenceY { get; }
 
@@ -21,6 +20,7 @@ namespace PixelFarm.Drawing
         {
             return img._innerImg;
         }
+
         public static void ClearCache(Image img)
         {
             if (img != null)
@@ -32,6 +32,7 @@ namespace PixelFarm.Drawing
                 img._innerImg = null;
             }
         }
+
         public static void SetCacheInnerImage(Image img, IDisposable o, bool handleInnerImgAsOwner)
         {
             img._innerImg = o;
@@ -39,7 +40,7 @@ namespace PixelFarm.Drawing
         }
 
         public abstract IntPtr GetRawBufferHead();
+
         public abstract void ReleaseRawBufferHead(IntPtr ptr);
     }
-
 }

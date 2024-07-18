@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,7 +22,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public static class VertexHitTester
     {
-        //======= Crossings Multiply algorithm of InsideTest ======================== 
+        //======= Crossings Multiply algorithm of InsideTest ========================
         //
         // By Eric Haines, 3D/Eye Inc, erich@eye.com
         //
@@ -52,7 +52,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         // for the CrossingsTest() code; it is left out here for clarity.
         //
         // Input 2D polygon _pgon_ with _numverts_ number of vertices and test point
-        // _point_, returns 1 if inside, 0 if outside. 
+        // _point_, returns 1 if inside, 0 if outside.
 
         public static bool IsPointInVxs(PixelFarm.Drawing.VertexStore vxs, double tx, double ty)
         {
@@ -119,11 +119,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 //vty1 = GetYN(k);
 
                 cmd = vxs.GetVertex(i, out vtx1, out vty1);
-
             }
             return inside_flag;
         }
-        static void FindActualPointCount(PixelFarm.Drawing.VertexStore vxs, out int actualPointCount)
+
+        private static void FindActualPointCount(PixelFarm.Drawing.VertexStore vxs, out int actualPointCount)
         {
             int pp = vxs.Count;
             double vtx0, vty0;

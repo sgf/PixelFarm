@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,16 +18,18 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     public interface ISpanInterpolator
     {
         //------------------------------------------------
         void Begin(double x, double y, int len);
+
         void GetCoord(out int x, out int y);
+
         void Next();
+
         //------------------------------------------------
-        VertexProcessing.ICoordTransformer Transformer { get; set; } 
+        VertexProcessing.ICoordTransformer Transformer { get; set; }
     }
 }

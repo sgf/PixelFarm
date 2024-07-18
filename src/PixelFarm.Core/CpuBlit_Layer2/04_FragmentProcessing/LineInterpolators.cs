@@ -7,8 +7,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -25,12 +25,12 @@
 namespace PixelFarm.CpuBlit.FragmentProcessing;
 
 //===================================================dda_line_interpolator
-struct LineInterpolatorDDA
+internal struct LineInterpolatorDDA
 {
-    int _y;
-    int _dy;
-    readonly int _inc;
-    readonly int _fractionShift;
+    private int _y;
+    private int _dy;
+    private readonly int _inc;
+    private readonly int _fractionShift;
 
     public LineInterpolatorDDA(int y1, int y2, int count, int fractionShift)
     {
@@ -50,30 +50,30 @@ struct LineInterpolatorDDA
 
     //--------------------------------------------------------------------
     public int y() => _y + (_dy >> (_fractionShift));  // - m_YShift)); }
+
     //
     public int dy() => _dy;
 }
 
-
-
 //=================================================dda2_line_interpolator
 
-class LineInterpolatorDDA2
+internal class LineInterpolatorDDA2
 {
-
     //----------------------
     //this need to be class ***?
-    //---------------------- 
-    int _cnt;
-    int _lft;
-    int _rem;
-    int _mod;
-    int _y;
+    //----------------------
+    private int _cnt;
+
+    private int _lft;
+    private int _rem;
+    private int _mod;
+    private int _y;
     //-------------------------------------------- Forward-adjusted line
 
     public LineInterpolatorDDA2()
     {
     }
+
     public LineInterpolatorDDA2(int y1, int y2, int count) => Set(y1, y2, count);
 
     public void Set(int y1, int y2, int count)
@@ -93,6 +93,7 @@ class LineInterpolatorDDA2
         }
         _mod -= count;
     }
+
     public void Set(int y, int count)
     {
         //dbugIdN = 0;
@@ -109,10 +110,10 @@ class LineInterpolatorDDA2
         }
     }
 
-
 #if DEBUG
     //static int dbugIdN;
 #endif
+
     //public void operator ++()
     public void Next()
     {
@@ -142,24 +143,26 @@ class LineInterpolatorDDA2
 
     //--------------------------------------------------------------------
     public void adjust_forward() => _mod -= _cnt;
+
     public void adjust_backward() => _mod += _cnt;
+
     //
     public int Y => _y;
+
     //
 }
 
-
-struct LineInterpolatorDDA2S
+internal struct LineInterpolatorDDA2S
 {
-    readonly int _cnt;
-    readonly int _lft;
-    readonly int _rem;
-    int _mod;
-    int _y;
+    private readonly int _cnt;
+    private readonly int _lft;
+    private readonly int _rem;
+    private int _mod;
+    private int _y;
+
     //-------------------------------------------- Forward-adjusted line
     public LineInterpolatorDDA2S(int y1, int y2, int count)
     {
-
         _cnt = (count <= 0 ? 1 : count);
         _lft = ((y2 - y1) / _cnt);
         _rem = ((y2 - y1) % _cnt);
@@ -186,26 +189,31 @@ struct LineInterpolatorDDA2S
             _y++;
         }
     }
+
     //
     public int Y => _y;
+
     //
 }
 
 //---------------------------------------------line_bresenham_interpolator
-sealed class LineInterpolatorBresenham
+internal sealed class LineInterpolatorBresenham
 {
-    int _x1_lr;
-    int _y1_lr;
-    int _x2_lr;
-    int _y2_lr;
-    bool _ver;
-    int _len;
-    int _inc;
-    LineInterpolatorDDA2 _interpolator;
+    private int _x1_lr;
+    private int _y1_lr;
+    private int _x2_lr;
+    private int _y2_lr;
+    private bool _ver;
+    private int _len;
+    private int _inc;
+    private LineInterpolatorDDA2 _interpolator;
+
     //
-    const int SUBPIXEL_SHIFT = 8;
-    const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
-    const int SUBPIXEL_MASK = SUBPIXEL_SCALE - 1;
+    private const int SUBPIXEL_SHIFT = 8;
+
+    private const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
+    private const int SUBPIXEL_MASK = SUBPIXEL_SCALE - 1;
+
     //
     //--------------------------------------------------------------------
     public static int line_lr(int v) => v >> (int)SUBPIXEL_SHIFT;
@@ -236,7 +244,9 @@ sealed class LineInterpolatorBresenham
 
     //--------------------------------------------------------------------
     public bool is_ver() => _ver;
+
     public int len() => _len;
+
     public int inc() => _inc;
 
     //--------------------------------------------------------------------
@@ -255,9 +265,14 @@ sealed class LineInterpolatorBresenham
 
     //--------------------------------------------------------------------
     public int x1() => _x1_lr;
+
     public int y1() => _y1_lr;
+
     public int x2() => line_lr(_interpolator.Y);
+
     public int y2() => line_lr(_interpolator.Y);
+
     public int x2_hr() => _interpolator.Y;
+
     public int y2_hr() => _interpolator.Y;
 }
