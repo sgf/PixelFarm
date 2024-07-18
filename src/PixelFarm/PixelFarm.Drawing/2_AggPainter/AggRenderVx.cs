@@ -24,8 +24,9 @@ namespace PixelFarm.CpuBlit
         public override int StripCount => throw new System.NotImplementedException();
         public string DelayString { get; internal set; }
         public bool IsDelay { get; internal set; }
-#if DEBUG
         public RenderVxGlyphPlan[] GlyphList { get; set; }
+
+#if DEBUG
 
         public string OriginalString { get; set; }
         public override string dbugName => "Agg";

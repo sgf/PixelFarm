@@ -74,12 +74,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
-      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
-      <Name>PixelFarm.BasicVisualElements</Name>
+    <ProjectReference Include="..\..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{af2a833d-fd66-4aa4-a210-f3f402c3e1bb}</Project>
+      <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
-  <Import Project="..\..\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

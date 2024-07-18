@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs">
@@ -175,6 +176,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj" />
     <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj" />
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj" />
     <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj" />
   </ItemGroup>
   <Import Project="..\LayoutFarm.TextFlow_SH\LayoutFarm.TextFlow_SH.projitems" Label="Shared" />

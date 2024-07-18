@@ -121,16 +121,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\PaintLab.BitmapBufferEx_TESTUNIT.csproj">
-      <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
-      <Name>PaintLab.BitmapBufferEx_TESTUNIT</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
-      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
-      <Name>PixelFarm.BasicVisualElements</Name>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{af2a833d-fd66-4aa4-a210-f3f402c3e1bb}</Project>
+      <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
-  <Import Project="..\..\PixelFarm\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
