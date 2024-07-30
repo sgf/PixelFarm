@@ -21,6 +21,7 @@
 // Rounded rectangle vertex generator
 //
 //----------------------------------------------------------------------------
+using ClipperLib;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
@@ -91,5 +92,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             pathWriter.LineTo(_bounds.Left, _bounds.Top);
             pathWriter.CloseFigure();
         }
+
+
     }
 }
