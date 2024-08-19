@@ -80,12 +80,12 @@ namespace PaintFx.Effects
                         {
                             int sampleCount = 0;
 
-                            PointF a = new PointF((float)x + _points[0].X, (float)y + _points[0].Y);
-                            PointF b = new PointF((float)x + _points[_points.Length - 1].X, (float)y + _points[_points.Length - 1].Y);
+                            pointf a = new PointF((float)x + _points[0].X, (float)y + _points[0].Y);
+                            pointf b = new PointF((float)x + _points[_points.Length - 1].X, (float)y + _points[_points.Length - 1].Y);
 
                             for (int j = 0; j < _points.Length; ++j)
                             {
-                                PointF pt = new PointF(_points[j].X + (float)x, _points[j].Y + (float)y);
+                                pointf pt = new PointF(_points[j].X + (float)x, _points[j].Y + (float)y);
 
                                 if (pt.X >= 0 && pt.Y >= 0 && pt.X <= (src.Width - 1) && pt.Y <= (src.Height - 1))
                                 {

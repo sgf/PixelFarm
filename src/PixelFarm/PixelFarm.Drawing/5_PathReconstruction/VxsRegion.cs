@@ -173,7 +173,7 @@ namespace PixelFarm.PathReconstruction
             }
             return null;
         }
-        public override bool IsVisible(PointF p)
+        public override bool IsVisible(pointf p)
         {
             throw new NotImplementedException();
         }

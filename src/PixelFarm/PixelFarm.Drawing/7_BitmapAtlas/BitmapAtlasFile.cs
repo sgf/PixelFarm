@@ -22,7 +22,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             OverviewFontInfo,
             FontScriptTags,
 
-            OverviewMultiSizeFontInfo,
+            OverviewMultisizefontInfo,
             OverviewBitmapInfo,
             ImgUrlDic,
         }
@@ -49,7 +49,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                     {
                         default: throw new NotSupportedException();
                       
-                        case ObjectKind.OverviewMultiSizeFontInfo:
+                        case ObjectKind.OverviewMultisizefontInfo:
                             listCount = reader.ReadUInt16();
                             break;
                         case ObjectKind.OverviewFontInfo:
@@ -180,9 +180,9 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 _writer.Write((ushort)kp.Value);
             }
         }
-        internal void WriteOverviewMultiSizeFontInfo(ushort count)
+        internal void WriteOverviewMultisizefontInfo(ushort count)
         {
-            _writer.Write((ushort)ObjectKind.OverviewMultiSizeFontInfo);
+            _writer.Write((ushort)ObjectKind.OverviewMultisizefontInfo);
             _writer.Write((ushort)count);
         }
         void WriteLengthPrefixUtf8String(string value)

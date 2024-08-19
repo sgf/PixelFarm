@@ -16,8 +16,8 @@ namespace PaintFx
         BinaryPixelOp _normalBlendOp;
         ColorBgra _startColor;
         ColorBgra _endColor;
-        PointF _startPoint;
-        PointF _endPoint;
+        pointf _startPoint;
+        pointf _endPoint;
         bool _alphaBlending;
         bool _alphaOnly;
 
@@ -51,7 +51,7 @@ namespace PaintFx
             }
         }
 
-        public PointF StartPoint
+        public pointf StartPoint
         {
             get => _startPoint;
             set
@@ -60,7 +60,7 @@ namespace PaintFx
             }
         }
 
-        public PointF EndPoint
+        public pointf EndPoint
         {
             get => _endPoint;
             set

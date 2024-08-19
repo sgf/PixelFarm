@@ -296,7 +296,7 @@ namespace PaintFx
             return new Point((rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2);
         }
 
-        public static PointF GetRectangleCenter(RectangleF rect)
+        public static pointf GetRectangleCenter(RectangleF rect)
         {
             return new PointF((rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2);
         }
@@ -497,16 +497,16 @@ namespace PaintFx
         {
             int area = 0;
 
-            foreach (RectangleF rectF in rects)
+            foreach (RectangleF rectf in rects)
             {
-                Rectangle rect = Rectangle.Truncate(rectF);
+                Rectangle rect = Rectangle.Truncate(rectf);
                 area += rect.Width * rect.Height;
             }
 
             return area;
         }
 
-        public static RectangleF RectangleFromCenter(PointF center, float halfSize)
+        public static RectangleF RectangleFromCenter(pointf center, float halfSize)
         {
             RectangleF ret = new RectangleF(center.X, center.Y, 0, 0);
             ret.Inflate(halfSize, halfSize);
@@ -598,7 +598,7 @@ namespace PaintFx
             return rect;
         }
 
-        public static RectangleF PointsToConstrainedRectangle(PointF a, PointF b)
+        public static RectangleF PointsToConstrainedRectangle(pointf a, pointf b)
         {
             RectangleF rect = PixelUtils.PointsToRectangle(a, b);
             float minWH = Math.Min(rect.Width, rect.Height);
@@ -635,7 +635,7 @@ namespace PaintFx
             return new Rectangle(x, y, width, height);
         }
 
-        public static RectangleF PointsToRectangle(PointF a, PointF b)
+        public static RectangleF PointsToRectangle(pointf a, pointf b)
         {
             float x = Math.Min(a.X, b.X);
             float y = Math.Min(a.Y, b.Y);
@@ -655,7 +655,7 @@ namespace PaintFx
             return new Rectangle(x, y, width, height);
         }
 
-        public static RectangleF PointsToRectangleExclusive(PointF a, PointF b)
+        public static RectangleF PointsToRectangleExclusive(pointf a, pointf b)
         {
             float x = Math.Min(a.X, b.X);
             float y = Math.Min(a.Y, b.Y);
@@ -713,12 +713,12 @@ namespace PaintFx
         /// Converts a RectangleF to RectangleF by rounding down the Location and rounding
         /// up the Size.
         /// </summary>
-        public static Rectangle RoundRectangle(RectangleF rectF)
+        public static Rectangle RoundRectangle(RectangleF rectf)
         {
-            float left = (float)Math.Floor(rectF.Left);
-            float top = (float)Math.Floor(rectF.Top);
-            float right = (float)Math.Ceiling(rectF.Right);
-            float bottom = (float)Math.Ceiling(rectF.Bottom);
+            float left = (float)Math.Floor(rectf.Left);
+            float top = (float)Math.Floor(rectf.Top);
+            float right = (float)Math.Ceiling(rectf.Right);
+            float bottom = (float)Math.Ceiling(rectf.Bottom);
 
             return Rectangle.Truncate(RectangleF.FromLTRB(left, top, right, bottom));
         }
@@ -755,26 +755,26 @@ namespace PaintFx
 
             for (int i = startIndex + 1; i < startIndex + length; ++i)
             {
-                RectangleF rectF = rectsF[i];
+                RectangleF rectf = rectsF[i];
 
-                if (rectF.Left < left)
+                if (rectf.Left < left)
                 {
-                    left = rectF.Left;
+                    left = rectf.Left;
                 }
 
-                if (rectF.Top < top)
+                if (rectf.Top < top)
                 {
-                    top = rectF.Top;
+                    top = rectf.Top;
                 }
 
-                if (rectF.Right > right)
+                if (rectf.Right > right)
                 {
-                    right = rectF.Right;
+                    right = rectf.Right;
                 }
 
-                if (rectF.Bottom > bottom)
+                if (rectf.Bottom > bottom)
                 {
-                    bottom = rectF.Bottom;
+                    bottom = rectf.Bottom;
                 }
             }
 
@@ -795,26 +795,26 @@ namespace PaintFx
 
             for (int i = startIndex + 1; i < startIndex + length; ++i)
             {
-                PointF pointF = pointsF[i];
+                pointf pointf = pointsF[i];
 
-                if (pointF.X < left)
+                if (pointf.X < left)
                 {
-                    left = pointF.X;
+                    left = pointf.X;
                 }
 
-                if (pointF.Y < top)
+                if (pointf.Y < top)
                 {
-                    top = pointF.Y;
+                    top = pointf.Y;
                 }
 
-                if (pointF.X > right)
+                if (pointf.X > right)
                 {
-                    right = pointF.X;
+                    right = pointf.X;
                 }
 
-                if (pointF.Y > bottom)
+                if (pointf.Y > bottom)
                 {
-                    bottom = pointF.Y;
+                    bottom = pointf.Y;
                 }
             }
 
@@ -919,8 +919,8 @@ namespace PaintFx
 
         private static float DistanceSquared(RectangleF[] rectsF, int indexA, int indexB)
         {
-            PointF centerA = new PointF(rectsF[indexA].Left + (rectsF[indexA].Width / 2), rectsF[indexA].Top + (rectsF[indexA].Height / 2));
-            PointF centerB = new PointF(rectsF[indexB].Left + (rectsF[indexB].Width / 2), rectsF[indexB].Top + (rectsF[indexB].Height / 2));
+            pointf centerA = new PointF(rectsF[indexA].Left + (rectsF[indexA].Width / 2), rectsF[indexA].Top + (rectsF[indexA].Height / 2));
+            pointf centerB = new PointF(rectsF[indexB].Left + (rectsF[indexB].Width / 2), rectsF[indexB].Top + (rectsF[indexB].Height / 2));
 
             return ((centerA.X - centerB.X) * (centerA.X - centerB.X)) +
                 ((centerA.Y - centerB.Y) * (centerA.Y - centerB.Y));
@@ -1060,14 +1060,14 @@ namespace PaintFx
         //    return SimplifyAndInflateRegion(region, defaultSimplificationFactor, 1);
         //}
 
-        public static RectangleF[] TranslateRectangles(RectangleF[] rectsF, PointF offset)
+        public static RectangleF[] TranslateRectangles(RectangleF[] rectsF, pointf offset)
         {
             RectangleF[] retRectsF = new RectangleF[rectsF.Length];
             int i = 0;
 
-            foreach (RectangleF rectF in rectsF)
+            foreach (RectangleF rectf in rectsF)
             {
-                retRectsF[i] = new RectangleF(rectF.Left + offset.X, rectF.Top + offset.Y, rectF.Width, rectF.Height);
+                retRectsF[i] = new RectangleF(rectf.Left + offset.X, rectf.Top + offset.Y, rectf.Width, rectf.Height);
                 ++i;
             }
 
@@ -1090,7 +1090,7 @@ namespace PaintFx
         {
             for (int i = 0; i < ptsF.Length; ++i)
             {
-                PointF p = ptsF[i];
+                pointf p = ptsF[i];
                 ptsF[i] = new PointF(p.X + dx, p.Y + dy);
             }
         }
@@ -1160,11 +1160,11 @@ namespace PaintFx
 
             List<PointF> polygon = new List<PointF>();
 
-            PointF s = v[v.Count - 1];
+            pointf s = v[v.Count - 1];
 
             for (int i = 0; i < v.Count; ++i)
             {
-                PointF p = v[i];
+                pointf p = v[i];
                 bool pIn = IsInside(bounds, edge, p);
                 bool sIn = IsInside(bounds, edge, s);
 
@@ -1196,7 +1196,7 @@ namespace PaintFx
             return polygon;
         }
 
-        private static bool IsInside(RectangleF bounds, RectangleEdge edge, PointF p)
+        private static bool IsInside(RectangleF bounds, RectangleEdge edge, pointf p)
         {
             switch (edge)
             {
@@ -1263,7 +1263,7 @@ namespace PaintFx
             throw new ArgumentException("no intercept found");
         }
 
-        private static PointF LineIntercept(RectangleF bounds, RectangleEdge edge, PointF a, PointF b)
+        private static pointf LineIntercept(RectangleF bounds, RectangleEdge edge, pointf a, pointf b)
         {
             if (a.Equals(b))
             {
@@ -1384,7 +1384,7 @@ namespace PaintFx
         /// <summary>
         /// Returns the Distance between two points
         /// </summary>
-        public static float Distance(PointF a, PointF b)
+        public static float Distance(pointf a, pointf b)
         {
             return Magnitude(new PointF(a.X - b.X, a.Y - b.Y));
         }
@@ -1393,7 +1393,7 @@ namespace PaintFx
         /// Returns the Magnitude (distance to origin) of a point
         /// </summary>
         // TODO: In v4.0 codebase, turn this into an extension method
-        public static float Magnitude(PointF p)
+        public static float Magnitude(pointf p)
         {
             return (float)Math.Sqrt(p.X * p.X + p.Y * p.Y);
         }
@@ -1507,7 +1507,7 @@ namespace PaintFx
             return (from + frac * (to - from));
         }
 
-        public static PointF Lerp(PointF from, PointF to, float frac)
+        public static pointf Lerp(pointf from, pointf to, float frac)
         {
             return new PointF(Lerp(from.X, to.X, frac), Lerp(from.Y, to.Y, frac));
         }
@@ -1922,13 +1922,13 @@ namespace PaintFx
         }
 
 
-        public static PointF NormalizeVector(PointF vecF)
+        public static pointf NormalizeVector(pointf vecF)
         {
             float magnitude = Magnitude(vecF);
             return new PointF(vecF.X / magnitude, vecF.Y / magnitude);
         }
 
-        public static PointF NormalizeVector2(PointF vecF)
+        public static pointf NormalizeVector2(pointf vecF)
         {
             float magnitude = Magnitude(vecF);
 
@@ -1952,7 +1952,7 @@ namespace PaintFx
             }
         }
 
-        public static PointF RotateVector(PointF vecF, float angleDelta)
+        public static pointf RotateVector(pointf vecF, float angleDelta)
         {
             angleDelta *= (float)(Math.PI / 180.0);
             float vecFLen = Magnitude(vecF);
@@ -1970,22 +1970,22 @@ namespace PaintFx
             }
         }
 
-        public static PointF MultiplyVector(PointF vecF, float scalar)
+        public static pointf MultiplyVector(pointf vecF, float scalar)
         {
             return new PointF(vecF.X * scalar, vecF.Y * scalar);
         }
 
-        public static PointF AddVectors(PointF a, PointF b)
+        public static pointf AddVectors(pointf a, pointf b)
         {
             return new PointF(a.X + b.X, a.Y + b.Y);
         }
 
-        public static PointF SubtractVectors(PointF lhs, PointF rhs)
+        public static pointf SubtractVectors(pointf lhs, pointf rhs)
         {
             return new PointF(lhs.X - rhs.X, lhs.Y - rhs.Y);
         }
 
-        public static PointF NegateVector(PointF v)
+        public static pointf NegateVector(pointf v)
         {
             return new PointF(-v.X, -v.Y);
         }
@@ -2004,13 +2004,13 @@ namespace PaintFx
 
         //public static bool IsTransformFlipped(Matrix matrix)
         //{
-        //    PointF ptX = new PointF(1.0f, 0.0f);
-        //    PointF ptXT = PixelUtils.TransformOneVector(matrix, ptX);
+        //    pointf ptX = new PointF(1.0f, 0.0f);
+        //    pointf ptXT = PixelUtils.TransformOneVector(matrix, ptX);
         //    double atan2X = Math.Atan2(ptXT.Y, ptXT.X);
         //    double angleX = atan2X * (180.0 / Math.PI);
 
-        //    PointF ptY = new PointF(0.0f, 1.0f);
-        //    PointF ptYT = PixelUtils.TransformOneVector(matrix, ptY);
+        //    pointf ptY = new PointF(0.0f, 1.0f);
+        //    pointf ptYT = PixelUtils.TransformOneVector(matrix, ptY);
         //    double atan2Y = Math.Atan2(ptYT.Y, ptYT.X);
         //    double angleY = (atan2Y * (180.0 / Math.PI)) - 90.0;
 
@@ -2032,7 +2032,7 @@ namespace PaintFx
         /// <summary>
         /// Calculates the dot product of two vectors.
         /// </summary>
-        public static float DotProduct(PointF lhs, PointF rhs)
+        public static float DotProduct(pointf lhs, pointf rhs)
         {
             return lhs.X * rhs.X + lhs.Y * rhs.Y;
         }
@@ -2051,7 +2051,7 @@ namespace PaintFx
         /// <remarks>
         /// As a special case, if u=(0,0) the results are all zero.
         /// </remarks>
-        public static void GetProjection(PointF y, PointF u, out PointF yhat, out float yhatLen, out PointF z)
+        public static void GetProjection(pointf y, pointf u, out pointf yhat, out float yhatLen, out pointf z)
         {
             if (u.X == 0 && u.Y == 0)
             {

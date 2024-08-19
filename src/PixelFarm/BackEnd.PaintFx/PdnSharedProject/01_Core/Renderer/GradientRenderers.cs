@@ -20,7 +20,7 @@ namespace PaintFx
 
             public override void BeforeRender()
             {
-                PointF vec = new PointF(EndPoint.X - StartPoint.X, EndPoint.Y - StartPoint.Y);
+                pointf vec = new PointF(EndPoint.X - StartPoint.X, EndPoint.Y - StartPoint.Y);
                 float mag = PixelUtils.Magnitude(vec);
 
                 if (EndPoint.X == StartPoint.X)

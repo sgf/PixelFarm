@@ -160,8 +160,8 @@ namespace PaintFx.Effects
             }
         }
 
-        PointF _offset;
-        public PointF Offset
+        pointf _offset;
+        public pointf Offset
         {
             get => _offset;
             set
@@ -172,7 +172,7 @@ namespace PaintFx.Effects
         }
 
         public RotateZoomEffectConfigToken(bool highQuality, float preRotateZ, float postRotateZ,
-            float tilt, float zoom, PointF offset, bool sourceAsBackground, bool tile)
+            float tilt, float zoom, pointf offset, bool sourceAsBackground, bool tile)
         {
             this.HighQuality = highQuality;
             _preRotateZ = preRotateZ;

@@ -64,7 +64,7 @@ namespace PixelFarm.PathReconstruction
         {
             throw new System.NotSupportedException();
         }
-        public override bool IsVisible(PointF p)
+        public override bool IsVisible(pointf p)
         {
             throw new NotImplementedException();
         }

@@ -136,7 +136,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
 
-        static void AppendCoord(PointF p, ref int index, float[] outputArr)
+        static void AppendCoord(pointf p, ref int index, float[] outputArr)
         {
             outputArr[index] = p.X;
             outputArr[index + 1] = p.Y;

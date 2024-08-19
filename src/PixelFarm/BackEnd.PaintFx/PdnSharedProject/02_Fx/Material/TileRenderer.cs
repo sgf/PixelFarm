@@ -71,7 +71,7 @@ namespace PaintFx.Effects
 
                             for (int p = 0; p < aaSampleCount; ++p)
                             {
-                                PointF pt = aaPointsArray[p];
+                                pointf pt = aaPointsArray[p];
 
                                 float u1 = i + pt.X;
                                 float v1 = j - pt.Y;

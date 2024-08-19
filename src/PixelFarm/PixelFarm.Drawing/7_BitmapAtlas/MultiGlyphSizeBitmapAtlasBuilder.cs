@@ -121,7 +121,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 fontAtlasFile.StartWrite(fs);
 
                 //1. simple atlas count
-                fontAtlasFile.WriteOverviewMultiSizeFontInfo((ushort)j);
+                fontAtlasFile.WriteOverviewMultisizefontInfo((ushort)j);
                 //2. 
                 for (int i = 0; i < j; ++i)
                 {

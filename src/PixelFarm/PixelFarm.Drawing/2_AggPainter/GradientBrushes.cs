@@ -60,8 +60,8 @@ namespace PixelFarm.CpuBlit
         public void ResolveBrush(LinearGradientBrush linearGrBrush)
         {
 
-            PointF p1 = linearGrBrush.StartPoint;
-            PointF p2 = linearGrBrush.EndPoint;
+            pointf p1 = linearGrBrush.StartPoint;
+            pointf p2 = linearGrBrush.EndPoint;
             //assume horizontal line
 
 
@@ -211,8 +211,8 @@ namespace PixelFarm.CpuBlit
         {
             //for gradient :
 
-            PointF p1 = radialGrBrush.StartPoint;
-            PointF p2 = radialGrBrush.EndPoint;
+            pointf p1 = radialGrBrush.StartPoint;
+            pointf p2 = radialGrBrush.EndPoint;
 
             if (radialGrBrush.CoordTransformer != null)
             {
